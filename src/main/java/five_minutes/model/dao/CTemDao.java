@@ -13,10 +13,6 @@ import java.util.List;
 public class CTemDao extends Dao {
     // CheckTemplate
     // [1] 체크리스트 템플릿 생성
-    // 1. ctName(체크리스트 템플릿 이름)과 ctDescription(체크리스트 템플릿 설명)을 입력받는다.
-    // 2. 세션에서 bnNo(고용자번호/작성자번호)를 확인한다.
-    // 3. DB에 저장한다.
-
     public int createCTem(CTemDto cTemDto) {
         try {
             String sql = "insert into checktemplate (ctName , ctDescription , bnNo) values (? , ? , ?) ";
@@ -58,6 +54,8 @@ public class CTemDao extends Dao {
                 cTemDto.setBnNo(rs.getString("bnNo"));
                 list.add(cTemDto);
             }
+            rs.close();
+            ps.close();
         } catch (Exception e) {
             System.out.println(e);
         } // catch end
@@ -66,10 +64,68 @@ public class CTemDao extends Dao {
 
 
     // [3] 체크리스트 템플릿 개별조회
+    public CTemDto getIndiCtem(String bnNo, int ctNo) {
+        try {
+            String sql = "select * from checktemplate where ctStatus = 1 and bnNo = ? and ctNo = ? ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, bnNo);
+            ps.setInt(2, ctNo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                CTemDto cTemDto = new CTemDto();
+                cTemDto.setCtNo(rs.getInt("ctNo"));
+                cTemDto.setCtName(rs.getString("ctName"));
+                cTemDto.setCtDescription(rs.getString("ctDescription"));
+                cTemDto.setCtStatus(rs.getInt("ctStatus"));
+                cTemDto.setCreateDate(rs.getString("createDate"));
+                cTemDto.setUpdateDate(rs.getString("updateDate"));
+                cTemDto.setBnNo(rs.getString("bnNo"));
+                return cTemDto;
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        } // catch end
+        return null;
+    } // func end
 
     // [4] 체크리스트 템플릿 수정
+    public int updateCTem(CTemDto cTemDto) {
+        try {
+            String sql = "update checktemplate set ctName = ? , ctDescription = ? where bnNo = ? and ctNo = ? and ctStatus = 1 ";
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, cTemDto.getCtName());
+            ps.setString(2, cTemDto.getCtDescription());
+            ps.setInt(3, cTemDto.getCtNo());
+            ps.setString(4, cTemDto.getBnNo());
+            if (ps.executeUpdate() == 1) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    rs.getInt(1);
+                }
+                rs.close();
+                ps.close();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        } // catch end
+        return 0;
+    }
 
     // [5] 체크리스트 템플릿 삭제
+    public int deleteCTem(String bnNo , int ctNo) {
+        try{
+            String sql = "update checktemplate set ctStatus = 0 where bnNo =? and ctNo = ? ";
+            PreparedStatement ps = conn.prepareStatement(sql );
+            ps.setString(1, bnNo);
+            ps.setInt(2, ctNo);
+            return ps.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e);
+        } // catch end
+        return 0;
+    } // func end
 
 
 } // class end
