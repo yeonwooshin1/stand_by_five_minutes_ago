@@ -2,7 +2,11 @@ package five_minutes.controller;
 
 import five_minutes.model.dto.RtDto;
 import five_minutes.service.RtService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,13 +21,29 @@ import java.util.List;
 
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
+@RequestMapping("/roleTem")
 public class RtController {  // class start
 
     private final RtService rtService;
 
     // [ RT-01 ] 역할 템플릿 생성 createRT()
-    public int createRT(){
-        return  0;
+    @PostMapping
+    public int createRT(@RequestBody RtDto rtDto, HttpSession session){
+//        if( session.getAttribute("loginUserNo") == null ||
+//                session.getAttribute("loginBnNo") == null){
+//            return -1;
+//        }
+//        Object loginUserNo = session.getAttribute("loginUserNo");
+//        Object loginBnNo = session.getAttribute("loginBnNo");
+//        int userNo = (int)loginUserNo;
+//        String bnNo = loginBnNo+"" ;
+//        rtDto.setBnNo("bnNo");
+        if(rtDto.getRtName() == null || rtDto.getRtName().isEmpty()){
+            return -2;
+        } else if (rtDto.getRtDescription() == null|| rtDto.getRtDescription().isEmpty()){
+            return -3;
+        }
+        return rtService.createRT(rtDto);
     }// [ RT-01 ]  func end
 
     // [ RT-02 ] 역할 템플릿 전체 조회 getRT()

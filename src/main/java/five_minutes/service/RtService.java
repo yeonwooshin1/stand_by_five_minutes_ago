@@ -22,8 +22,9 @@ public class RtService { // class start
     private final RtDao rtDao;
 
     // [ RT-01 ] 역할 템플릿 생성 createRT()
-    public int createRT(){
-        return  0;
+    public int createRT(RtDto rtDto){
+
+        return rtDao.createRT(rtDto);
     }// [ RT-01 ]  func end
 
     // [ RT-02 ] 역할 템플릿 전체 조회 getRT()

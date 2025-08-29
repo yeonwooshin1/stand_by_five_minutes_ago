@@ -20,6 +20,6 @@ public class RtDto {
     private int rtStatus;           // 상태 : 0 - 비활성화 / 1 - 활성화
     private String createDate;      // 생성일
     private String updateDate;      // 수정일
-    private int bnNo;               // 사업자등록번호 (FK-BusinessUser table)
+    private String bnNo;            // 사업자등록번호 (FK-BusinessUser table)
 
 }   // class end
