@@ -26,7 +26,7 @@ INSERT INTO BusinessUser (bnNo, bnName, managerName, managerPhone, bnDocuImg, bn
 ('100-00-00002', '푸른기획', '이도윤', '010-8438-0000', '사업자등록증_sample2.jpg', '유통업', '식품', 1, '2025-06-01 00:00:00', '2025-06-07 00:00:00', 1000002),
 ('100-00-00003', '빛나는컴퍼니', '박예진', '010-3595-0000', '사업자등록증_sample3.jpg', '제조업', '전자기기', 1, '2025-06-02 00:00:00', '2025-06-14 00:00:00', 1000005);
 
-INSERT INTO RoleTemplete (rtNo, bnNo, rtName, rtDescription, rtStatus, createDate, updateDate) VALUES
+INSERT INTO RoleTemplate (rtNo, bnNo, rtName, rtDescription, rtStatus, createDate, updateDate) VALUES
 (2000001, '100-00-00001', '삐에로', '행사장에서 아이들을 웃기고 풍선아트를 제공', 1, '2025-06-07 08:38:54', '2025-06-07 08:38:54'),
 (2000002, '100-00-00001', '무대', '무대 설치 및 철거를 담당', 1, '2025-06-07 09:07:50', '2025-06-07 09:07:50'),
 (2000003, '100-00-00001', '총괄', '행사 전체 진행을 총괄하고 조율', 1, '2025-06-07 10:33:32', '2025-06-07 10:33:32'),
@@ -43,7 +43,7 @@ INSERT INTO RoleTemplete (rtNo, bnNo, rtName, rtDescription, rtStatus, createDat
 (2000014, '100-00-00003', '안내데스크', '행사장 입구 안내 및 등록', 1, '2025-06-09 12:07:56', '2025-06-09 12:07:56'),
 (2000015, '100-00-00003', '의상', '행사 의상 준비 및 관리', 1, '2025-06-09 13:57:45', '2025-06-09 13:57:45');
 
-INSERT INTO RoleTempleteItem (rtiNo, rtNo, rtiName, rtiDescription, rtiStatus, createDate, updateDate) VALUES
+INSERT INTO RoleTemplateItem (rtiNo, rtNo, rtiName, rtiDescription, rtiStatus, createDate, updateDate) VALUES
 (3000001, 2000001, '일반삐에로', '기본적인 복장과 동작으로 관객과 소통', 1, '2025-06-08 11:00:00', '2025-06-08 11:00:00'),
 (3000002, 2000001, '고급삐에로', '고난이도 퍼포먼스를 수행하는 전문 삐에로', 1, '2025-06-08 11:00:00', '2025-06-08 11:00:00'),
 (3000003, 2000001, '풍선삐에로', '풍선아트로 아이들과 소통하는 삐에로', 1, '2025-06-08 11:00:00', '2025-06-08 11:00:00'),
@@ -90,7 +90,7 @@ INSERT INTO RoleTempleteItem (rtiNo, rtNo, rtiName, rtiDescription, rtiStatus, c
 (3000044, 2000015, '무대해체', '무대 구조물 해체 작업', 1, '2025-06-10 11:00:00', '2025-06-10 11:00:00'),
 (3000045, 2000015, '현장청소', '철거 후 현장 청소 및 정리', 1, '2025-06-10 11:00:00', '2025-06-10 11:00:00');
 
-INSERT INTO CheckTemplete (ctNo, ctName, ctDescription, ctStatus, createDate, updateDate, bnNo) VALUES
+INSERT INTO CheckTemplate (ctNo, ctName, ctDescription, ctStatus, createDate, updateDate, bnNo) VALUES
 (4000001, '출근', '현장 도착 후 출근 여부 확인 및 보고', 1, '2025-06-07 14:00:00', '2025-06-07 14:00:00', '100-00-00001'),
 (4000002, '무대준비', '무대 설치 및 장비 배치 준비', 1, '2025-06-07 14:00:00', '2025-06-07 14:00:00', '100-00-00001'),
 (4000003, '정리', '행사 종료 후 장비 및 현장 정리', 1, '2025-06-07 14:00:00', '2025-06-07 14:00:00', '100-00-00001'),
@@ -107,7 +107,7 @@ INSERT INTO CheckTemplete (ctNo, ctName, ctDescription, ctStatus, createDate, up
 (4000014, '기록촬영', '행사 중 사진 및 영상 기록 촬영', 1, '2025-06-09 14:00:00', '2025-06-09 14:00:00', '100-00-00003'),
 (4000015, '마무리보고', '행사 종료 후 클라이언트에게 보고', 1, '2025-06-09 14:00:00', '2025-06-09 14:00:00', '100-00-00003');
 
-INSERT INTO CheckTempleteItem (ctINo, ctNo, ctiTitle, ctiHelpText, ctIStatus, createDate, updateDate) VALUES
+INSERT INTO CheckTemplateItem (ctINo, ctNo, ctiTitle, ctiHelpText, ctIStatus, createDate, updateDate) VALUES
 (5000001, 4000001, '출근 세부업무 1', '출근 업무를 위한 세부 작업 1 수행', 1, '2025-06-07 15:00:00', '2025-06-07 15:00:00'),
 (5000002, 4000001, '출근 세부업무 2', '출근 업무를 위한 세부 작업 2 수행', 1, '2025-06-07 15:00:00', '2025-06-07 15:00:00'),
 (5000003, 4000002, '무대준비 세부업무 1', '무대준비 업무를 위한 세부 작업 1 수행', 1, '2025-06-07 15:00:00', '2025-06-07 15:00:00'),
@@ -300,10 +300,10 @@ INSERT INTO pjPerform (pfNo, pjChkItemNo, userNo,  pfStart, pfEnd, notifyType, n
  
 select * from Users;
 select * from BusinessUser;
-select * from RoleTemplete;
-select * from RoleTempleteItem;
-select * from CheckTemplete;
-select * from CheckTempleteItem;
+select * from RoleTemplate;
+select * from RoleTemplateItem;
+select * from CheckTemplate;
+select * from CheckTemplateItem;
 select * from ProjectInfo;
 select * from pjWorker;
 select * from pjChecklist;
