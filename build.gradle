@@ -19,16 +19,36 @@ repositories {
 
 dependencies {
     // 스프링부트 웹 설치
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // MYSQL JDBC 라이브러리 설치
+
     runtimeOnly 'com.mysql:mysql-connector-j'
     // JSP 라이브러리 설치
+
     implementation "org.apache.tomcat.embed:tomcat-embed-jasper"
     // 롬복 라이브러리 설치
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     // open CSV 라이브러리 설치
+
     implementation("com.opencsv:opencsv:5.12.0")
+
+    // bcrypt 비밀번호 인코딩 전용 ( 비밀번호 강력한 해시화 전용 해시전용 보안 라이브러리)
+    implementation 'org.springframework.security:spring-security-crypto'
+
+    // Caffeine 인메모리 캐시( 링크 만료 통제 로그인 5회 시도시 차단 등에 쓰일 인메모리 라이브러리 )
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
+    // JJWT ( 이메일 링크에 쓸 인증 토큰 라이브러리 )
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    runtimeOnly  'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly  'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
+    // 메일 서비스 라이브러리 (Jakarta Mail + Jakarta Activation)
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 }
 
