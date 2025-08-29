@@ -3,8 +3,10 @@ package five_minutes.service;
 import five_minutes.model.dao.CsvPasswordService;
 import five_minutes.model.dao.UsersDao;
 import five_minutes.model.dto.UsersDto;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +21,16 @@ public class UsersService { // class start
     private final CsvPasswordService csvPasswordService;
 
 
-//    // 로그인
+
+    // 세션에 임시 loginUserNo, loginBnNo 저장
+    @GetMapping("/testLogin")
+    public void login(HttpSession session) {
+        // 강제로 로그인 값 세팅
+        session.setAttribute("loginUserNo", 1000001);  // 테스트용 회원 번호
+        session.setAttribute("loginBnNo", "100-00-00001"); // 테스트용 사업자 번호
+    }
+
+
 //    public Map<String , Object > login(UsersDto usersDto ) {
 //
 //        // 반환값 객체 생성
