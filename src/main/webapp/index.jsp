@@ -12,10 +12,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
-    <link rel='stylesheet' href='../CSS/sideMenu.css'>
+    <link rel='stylesheet' href='/CSS/index.css'>
 </head>
 
-<body>
+<body id="indexBody">
     <!-- header 연결 -->
     <jsp:include page="/header.jsp"></jsp:include>
 
@@ -27,16 +27,17 @@
         </div>
 
         <!-- 본문 작업 영역 -->
-        <div class="mainContent co10-10">
+        <div class="mainContent col-10">
 
+            본문 작업 영역!!
         </div>
 
     </div>
+
+    
     <!-- footer 연결 -->
     <jsp:include page="/footer.jsp"></jsp:include>
 
-
-    <script src="../JS/sideMenu.js"></script>
     <!--부트스트랩 CDN JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"

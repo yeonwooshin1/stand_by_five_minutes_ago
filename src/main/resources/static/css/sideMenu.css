@@ -23,7 +23,8 @@ body {
 }
 
 #sideMenuContainer {
-    width: 1280px;
+    max-width: 250px;
+    min-width: 200px;
 }
 
 .sideMenu {
@@ -51,15 +52,19 @@ body {
 }
 
 .middleMenu > a {
+    color: black;
     font-size: 1.3rem;
     font-weight: 600;
     padding : 1.4rem 0;
     padding-left: 1.2rem;
+    text-decoration: none;
 }
 
 .smallMenu > a {
+    color: black;
     font-size: 1.1rem;
     font-weight: 600;
     padding : 0.9rem 0;
     padding-left: 1.7rem;
+    text-decoration: none;
 }

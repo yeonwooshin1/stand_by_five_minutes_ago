@@ -18,7 +18,7 @@
 <body>
 
     <div id="sideMenuContainer" class="row">
-        <div class="sideMenu col-2">
+        <div class="sideMenu col">
             <div class="menuHead">템플릿 관리</div>
             <div class="middleMenu"> <a href="#">역할 관리</a></div>
             <div class="smallMenu"><a href="#">역할 템플릿</a></div>
@@ -32,7 +32,7 @@
     <br>
 
     <div id="sideMenuContainer" class="row">
-        <div class="sideMenu col-2">
+        <div class="sideMenu col">
             <div class="menuHead">프로젝트 관리</div>
             <div class="middleMenu"> <a href="#">프로젝트 목록</a></div>
             <div class="middleMenu"> <a href="#">프로젝트 상세</a></div>
