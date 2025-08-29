@@ -38,7 +38,7 @@ public class UsersService { // class start
             return result;
         }   // if end
 
-        // email 찾는 dao 호출
+        // userNo 찾는 dao 호출
         int userNo = usersDao.findUserNo(email);
 
         // email에 맞는 userNo 없을 시 0 -> 실패 반환
