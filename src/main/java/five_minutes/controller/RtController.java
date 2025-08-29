@@ -66,7 +66,5 @@ public class RtController {  // class start
         return  0;
     }// [ RT-05 ]  func end
 
-
-
 }   // class end
 
