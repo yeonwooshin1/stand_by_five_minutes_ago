@@ -22,16 +22,6 @@ public class UsersService { // class start
 
 
 
-    // 세션에 임시 loginUserNo, loginBnNo 저장
-    @GetMapping("/testLogin")
-    public void login(HttpSession session) {
-        // 강제로 로그인 값 세팅
-        session.setAttribute("loginUserNo", 1000001);  // 테스트용 회원 번호
-        session.setAttribute("loginBnNo", "100-00-00001"); // 테스트용 사업자 번호
-    }
-
-
-
 
 //    public Map<String , Object > login(UsersDto usersDto ) {
 //

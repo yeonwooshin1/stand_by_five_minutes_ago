@@ -4,10 +4,7 @@ import five_minutes.model.dto.UsersDto;
 import five_minutes.service.UsersService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
@@ -15,6 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsersController {  // class start
     // service
     private final UsersService usersService;
+    // 세션에 임시 loginUserNo, loginBnNo 저장
+    @GetMapping("/testLogin")
+    public void login(HttpSession session) {
+        // 강제로 로그인 값 세팅
+        session.setAttribute("loginUserNo", 1000001);  // 테스트용 회원 번호
+        session.setAttribute("loginBnNo", "100-00-00001"); // 테스트용 사업자 번호
+    }
 
 
 //    // 로그인
