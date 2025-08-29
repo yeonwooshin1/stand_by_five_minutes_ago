@@ -6,4 +6,6 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor @NoArgsConstructor @Data    // lombok
 public class UsersDto { // class start
+
+
 }   // class end
