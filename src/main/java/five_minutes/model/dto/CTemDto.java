@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CTemDto {
+    // CheckTemplate
     // DB 멤버변수
     private int ctNo;
     private String ctName;
