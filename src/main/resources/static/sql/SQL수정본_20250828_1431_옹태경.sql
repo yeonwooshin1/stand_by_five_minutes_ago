@@ -48,10 +48,10 @@ CREATE TABLE BusinessUser (
  -- 2) 템플릿부분 --
  
 /* =========================================================
- * 2-1) RoleTemplete table
+ * 2-1) RoleTemplate table
  * 역할 템플릿 헤더(역할군의 묶음)
  * ========================================================= */
-CREATE TABLE RoleTemplete (
+CREATE TABLE RoleTemplate (
   rtNo 				INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,   				-- 역할 템플릿 식별자 부분 PK
   bnNo 			VARCHAR(30) not null,                             		-- 이 템플릿을 소유/배포하는 사업자 식별 FK
   rtName    		VARCHAR(120) NOT NULL,                         			-- 템플릿 이름 (예: "콘서트_기본_역할군_v1")
@@ -67,10 +67,10 @@ CREATE TABLE RoleTemplete (
 
 
 /* =========================================================
- * 2-2) RoleTempleteItem table
+ * 2-2) RoleTemplateItem table
  * 역할 템플릿 항목(실제 역할들: 예 "무대매니저", "안내_입구", "안전요원")
  * ========================================================= */
-CREATE TABLE RoleTempleteItem (
+CREATE TABLE RoleTemplateItem (
   rtiNo 			INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, 		-- 역할 템플릿 실제 항목 부분 PK
   rtNo 				INT UNSIGNED NOT NULL,                        	-- 소속 역할템플릿 FK
   rtiName  			VARCHAR(120) NOT NULL,                          -- 역할 표시명(한글명)
@@ -79,15 +79,15 @@ CREATE TABLE RoleTempleteItem (
   createDate 		DATETIME NOT NULL DEFAULT NOW(),				-- 생성 시간
   updateDate 		DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),		 -- 변경 날짜
   CONSTRAINT
-    FOREIGN KEY (rtNo) REFERENCES RoleTemplete(rtNo)
+    FOREIGN KEY (rtNo) REFERENCES RoleTemplate(rtNo)
 ) ENGINE=InnoDB AUTO_INCREMENT=3000001; 					   		-- PK 3000001부터 시작
 
 
 /* =========================================================
- * 2-3) CheckTemplete table
+ * 2-3) CheckTemplate table
  *  체크리스트 템플릿 헤더
  * ========================================================= */
-CREATE TABLE CheckTemplete (
+CREATE TABLE CheckTemplate (
   ctNo  		INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,    	-- 체크리스트 템플릿 식별자 PK
   bnNo 		VARCHAR(30) NOT NULL,                           -- 이 템플릿을 소유/배포하는 사업자 식별 FK
   ctName    		VARCHAR(120) NOT NULL,                          -- 이름 (예: "개장_체크리스트_v2")
@@ -102,10 +102,10 @@ CREATE TABLE CheckTemplete (
 
 
 /* =========================================================
- * 2-4) CheckTempleteItem table
+ * 2-4) CheckTemplateItem table
  *  체크리스트 템플릿 아이템 항목
  * ========================================================= */
-CREATE TABLE CheckTempleteItem (
+CREATE TABLE CheckTemplateItem (
   ctINo 		INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, 		 		-- [PK] 체크리스트 템플릿 아이템 번호 
   ctNo 			INT UNSIGNED NOT NULL,                        	 		-- [FK] 체크리스트헤더 템플릿 번호
   ctiTitle 		VARCHAR(200) NOT NULL,                           		-- 체크리스트 제목
@@ -114,7 +114,7 @@ CREATE TABLE CheckTempleteItem (
   createDate		DATETIME NOT NULL DEFAULT NOW(),					-- 생성시간 
   updateDate 		DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),	-- 변경 날짜 (이거 최신템플릿 동기화할 시 필요한 항목) (선택으로 넣기)
   CONSTRAINT
-    FOREIGN KEY (ctNo) REFERENCES CheckTemplete(ctNo)
+    FOREIGN KEY (ctNo) REFERENCES CheckTemplate(ctNo)
 ) ENGINE=InnoDB AUTO_INCREMENT=5000001 ;							 	-- PK 5000001부터 시작
 
 
