@@ -15,7 +15,7 @@ import java.util.List;
 // RoleTemplate Controller
 // 역할 템플릿 대분류를 정의
 // Google sheet > 21.테이블 > 2-1
-// 작성자 : OngTK
+// Writer : OngTK
 
 // TODO 옹태경
 
@@ -29,21 +29,21 @@ public class RtController {  // class start
     // [ RT-01 ] 역할 템플릿 생성 createRT()
     @PostMapping
     public int createRT(@RequestBody RtDto rtDto, HttpSession session){
-//        if( session.getAttribute("loginUserNo") == null ||
-//                session.getAttribute("loginBnNo") == null){
-//            return -1;
-//        }
-//        Object loginUserNo = session.getAttribute("loginUserNo");
-//        Object loginBnNo = session.getAttribute("loginBnNo");
-//        int userNo = (int)loginUserNo;
-//        String bnNo = loginBnNo+"" ;
-//        rtDto.setBnNo("bnNo");
+        System.out.println("RtController.createRT");
+        System.out.println("rtDto = " + rtDto + ", session = " + session);
+
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
+            return -1;
+        }
+        Object loginBnNo = session.getAttribute("loginBnNo");
+        String bnNo = (String) loginBnNo;
+        rtDto.setBnNo(bnNo);
         if(rtDto.getRtName() == null || rtDto.getRtName().isEmpty()){
             return -2;
         } else if (rtDto.getRtDescription() == null|| rtDto.getRtDescription().isEmpty()){
             return -3;
         }
-        return rtService.createRT(rtDto);
+        return rtService.create(rtDto);
     }// [ RT-01 ]  func end
 
     // [ RT-02 ] 역할 템플릿 전체 조회 getRT()
@@ -65,8 +65,6 @@ public class RtController {  // class start
     public int deleteRT(){
         return  0;
     }// [ RT-05 ]  func end
-
-
 
 }   // class end
 

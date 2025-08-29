@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CommonDao<T, ID> {
     // 제네릭
-    // T dto
+    // T dto : 어떤 Dto가 들어올지 모르니 제네릭을 사용
     // ID id : 일반적으로 PK 값을 받아서 사용
 
     int create(T dto);      // 생성 func
