@@ -1,11 +1,10 @@
 package five_minutes.service;
 
+import five_minutes.model.dao.CommonDao;
 import five_minutes.model.dao.RtDao;
 import five_minutes.model.dto.RtDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 // Info =========================
 // RoleTemplate Service
@@ -17,35 +16,13 @@ import java.util.List;
 
 @Service                    // 서비스 어노테이션
 @RequiredArgsConstructor    // 의존성 주입
-public class RtService { // class start
+public class RtService extends AbstractService<RtDto, Integer>{ // class start
 
     private final RtDao rtDao;
 
-    // [ RT-01 ] 역할 템플릿 생성 createRT()
-    public int createRT(RtDto rtDto){
-
-        return rtDao.createRT(rtDto);
-    }// [ RT-01 ]  func end
-
-    // [ RT-02 ] 역할 템플릿 전체 조회 getRT()
-    public List<RtDto> getRT(){
-        return null;
-    }// [ RT-02 ]  func end
-
-    // [ RT-03 ] 역할 템플릿 개별 조회 getIndiRT()
-    public RtDto getIndiRT(){
-        return null;
-    }// [ RT-03 ]  func end
-
-    // [ RT-04 ] 역할 템플릿 수정 updateRT()
-    public int updateRT(){
-        return  0;
-    }// [ RT-04 ]  func end
-
-    // [ RT-05 ] 역할 템플릿 삭제(비활성화) deleteRT()
-    public int deleteRT(){
-        return  0;
-    }// [ RT-05 ]  func end
-
-
+    // AbstractService로 부터 getDao 메소드를 Override
+    @Override
+    protected CommonDao<RtDto, Integer> getDao() {
+        return (CommonDao<RtDto, Integer>) rtDao;
+    }
 }   // class end

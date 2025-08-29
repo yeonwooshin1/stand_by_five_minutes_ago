@@ -6,15 +6,16 @@ package five_minutes.service;
 // getDao 추상 클래스를 정의
 // Writer : OngTK
 
+import five_minutes.model.dao.CommonDao;
+
 import java.util.List;
 
 public abstract class AbstractService<T, ID> implements CommonService<T, ID> {
 
     // [1] 추상 메소드
-    public abstract CommonService<T, ID> getDao();
+    protected abstract CommonDao<T, ID> getDao();
     
     // [2] CommonService 구현
-
     @Override
     // [2.1] 생성 구현
     public int create(T dto) {

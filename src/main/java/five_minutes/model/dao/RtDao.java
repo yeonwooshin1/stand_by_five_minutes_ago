@@ -15,9 +15,49 @@ import java.util.List;
 // Writer : OngTK
 
 @Repository     // Dao 어노테이션
-public class RtDao extends Dao {
+public class RtDao extends Dao implements CommonDao<RtDto, Integer>{
 
     // [ RT-01 ] 역할 템플릿 생성 createRT()
+
+    @Override
+    public int create(RtDto rtDto) {
+        try {
+            String sql = "insert into RoleTemplate(rtName, rtDescription, bnNo) values (?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1,rtDto.getRtName());
+            ps.setString(2,rtDto.getRtDescription());
+            ps.setString(3,rtDto.getBnNo());
+            int count = ps.executeUpdate();
+            if (count == 1 ){
+                ResultSet rs = ps.getGeneratedKeys();
+                if(rs.next()) return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("RtDao.createRT " + e);
+        }
+        return 0;
+    }
+
+    @Override
+    public RtDto read(Integer integer) {
+        return null;
+    }
+
+    @Override
+    public List<RtDto> readAll() {
+        return List.of();
+    }
+
+    @Override
+    public int update(RtDto dto) {
+        return 0;
+    }
+
+    @Override
+    public int delete(Integer integer) {
+        return 0;
+    }
+
     public int createRT(RtDto rtDto) {
         try {
             String sql = "insert into RoleTemplete(rtName, rtDescription, bnNo) values (?,?,?)";
