@@ -116,17 +116,7 @@ public class CTemController {  // class start
 
         // 2. 로그인 중일때 세션에서 사업자번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
-        CTemDto dto = cTemService.getIndiCtem(bnNo, ctNo);
 
-        // 3. DTO에서 사용자에게 입력받은 ctNo를 찾을 수 없는 경우
-        if (dto == null){
-            dto = new CTemDto();
-            dto.setStatus("NOT_FOUND");
-            return 0;
-        }
-
-        // 4. 리턴
-        dto.setStatus("ACCESS_OK");
         return cTemService.deleteCTem(bnNo , ctNo);
     }
 

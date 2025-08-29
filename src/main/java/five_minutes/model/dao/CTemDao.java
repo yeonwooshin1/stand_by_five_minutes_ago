@@ -116,7 +116,7 @@ public class CTemDao extends Dao {
     // [5] 체크리스트 템플릿 삭제
     public int deleteCTem(String bnNo , int ctNo) {
         try{
-            String sql = "update checktemplate set ctStatus = 0 where bnNo =? and ctNo = ? ";
+            String sql = "update checktemplate set ctStatus = 0 where bnNo =? and ctNo = ? AND ctStatus = 1 ";
             PreparedStatement ps = conn.prepareStatement(sql );
             ps.setString(1, bnNo);
             ps.setInt(2, ctNo);

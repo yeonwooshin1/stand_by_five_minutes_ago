@@ -6,44 +6,45 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
 @RequestMapping("/user")
 public class UsersController {  // class start
+
     // service
     private final UsersService usersService;
-    // 세션에 임시 loginUserNo, loginBnNo 저장
-    @GetMapping("/testLogin")
-    public void login(HttpSession session) {
-        // 강제로 로그인 값 세팅
-        session.setAttribute("loginUserNo", 1000001);  // 테스트용 회원 번호
-        session.setAttribute("loginBnNo", "100-00-00001"); // 테스트용 사업자 번호
-
-    }
 
 
-//    // 로그인
-//    @PostMapping("/login")
-//    public int login(@ResponseBody UsersDto usersDto , HttpSession httpSession ) {
-//
-//        int result = usersService.login( usersDto );
-//        // if ( )
-//
-//
-//
-//        // 1.매개변수로 받은 요청정보내 세션객체를 확인 해서 없으면 비로그인상태
-//        if( session == null || session.getAttribute("loginUserNo") == null ) return -1;
-//        // 2.
-//        int loginMno = (int)session.getAttribute("loginMno");
-//        // 3.
-//        boolean result = memberService.delete( loginMno , oldpwd );
-//
-//        if(result)  session.removeAttribute("loginMno");
-//
-//        return result;
-//
-//
-//    }   // func end
+    // 로그인 컨트롤러
+    @PostMapping("/login")
+    public int login(@RequestBody UsersDto usersDto , HttpSession httpSession ) {
+
+        // 서비스 호출하여 유효한 로그인인지 검사
+        Map<String, Object> loginResult = usersService.login(usersDto);
+
+        int loginUserNo = (int) loginResult.get("loginUserNo");
+
+        // 로그인 실패할시 0을 반환
+        if (loginUserNo == 0) {
+            return 0;
+        }   // if end
+
+        // 로그인 성공 → 세션에 정보 저장
+        // 유저 번호 저장
+        httpSession.setAttribute("loginUserNo", loginUserNo);
+        // 사업자번호 없으면 null 값 저장
+        httpSession.setAttribute("loginBnNo", loginResult.get("loginBnNo"));
+
+        // 확인용 print
+        System.out.println(httpSession.getAttribute("loginUserNo"));
+        System.out.println(httpSession.getAttribute("loginBnNo"));
+
+        // 성공 시 userNo 반환
+        return loginUserNo;
+    }   // func end
 
 
 }   // class end
