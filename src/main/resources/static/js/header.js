@@ -1,6 +1,6 @@
 console.log("header js exe")
 // [공통] userNo 저장
-const userNo = 2;
+const userNo = 1;
 
 
 // [1] 메인 메뉴 
