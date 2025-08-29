@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor    // 의존성 주입
 public class CsvPasswordService {   // class start
 
+    // 파일 경로 지정
     private final String path = "src/main/resources/csv/password.csv";
     // BCrypt 라이브러리
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -29,6 +30,8 @@ public class CsvPasswordService {   // class start
         if( plainPassword == null || plainPassword.isBlank()) {
             return false;
         }   // if end
+
+        // userNo와 일치하는 해시화 비밀번호 찾는 메소드 ( 아래 참고 )
         String getHashPwd = findHashByUserNo(userNo);
 
         // 해시 비밀번호가 null 이거나 공백이라면 false 반환
@@ -51,17 +54,22 @@ public class CsvPasswordService {   // class start
 
     // CSV 파일에서 특정 userNo에 해당하는 bcrypt 해시를 찾아 반환하는 매소드 ( matches 메소드의 헬퍼 메소드 )
     private String findHashByUserNo(int putUserNo) {
-
+        // file 객체 생성
         File file = new File(path);
+
+        // 파일이 존재하지 않으면?
         if (!file.exists()) {
             // null 반환
             return null;
         }   // if end
         try {
+            // 한국어로 인코딩하고 내가 위에 설정한 경로로 file을 읽어온다.
             FileReader fileReader = new FileReader(path, StandardCharsets.UTF_8);
 
+            // CSV 파일 읽어온다.
             CSVReader csvReader = new CSVReader(fileReader);
 
+            // 파일 행 읽어올 문자열 배열 변수
             String[] row;
 
             // readNext() : 다음 줄을 읽는다. 없으면 null 반환이라 null이 아닐 때까지 무한 반복문을 돌린다. => 파일을 끝까지 읽는다.
