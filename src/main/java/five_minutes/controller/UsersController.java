@@ -18,6 +18,7 @@ public class UsersController {  // class start
         // 강제로 로그인 값 세팅
         session.setAttribute("loginUserNo", 1000001);  // 테스트용 회원 번호
         session.setAttribute("loginBnNo", "100-00-00001"); // 테스트용 사업자 번호
+
     }
 
 
