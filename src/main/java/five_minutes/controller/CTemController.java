@@ -17,15 +17,6 @@ public class CTemController {  // class start
     // * DI
     private final CTemService cTemService;
 
-    // 세션에 임시 loginUserNo, loginBnNo 저장
-    // http://localhost:8080/checktem/testLogin
-    @GetMapping("/testLogin")
-    public void tempLogin(HttpSession session) {
-        // 강제로 로그인 값 세팅
-        session.setAttribute("loginUserNo", 1000001);  // 테스트용 회원 번호
-        session.setAttribute("loginBnNo", "100-00-00001"); // 테스트용 사업자 번호
-    }
-
     // [1] 체크리스트 템플릿 생성
     // URL : http://localhost:8080/checktem
     // BODY : { "ctName" : "출퇴근 돌파" , "ctDescription" : "네이버 지도를 활용하도록 합니다."}
