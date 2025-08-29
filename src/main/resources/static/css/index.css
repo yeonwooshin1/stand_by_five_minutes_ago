@@ -11,15 +11,25 @@ li {
 a {
     text-decoration: none;
     color: black;
-    font-size: 1.2rem;
-    font-weight: 600;
 }
 
-#indexBody {
-    align-items: center;
-}
-
-.container{
-    display: flex;
+.indexContainer{
+    margin: 0.5rem auto;
     max-width: 1280px;
+}
+
+.mainContent {
+    padding: 0.5rem;
+}
+
+.ContentBox {
+    border: 0.25rem solid #eeeeee;
+    border-radius: 1.25rem;
+    padding: 1rem;
+}
+
+.title1{
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
 }

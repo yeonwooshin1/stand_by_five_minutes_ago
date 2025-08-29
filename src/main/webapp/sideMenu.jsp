@@ -17,6 +17,7 @@
 
 <body>
 
+    <div id="sideBody">
     <div id="sideMenuContainer" class="row">
         <div class="sideMenu col">
             <div class="menuHead">템플릿 관리</div>
@@ -41,6 +42,7 @@
             <div class="smallMenu"><a href="#">프로젝트 체크리스트</a></div>
             <div class="smallMenu"><a href="#">실무관리</a></div>
         </div>
+    </div>
     </div>
 
     <script src="../JS/sideMenu.js"></script>
