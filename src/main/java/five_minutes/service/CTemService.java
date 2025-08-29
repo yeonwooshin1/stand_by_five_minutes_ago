@@ -25,9 +25,18 @@ public class CTemService {
     }
 
     // [3] 체크리스트 템플릿 개별조회
+    public CTemDto getIndiCtem(String bnNo , int ctNo){
+        return cTemDao.getIndiCtem(bnNo, ctNo);
+    }
 
     // [4] 체크리스트 템플릿 수정
+    public int updateCTem(CTemDto cTemDto){
+        return cTemDao.updateCTem(cTemDto);
+    }
 
     // [5] 체크리스트 템플릿 삭제
+    public int deleteCTem(String bnNo , int ctNo){
+        return cTemDao.deleteCTem(bnNo , ctNo);
+    }
 
 } // class end
