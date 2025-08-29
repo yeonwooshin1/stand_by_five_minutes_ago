@@ -15,26 +15,36 @@
     <link rel='stylesheet' href='/CSS/index.css'>
 </head>
 
-<body id="indexBody">
+<body>
+
     <!-- header 연결 -->
     <jsp:include page="/header.jsp"></jsp:include>
 
+
     <!-- 본문 영역 -->
-    <div class="container row">
-        <!-- 사이드 메뉴바 영역 -->
-        <div class="side col-2">
-            <jsp:include page="/sideMenu.jsp"></jsp:include>
+    <div class="indexContainer">
+        <div class="row">
+            <!-- 사이드 메뉴바 영역 -->
+            <div class="side col-2">
+                <jsp:include page="/sideMenu.jsp"></jsp:include>
+            </div>
+            <!-- 본문 작업 영역 -->
+            <div class="mainContent col-10">
+                <div class="title1">제목</div>
+                <div class="ContentBox">
+                    본문 작업 영역!!
+                    <br/>
+                    1<br/>
+                    2<br/>
+                    3<br/>
+                    4<br/>
+
+                </div>
+            </div>
         </div>
-
-        <!-- 본문 작업 영역 -->
-        <div class="mainContent col-10">
-
-            본문 작업 영역!!
-        </div>
-
     </div>
 
-    
+
     <!-- footer 연결 -->
     <jsp:include page="/footer.jsp"></jsp:include>
 
