@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor @NoArgsConstructor @Data    // lombok
 public class BusinessDto { // class start
-
+    private String bnName;
 
 
 
