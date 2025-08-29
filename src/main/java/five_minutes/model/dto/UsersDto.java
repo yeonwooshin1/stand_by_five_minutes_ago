@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor @NoArgsConstructor @Data    // lombok
 public class UsersDto { // class start
-
+    private String email;
 
 }   // class end

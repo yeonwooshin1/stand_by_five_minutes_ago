@@ -18,19 +18,6 @@ public class RtDao extends Dao {
 
     // [ RT-01 ] 역할 템플릿 생성 createRT()
     public int createRT(RtDto rtDto) {
-        try {
-            String sql = "insert into RoleTemplete(rtName, rtDescription, bnNo) values (?,?,?)";
-            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,rtDto.getRtName());
-            ps.setString(2, rtDto.getRtDescription());
-            ps.setInt(3,rtDto.getBnNo());
-            int count = ps.executeUpdate();
-            if (count == 1 ){
-
-            }
-        } catch (Exception e) {
-            System.out.println("RtDao.createRT " + e);
-        }
         return 0;
     }// [ RT-01 ]  func end
 
