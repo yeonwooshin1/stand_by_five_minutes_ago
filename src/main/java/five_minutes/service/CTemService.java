@@ -5,6 +5,8 @@ import five_minutes.model.dto.CTemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service                    // 서비스 어노테이션
 @RequiredArgsConstructor    // 의존성 주입
 public class CTemService {
@@ -18,6 +20,9 @@ public class CTemService {
     }
 
     // [2] 체크리스트 템플릿 전체조회
+    public List<CTemDto> getCTem(String bnNo) {
+        return cTemDao.getCTem(bnNo);
+    }
 
     // [3] 체크리스트 템플릿 개별조회
 

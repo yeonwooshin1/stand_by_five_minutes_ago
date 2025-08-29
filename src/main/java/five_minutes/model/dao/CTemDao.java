@@ -21,16 +21,17 @@ public class CTemDao extends Dao {
         try {
             String sql = "insert into checktemplate (ctName , ctDescription , bnNo) values (? , ? , ?) ";
             // 생성된 PK값을 반환하기 위해 제너레이트키 반환
-            PreparedStatement ps = conn.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, cTemDto.getCtName());
             ps.setString(2, cTemDto.getCtDescription());
             ps.setString(3, cTemDto.getBnNo());
             if (ps.executeUpdate() == 1) {
                 ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()){
+                if (rs.next()) {
                     return rs.getInt(1);
                 }
-                rs.close(); ps.close();
+                rs.close();
+                ps.close();
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -39,15 +40,28 @@ public class CTemDao extends Dao {
     } // func end
 
     // [2] 체크리스트 템플릿 전체조회
-    public List<CTemDto> getCTem(){
+    public List<CTemDto> getCTem(String bnNo) {
         List<CTemDto> list = new ArrayList<>();
-        try{
+        try {
             String sql = "select * from checktemplate where ctStatus = 1 and bnNo = ? ";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, );
-        } catch (Exception e){
+            ps.setString(1, bnNo);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CTemDto cTemDto = new CTemDto();
+                cTemDto.setCtNo(rs.getInt("ctNo"));
+                cTemDto.setCtName(rs.getString("ctName"));
+                cTemDto.setCtDescription(rs.getString("ctDescription"));
+                cTemDto.setCtStatus(rs.getInt("ctStatus"));
+                cTemDto.setCreateDate(rs.getString("createDate"));
+                cTemDto.setUpdateDate(rs.getString("updateDate"));
+                cTemDto.setBnNo(rs.getString("bnNo"));
+                list.add(cTemDto);
+            }
+        } catch (Exception e) {
             System.out.println(e);
         } // catch end
+        return list;
     } // func end
 
 
