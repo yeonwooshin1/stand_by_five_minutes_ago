@@ -1,0 +1,43 @@
+* {
+    margin: 0px 0px;
+    padding: 0px 0px;
+    text-decoration: none;
+}
+
+.footerBackgroud {
+    background-color: #2F4676;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-area {
+    width: 1280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.footerNotice a {
+    color: white;
+    text-decoration-line: none;
+}
+
+.footerNotice {
+    display: flex;
+    list-style: none;
+}
+
+.footerNotice li,
+.footerNotice span {
+    color: white;
+    margin: 0 0.5rem 0 0.5rem;
+    font-size: 0.9rem;
+}
+
+.copyRight {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
