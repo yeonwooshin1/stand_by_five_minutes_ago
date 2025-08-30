@@ -117,7 +117,12 @@ public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
     @Override
     public int delete(Integer rtNo, String bnNo) {
         try {
-            String sql = "";
+            String sql = "update RoleTemplate set rtStatus = 0 where rtNo = ? and bnNo = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, rtNo);
+            ps.setString(2, bnNo);
+            int count = ps.executeUpdate();
+            if(count == 1) return rtNo;
         } catch (Exception e) {
             System.out.println("RtDao.delete" + e);
         }

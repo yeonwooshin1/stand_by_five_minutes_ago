@@ -98,8 +98,19 @@ public class RtController {  // class start
     }// [ RT-04 ]  func end
 
     // [ RT-05 ] 역할 템플릿 삭제(비활성화) deleteRT()
-    public int deleteRT(){
-        return  0;
+    @DeleteMapping
+    public int deleteRT(@RequestParam int rtNo, HttpSession session){
+        System.out.println("RtController.deleteRT");
+        System.out.println("rtNo = " + rtNo + ", session = " + session);
+
+        if( session.getAttribute("loginUserNo") == null ||
+                session.getAttribute("loginBnNo") == null ){
+            return -1;
+        }
+        Object loginBnNo = session.getAttribute("loginBnNo");
+        String bnNo = (String) loginBnNo;
+
+        return rtService.delete(rtNo, bnNo);
     }// [ RT-05 ]  func end
 
 }   // class end
