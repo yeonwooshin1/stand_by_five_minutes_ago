@@ -138,17 +138,38 @@ public class UsersService { // class start
 
     }   // func end
 
+
     // 유저정보 조회 서비스
     public UsersDto getUserInfo( int userNo ){
         return usersDao.getUserInfo(userNo);
     }   // func end
 
-//    // 유저정보 수정 서비스
-//    public int updateUserInfo( UsersDto usersDto ){
-//
-//
-//    }   // func end
 
+    // 유저정보 수정 서비스
+    public int updateUserInfo(UsersDto usersDto , int userNo ) {
 
+        // 가져온 dto 값들 유효성 검사용 , null 이면 null 값 주기 아니라면 공백제거해서 가져오기
+        String userName = usersDto.getUserName() == null ? null : usersDto.getUserName().trim();
+        String roadAddress = usersDto.getRoadAddress() == null ? null : usersDto.getRoadAddress().trim();
+        String detailAddress = usersDto.getDetailAddress() == null ? null : usersDto.getDetailAddress().trim();
+        String userPhone = usersDto.getUserPhone() == null? null : usersDto.getUserPhone().trim();
+
+        // 값이 없으면 -3 반환 => 유저 정보가 모두 있어야 한다는 전제조건이 깔림.
+        if ( userName == null || roadAddress == null || detailAddress == null || userPhone == null ||
+            userName.isBlank() || roadAddress.isBlank() ||  detailAddress.isBlank() || userPhone.isBlank() ) {
+            return -3;
+        }   // if end
+
+        // 비밀번호가 null 이 아니면서 형식 검사에서 틀리면 -2 반환 => 형식 오류
+        if( userPhone != null && !PhoneNumberUtil.isValid(usersDto.getUserPhone()) ) return -2;
+
+        // 보낼 dto 새로 만들기 => 생성자에 넣기
+        UsersDto dto = new UsersDto(userNo , null , null , userName , userPhone , roadAddress
+                , detailAddress , 1 , null , null);
+
+        // dao 호출해서 값 반환 => true면 1 , 아니면 0 반환
+        return usersDao.updateUserInfo(dto) ? 1 : 0 ;
+
+    }   // func end
 
 }   // class end

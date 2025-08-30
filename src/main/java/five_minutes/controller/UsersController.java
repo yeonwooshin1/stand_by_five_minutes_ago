@@ -113,25 +113,23 @@ public class UsersController {  // class start
     }   // func end
 
 
-//    // 유저 정보 변경
-//    @PutMapping("/user/update/info")
-//    public int updateUserInfo( @RequestBody UsersDto usersDto  ,HttpSession httpSession ){
-//
-//        // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
-//        if( httpSession == null || httpSession.getAttribute("loginUserNo")== null ){
-//        }   // if end
-//
-//        // userNo 를 가져온다.
-//        int userNo = (int) httpSession.getAttribute("loginUserNo");
-//
-//
-//
-//    }   // func end
+    // 유저 정보 변경
+    @PutMapping("/update/info")
+    public int updateUserInfo( @RequestBody UsersDto usersDto  ,HttpSession httpSession ){
 
+        // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
+        if( httpSession == null || httpSession.getAttribute("loginUserNo")== null ){
+            // -1 : 세션 없음
+            return -1;
+        }   // if end
 
+        // userNo 를 가져온다.
+        int userNo = (int) httpSession.getAttribute("loginUserNo");
 
+        // 서비스 호출 후 값을 반환한다.
+        return usersService.updateUserInfo( usersDto ,userNo );
 
-
+    }   // func end
 
 
 

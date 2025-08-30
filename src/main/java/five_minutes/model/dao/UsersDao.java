@@ -100,4 +100,26 @@ public class UsersDao extends Dao { // class start
         return null;
     }   // func end
 
+    // 유저 정보 수정
+    public boolean updateUserInfo( UsersDto usersDto ){
+        try{
+            String sql ="update Users set userName = ?, roadAddress = ? , detailAddress = ? , userPhone = ? where userNo = ? ";
+            PreparedStatement ps = conn.prepareStatement( sql );
+            ps.setString( 1 , usersDto.getUserName() );
+            ps.setString( 2 , usersDto.getRoadAddress());
+            ps.setString( 3 , usersDto.getDetailAddress());
+            ps.setString( 4 , usersDto.getUserPhone());
+
+            ps.setInt( 5, usersDto.getUserNo() );
+
+            int count = ps.executeUpdate();
+            // 업데이트 된 행이 1개면 성공
+            return count == 1;
+        } catch (Exception e) { System.out.println(e);  }
+        // 아니라면 실패
+        return false;
+    }   // func end
+
+
+
 }   // class end
