@@ -8,8 +8,10 @@ import five_minutes.model.dto.UsersDto;
 import five_minutes.util.PasswordValidator;
 import five_minutes.util.PhoneNumberUtil;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -135,6 +137,17 @@ public class UsersService { // class start
         else { return 0; }
 
     }   // func end
+
+    // 유저정보 조회 서비스
+    public UsersDto getUserInfo( int userNo ){
+        return usersDao.getUserInfo(userNo);
+    }   // func end
+
+//    // 유저정보 수정 서비스
+//    public int updateUserInfo( UsersDto usersDto ){
+//
+//
+//    }   // func end
 
 
 

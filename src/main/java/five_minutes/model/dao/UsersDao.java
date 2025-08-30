@@ -77,5 +77,27 @@ public class UsersDao extends Dao { // class start
         return null;
     }   // func end
 
+    // 유저정보 찾기
+    public UsersDto getUserInfo( int userNo ){
+        try{
+            // 이메일 , 이름 , 폰 , 도로명주소 , 상세주소 , 가입날짜 보여줌
+            String sql = "select email, userName, userPhone, roadAddress, detailAddress, createDate from Users where userNo = ?";
+            PreparedStatement ps = conn.prepareStatement( sql );
+            ps.setInt( 1 , userNo );
+            ResultSet rs = ps.executeQuery();
+            if( rs.next() ){
+                UsersDto usersDto  = new UsersDto(); // 패스워드 제외한
+                usersDto.setEmail( rs.getString( "email" ) );
+                usersDto.setUserName( rs.getString( "userName" ) );
+                usersDto.setUserPhone( rs.getString( "userPhone" ) );
+                usersDto.setRoadAddress( rs.getString( "roadAddress" ) );
+                usersDto.setDetailAddress( rs.getString( "detailAddress" ) );
+                usersDto.setCreateDate( rs.getString( "createDate" ) );
+                return usersDto;
+            }   // if end
+        } catch (Exception e) {   System.out.println("예외 발생");   }
+        // 없으면 null 반환
+        return null;
+    }   // func end
 
 }   // class end
