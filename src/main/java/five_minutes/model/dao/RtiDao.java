@@ -41,10 +41,11 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String>{
         return 0;
     } // [ RTI-01 ] func end
 
-    // [ RTI-02 ] 상세 역할 템플릿 개별 조회
+    // [ RTI-02 ] 상세 역할 템플릿 전체 조회
     @Override
     public List<RtiDto> readAll(String s) {
         try{
+            // [02-1] sql 작성
             String sql = "";
         } catch (Exception e) {
             System.out.println("RtiDao.readAll " + e);
@@ -52,7 +53,7 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String>{
         return List.of();
     } // [ RTI-02 ] func end
 
-    // [ RTI-03 ] 상세 역할 템플릿 전체 조회
+    // [ RTI-03 ] 상세 역할 템플릿 개별 조회
     @Override
     public RtiDto read(Integer i, String s) {
         try{
@@ -84,4 +85,7 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String>{
         }
         return 0;
     } // [ RTI-05 ] func end
+
+    // [06] 사업자 등록 번호 조회
+    // 해당 레코드의 작성
 }   // class end

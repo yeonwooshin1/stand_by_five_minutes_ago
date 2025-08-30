@@ -2,6 +2,7 @@ package five_minutes.model.dao;
 
 import five_minutes.model.dto.RtDto;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -143,5 +144,22 @@ public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
         }
         return 0;
     }// [ RT-05 ]  func end
+
+    // [ 01 ] rtNo - bnNo 일치 여부 판단
+    public int checkRtnoBnno(int rtNo, String bnNo){
+        try{
+            // [01-1] sql 작성
+            String sql = "select rtNo from RoleTemplate where rtNo = ? and bnNo = ? ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1,rtNo);
+            ps.setString(2,bnNo);
+            // [01-2] sql 실행
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) return rs.getInt("rtNo");
+        } catch (Exception e) {
+            System.out.println("RtDao.checkRtnoBnNo " + e);
+        }
+        return 0;
+    } // func end
 
 }   // class end
