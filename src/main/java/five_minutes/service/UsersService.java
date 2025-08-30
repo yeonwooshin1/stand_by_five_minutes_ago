@@ -1,11 +1,12 @@
 package five_minutes.service;
 
 import five_minutes.model.dao.UsersDao;
+import five_minutes.model.dto.EmailRecoverDto;
 import five_minutes.model.dto.UsersDto;
 
+import five_minutes.util.PhoneNumberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,6 +67,23 @@ public class UsersService { // class start
         return result;
 
     }   // func end
+
+    // 이메일찾기 서비스
+    public EmailRecoverDto recoverUserEmail( UsersDto usersDto ) {
+
+        // 유효성 검사 => userDto가 null 인지 전화번호 형식이 맞는지 확인, userName이 유효한 값인지 확인
+        if ( usersDto == null || !PhoneNumberUtil.isValid(usersDto.getUserPhone()) || usersDto.getUserName() == null || usersDto.getUserName().trim().isEmpty()) {
+            return new EmailRecoverDto(false , "" );
+        }   // if end
+
+        // dao 호출 후 email 값 받기
+        String getEmail = usersDao.recoverUserEmail(usersDto);
+
+        // email이 null 이면 실패반환 null 이 아니라면 true에 getEmail 반환
+        return (getEmail == null || getEmail.trim().isEmpty())?
+                new EmailRecoverDto(false , "" ) : new EmailRecoverDto(true , getEmail );
+
+    }   // if end
 
 
 

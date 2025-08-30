@@ -1,12 +1,13 @@
 package five_minutes.controller;
 
+import five_minutes.model.dto.EmailRecoverDto;
 import five_minutes.model.dto.UsersDto;
 import five_minutes.service.UsersService;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController             // 컨트롤러 컴포넌트
@@ -18,7 +19,7 @@ public class UsersController {  // class start
     private final UsersService usersService;
 
 
-    // 로그인 컨트롤러
+    // 로그인
     @PostMapping("/login")
     public int login(@RequestBody UsersDto usersDto , HttpSession httpSession ) {
 
@@ -45,6 +46,40 @@ public class UsersController {  // class start
         // 성공 시 userNo 반환
         return loginUserNo;
     }   // func end
+
+    // 로그아웃
+    @GetMapping("/logout")
+    public int logout( HttpSession httpSession ){
+
+        // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
+        if( httpSession == null || httpSession.getAttribute("loginUserNo")== null ){
+            return 0;
+        }   // if end
+
+        // 로그인 중이라면 세션 값을 제거한다.
+        httpSession.removeAttribute("loginUserNo");
+
+        // 사업자번호도 null이 아니면 같이 제거한다.
+        if( httpSession.getAttribute("loginBnNo") != null ){
+            httpSession.removeAttribute("loginBnNo");
+        }   // if end
+
+        // 로그아웃 성공 반환
+        return 1;
+    }   // func end
+
+    // 이메일찾기 (=id)
+    @GetMapping("/recoverEmail")
+    public EmailRecoverDto recoverUserEmail( UsersDto usersDto ){
+
+        // 서비스 호출해서 유효성 검사 후 반환
+        return usersService.recoverUserEmail(usersDto);
+
+    }   // func end
+
+
+
+
 
 
 }   // class end

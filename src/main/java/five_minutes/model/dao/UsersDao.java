@@ -1,5 +1,8 @@
 package five_minutes.model.dao;
 
+
+import five_minutes.model.dto.UsersDto;
+
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -52,6 +55,25 @@ public class UsersDao extends Dao { // class start
         }
 
         // 없다면 null 반환
+        return null;
+    }   // func end
+
+    // 이메일찾기 - 이름과 전화번호에 맞는 이메일 반환.
+    public String recoverUserEmail(UsersDto usersDto ) {
+        try{
+            String sql = "select email from Users where userName = ? and userPhone = ?";
+
+            PreparedStatement ps = conn.prepareStatement( sql );
+
+            ps.setString( 1 , usersDto.getUserName());
+            ps.setString( 2 , usersDto.getUserPhone() );
+
+            ResultSet rs = ps.executeQuery();
+            // email 반환
+            if( rs.next() ) return rs.getString("email");
+
+        } catch (Exception e) { System.out.println("예외 발생"); }
+        // 없으면 null 반환
         return null;
     }   // func end
 
