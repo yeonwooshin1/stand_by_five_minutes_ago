@@ -15,8 +15,6 @@ import java.util.List;
 // Google sheet > 21.테이블 > 2-1
 // Writer : OngTK
 
-// TODO 옹태경
-
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
 @RequestMapping("/roleTem")

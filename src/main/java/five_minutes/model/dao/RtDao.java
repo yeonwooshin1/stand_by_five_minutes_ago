@@ -14,7 +14,6 @@ import java.util.List;
 // 역할 템플릿 대분류를 정의
 // Google sheet > 21.테이블 > 2-1
 // Writer : OngTK
-// TODO 옹태경
 
 @Repository     // Dao 어노테이션
 public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
