@@ -16,7 +16,7 @@ import java.util.List;
 // TODO 옹태경
 
 @Repository     // Dao 어노테이션
-public class RtDao extends Dao implements CommonDao<RtDto, Integer>{
+public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
 
     // [ RT-01 ] 역할 템플릿 생성 create()
     @Override
@@ -38,33 +38,33 @@ public class RtDao extends Dao implements CommonDao<RtDto, Integer>{
         return 0;
     } // [ RT-01 ]  func end
 
-    // [ RT-02 ] 역할 템플릿 개별 조회  read()
+    // [ RT-02 ] 역할 템플릿 전체 조회 readAll()
     @Override
-    public RtDto read(Integer integer) {
+    public List<RtDto> readAll(String bnNo) {
         try {
+            String sql = "select * from ";
+        } catch (Exception e) {
+            System.out.println("RtDao.read" + e);
+        }
+        return  List.of();
+    } // [ RT-02 ] func end
 
+    // [ RT-03 ] 역할 템플릿 개별 조회  read()
+    @Override
+    public RtDto read(Integer rtNo, String bnNo) {
+        try {
+            String sql = "";
         } catch (Exception e) {
             System.out.println("RtDao.read" + e);
         }
         return null;
-    } // [ RT-02 ]  func end
-
-    // [ RT-03 ] 역할 템플릿 전체 조회 readAll()
-    @Override
-    public List<RtDto> readAll() {
-        try {
-
-        } catch (Exception e) {
-            System.out.println("RtDao.readAll" + e);
-        }
-        return List.of();
     } // [ RT-03 ]  func end
 
     // [ RT-04 ] 역할 템플릿 수정 update()
     @Override
     public int update(RtDto dto) {
         try {
-
+            String sql = "";
         } catch (Exception e) {
             System.out.println("RtDao.update" + e);
         }
@@ -72,11 +72,10 @@ public class RtDao extends Dao implements CommonDao<RtDto, Integer>{
     } // [ RT-04 ] func end
 
     // [ RT-05 ] 역할 템플릿 삭제(비활성화) delete()
-
     @Override
-    public int delete(Integer integer) {
+    public int delete(Integer rtNo, String bnNo) {
         try {
-
+            String sql = "";
         } catch (Exception e) {
             System.out.println("RtDao.delete" + e);
         }

@@ -10,10 +10,10 @@ import five_minutes.model.dao.CommonDao;
 
 import java.util.List;
 
-public abstract class AbstractService<T, ID> implements CommonService<T, ID> {
+public abstract class AbstractService<T, ID, S> implements CommonService<T, ID, S> {
 
     // [1] 추상 메소드
-    protected abstract CommonDao<T, ID> getDao();
+    protected abstract CommonDao<T, ID, S> getDao();
     
     // [2] CommonService 구현
     @Override
@@ -23,15 +23,15 @@ public abstract class AbstractService<T, ID> implements CommonService<T, ID> {
     } // func end
 
     @Override
-    // [2.2] 상세 조회 구현
-    public List<T> readAll() {
-        return getDao().readAll();
+    // [2.2] 전체 조회 구현
+    public List<T> readAll(S s) {
+        return getDao().readAll(s);
     } // func end
 
     @Override
     // [2.3] 개별 조회 구현
-    public T read(ID id) {
-        return getDao().read(id);
+    public T read(ID id, S s) {
+        return getDao().read(id, s);
     } // func end
 
     @Override
@@ -42,8 +42,8 @@ public abstract class AbstractService<T, ID> implements CommonService<T, ID> {
 
     @Override
     // [2.5] 삭제(비활성화) 구현
-    public int delete(ID id) {
-        return getDao().delete(id);
+    public int delete(ID id, S s) {
+        return getDao().delete(id, s);
     } // func end
 
 } // func end
