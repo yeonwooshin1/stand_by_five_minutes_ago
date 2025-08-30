@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 
 
@@ -103,4 +104,95 @@ public class CsvPasswordService {   // class start
             return null;    // 읽기/파싱 중의 에러는 null 처리해준다.
         }   // try end
     }   // func end
+
+
+    // 기존 비밀번호를 새 비밀번호로 바꾸는 메소드
+    public boolean changePassword(int userNo, String oldPassword, String newPassword) {
+
+        // 기존에 만든 matches 메소드 재활용해서 비밀번호가 기존 비밀번호와 맞는지 확인한다.
+        if (!matches(userNo, oldPassword)) {
+            // 현재 비번 불일치하면 false 반환
+            return false;
+        }   // if end
+
+        // 새 비밀번호 bcrypt 해시 생성 한다.
+        final String newPwdHash;
+        try{
+            newPwdHash = encoder.encode(newPassword);
+        } catch ( RuntimeException e){
+            // encoder 내부 예외가 날 가능성은 낮지만, 안전하게 실패 처리
+            return false;
+        }   // try end
+
+        // file 객체 생성
+        File file = new File(path);
+
+        // 파일이 존재하지 않으면?
+        if (!file.exists()) {
+            // null 반환
+            return false;
+        }   // if end
+
+        // 읽기 쓰기 다 가능한 RandomAccessFile 클래스
+        // "rw" 는 읽기 쓰기 다 하겠단 것.
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(path , "rw") ){
+            String line;            // 현재 읽은 한 줄 문자열
+            long pointerLine;       // 현재 줄이 시작되는 파일 위치를 기억하기 위한 변수
+
+            while(true) {
+
+                // 현재 파일 행 위치를 기억하는 변수
+                pointerLine = randomAccessFile.getFilePointer();
+
+                // readLine() 현재 위치에서 한 줄을 읽는 걸 기억하는 변수
+                line = randomAccessFile.readLine();
+
+                // null 이면 다 읽었다는 뜻이니까 반복문 종료
+                if(line == null) break;
+
+                // 그 읽어온 행을 ,을 기준으로 나누고 배열에 저장한다.
+                String[] cols = line.split(",");
+
+                // userNo랑 비밀번호 두 개의 행이 쪼개지는 거니까 최소 length 2개의 배열은 나와야한다. 만약 안나오면 잘못된 형식이니까 continue
+                if(cols.length < 2) continue;
+
+
+                try{
+                    // cols 변수의 0번째 열은 userNo의 정보니까 그것을 변수로 저장
+                    int rowUserNo = Integer.parseInt(cols[0].trim());
+
+                    // 그것이 찾는 userNo와 같다면 이 줄이 우리가 수정할 대상임.
+                    if (rowUserNo == userNo) {
+                        // newLine의 변수에 해당 userNo와 , 새로운 비밀번호 해시화 한 것을 담아서 저장
+                        String newLine = rowUserNo + "," + newPwdHash;
+
+                        // 기존 줄이랑 길이가 다르면 형식 오류임 : 왜냐면 BCrypt는 길이가 다 동일하다.
+                        if( newLine.length() != line.length() ){
+                            System.out.println("확인용 : 기존 줄이랑 길이가 달라서 덮어쓰기 안되는 오류");
+                            return false;
+                        }   // if end
+
+                        // 파일 포인터를 그 행의 시작으로 돌린다.
+                        randomAccessFile.seek(pointerLine);
+                        // 현재 포인터 위치(= 줄 시작)에 바뀐 비밀번호가 포함한 새 문자열을 그대로 덮어쓴다
+                        randomAccessFile.writeBytes(newLine);
+
+                        // 덮어쓰면 성공처리
+                        return true;
+                    }   // if end
+                } catch ( NumberFormatException e ){
+                    // Integer 할 때 숫자가 아닌 것을 숫자로 변환할 때 생기는 예외 처리
+                    System.out.println("int로 타입변환 중 생기는 예외");
+                }   // try end
+            }   // while end
+            // 못 찾으면 없으니까 실패 반환
+            return false;
+        } catch (Exception e){
+            // 파일 읽어오는데 예외처리
+            return false;
+        }   // try end
+
+    }   // func end
+
+
 }   // class end

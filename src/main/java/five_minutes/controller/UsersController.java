@@ -1,5 +1,6 @@
 package five_minutes.controller;
 
+import five_minutes.model.dto.ChangePasswordDto;
 import five_minutes.model.dto.EmailRecoverDto;
 import five_minutes.model.dto.UsersDto;
 import five_minutes.service.UsersService;
@@ -74,6 +75,23 @@ public class UsersController {  // class start
 
         // 서비스 호출해서 유효성 검사 후 반환
         return usersService.recoverUserEmail(usersDto);
+
+    }   // func end
+
+    // 비밀번호 변경
+    @PutMapping("/update/password")
+    public int updatePassword(@RequestBody ChangePasswordDto changePasswordDto , HttpSession httpSession){
+
+        // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
+        if( httpSession == null || httpSession.getAttribute("loginUserNo")== null ){
+            return -2;
+        }   // if end
+
+        // userNo 를 가져온다.
+        int userNo = (int) httpSession.getAttribute("loginUserNo");
+
+        // 서비스 호출해서 유효성 검사 후 반환
+        return usersService.updatePassword( changePasswordDto ,userNo );
 
     }   // func end
 

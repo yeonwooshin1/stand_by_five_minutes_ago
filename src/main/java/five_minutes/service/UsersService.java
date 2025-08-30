@@ -1,10 +1,13 @@
 package five_minutes.service;
 
 import five_minutes.model.dao.UsersDao;
+import five_minutes.model.dto.ChangePasswordDto;
 import five_minutes.model.dto.EmailRecoverDto;
 import five_minutes.model.dto.UsersDto;
 
+import five_minutes.util.PasswordValidator;
 import five_minutes.util.PhoneNumberUtil;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +32,7 @@ public class UsersService { // class start
         // 이메일 유효성 검사 후 변수에 저장, email이 null 이면 null 값 , 아니면 공백제거
         String email = usersDto.getEmail() == null ? null : usersDto.getEmail().trim();
         // 평문 비밀번호 변수에 저장
-        String plainPassword = usersDto.getPasswordHash();
+        String plainPassword = usersDto.getPasswordHash() == null ? null : usersDto.getPasswordHash().trim();
 
         // email과 평문비밀번호가 null 이거나 공백제거 후에 빈 값이라면 실패 반환 - 1차 유효성 검사
         // isBlank() : 문자열이 비어 있거나, 빈 공백으로만 이루어져 있으면 true 반환
@@ -84,6 +87,54 @@ public class UsersService { // class start
                 new EmailRecoverDto(false , "" ) : new EmailRecoverDto(true , getEmail );
 
     }   // if end
+
+
+    // 비밀번호 변경 서비스
+    public int updatePassword(ChangePasswordDto changePasswordDto , int userNo){
+
+        // 멤버변수 공백제거 후 변수 지정
+        String currentPassword = changePasswordDto.getCurrentPassword() == null? null : changePasswordDto.getCurrentPassword().trim();
+        String newPassword = changePasswordDto.getNewPassword() == null? null : changePasswordDto.getNewPassword().trim();
+        String confirmPassword = changePasswordDto.getConfirmPassword() == null? null : changePasswordDto.getConfirmPassword().trim();
+
+
+        System.out.println(confirmPassword);
+        System.out.println(newPassword);
+        System.out.println(confirmPassword);
+
+        // 얘네들 값이 null 이거나 비어있으면 실패 반환
+        if(newPassword == null || newPassword.isBlank() || confirmPassword == null || confirmPassword.isBlank()) {
+            return 0;
+        }   // if end
+
+        // 새 비밀번호랑 일치용 새 비밀번호랑 일치하는지 확인
+        if(!newPassword.equals(confirmPassword)){
+            // 일치 안하면 -1 => 두 개 일치 하지 않는다 반환
+            return -1;
+        }   // if end
+
+
+        // 확인용 비밀번호 형식 유효성 검사
+        // isBlank() : 문자열이 비어 있거나, 빈 공백으로만 이루어져 있으면 0 반환
+        if( currentPassword == null || currentPassword.trim().isBlank() ) {
+            // 실패 반환
+            return 0;
+        }   // if end
+
+        // 기존 비밀번호와 새 비밀번호가 일치하면 못 변경하게 함.
+        if(currentPassword.equals(newPassword)) return -4;
+
+        // 비밀번호 8글자 대소문자인지 확인하는 유효성 검사
+        if (!PasswordValidator.isValid(newPassword)) return -3;
+
+        // csv 파일에 있는 해시화된 비밀번호 확인하는 service 호출
+        boolean ok = csvPasswordService.changePassword(userNo, currentPassword , newPassword);
+
+        // boolean 반환값에 따라 다른 반환
+        if (ok) { return 1; }
+        else { return 0; }
+
+    }   // func end
 
 
 
