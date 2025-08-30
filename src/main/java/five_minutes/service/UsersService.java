@@ -161,7 +161,7 @@ public class UsersService { // class start
         }   // if end
 
         // 비밀번호가 null 이 아니면서 형식 검사에서 틀리면 -2 반환 => 형식 오류
-        if( userPhone != null && !PhoneNumberUtil.isValid(usersDto.getUserPhone()) ) return -2;
+        if( !PhoneNumberUtil.isValid(usersDto.getUserPhone()) ) return -2;
 
         // 보낼 dto 새로 만들기 => 생성자에 넣기
         UsersDto dto = new UsersDto(userNo , null , null , userName , userPhone , roadAddress

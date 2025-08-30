@@ -15,9 +15,11 @@ public class BusinessService { // class start
 
     // 회사 정보 조회 서비스
     public BusinessDto getBusinessInfo(String bnNo ){
-
+        // Dao 호출 후 Dto 반환
         return businessDao.getBusinessInfo( bnNo );
 
     }   // func end
+
+
 
 }   // class end

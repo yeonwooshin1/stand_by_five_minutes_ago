@@ -34,4 +34,6 @@ public class BusinessController {  // class start
         return businessService.getBusinessInfo(bnNo);
     }   // func end
 
+
+
 }   // class end
