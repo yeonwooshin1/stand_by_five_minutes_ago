@@ -72,7 +72,22 @@ public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
     @Override
     public RtDto read(Integer rtNo, String bnNo) {
         try {
-            String sql = "";
+            String sql = "select * from RoleTemplate where rtNo = ? and bnNo = ? and rtStatus = 1";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, rtNo);
+            ps.setString(2, bnNo);
+            ResultSet rs = ps.executeQuery();
+            RtDto rtDto = new RtDto();
+            if(rs.next()){
+                rtDto.setRtNo(rs.getInt("rtNo"));
+                rtDto.setBnNo( rs.getString("bnNo"));
+                rtDto.setRtName(rs.getString("rtName"));
+                rtDto.setRtDescription(rs.getString("rtDescription"));
+                rtDto.setRtStatus(rs.getInt("rtStatus"));
+                rtDto.setCreateDate(rs.getString("createDate"));
+                rtDto.setUpdateDate(rs.getString("updateDate"));
+            }
+            return rtDto;
         } catch (Exception e) {
             System.out.println("RtDao.read" + e);
         }

@@ -4,6 +4,7 @@ import five_minutes.model.dto.RtDto;
 import five_minutes.service.RtService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,8 +60,19 @@ public class RtController {  // class start
     }// [ RT-02 ]  func end
 
     // [ RT-03 ] 역할 템플릿 개별 조회 getIndiRT()
-    public RtDto getIndiRT(){
-        return null;
+    @GetMapping("/indi")
+    public RtDto getIndiRT(@RequestParam int rtNo, HttpSession session){
+        System.out.println("RtController.getIndiRT");
+        System.out.println("rtNo = " + rtNo);
+
+        if( session.getAttribute("loginUserNo") == null ||
+                session.getAttribute("loginBnNo") == null || rtNo == 0 ){
+            return null;
+        }
+        Object loginBnNo = session.getAttribute("loginBnNo");
+        String bnNo = (String) loginBnNo;
+
+        return rtService.read(rtNo, bnNo);
     }// [ RT-03 ]  func end
 
     // [ RT-04 ] 역할 템플릿 수정 updateRT()
