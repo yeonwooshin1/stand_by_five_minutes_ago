@@ -16,6 +16,12 @@ public class RtiController {  // class start
 
     private final RtiService rtiService;
 
+    // [ RTI-01 ] 상세 역할 템플릿 생성
+
+    // [ RTI-02 ] 상세 역할 템플릿 개별 조회
+    // [ RTI-03 ] 상세 역할 템플릿 전체 조회F
+    // [ RTI-04 ] 상세 역할 템플릿 수정
+    // [ RTI-05 ] 상세 역할 템플릿 삭제(비활성화)
 
 
 }   // class end

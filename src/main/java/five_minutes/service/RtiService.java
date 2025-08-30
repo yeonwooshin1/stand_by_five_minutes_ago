@@ -1,6 +1,8 @@
 package five_minutes.service;
 
+import five_minutes.model.dao.CommonDao;
 import five_minutes.model.dao.RtiDao;
+import five_minutes.model.dto.RtiDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,15 @@ import org.springframework.stereotype.Service;
 
 @Service                    // 서비스 어노테이션
 @RequiredArgsConstructor    // 의존성 주입
-public class RtiService { // class start
+public class RtiService extends AbstractService<RtiDto, Integer, String>{ // class start
 
     private final RtiDao rtiDao;
 
+    // AbstractService로 부터 getDao 메소드를 Override
+    // Controller의 CRUD 요청을 추상메소드를 통해 바로 Dao 단으로 전달
+    @Override
+    protected CommonDao<RtiDto, Integer, String> getDao() {
+        return (CommonDao<RtiDto, Integer, String>) rtiDao;
+    } // func end
 
 }   // class end
