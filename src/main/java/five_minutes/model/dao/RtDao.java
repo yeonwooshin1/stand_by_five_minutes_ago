@@ -96,9 +96,17 @@ public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
 
     // [ RT-04 ] 역할 템플릿 수정 update()
     @Override
-    public int update(RtDto dto) {
+    public int update(RtDto rtDto) {
         try {
-            String sql = "";
+            String sql = "update RoleTemplate set rtName = ?, rtDescription = ? where rtNo = ?";
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1,rtDto.getRtName());
+            ps.setString(2,rtDto.getRtDescription());
+            ps.setInt(3,rtDto.getRtNo());
+            int count = ps.executeUpdate();
+            if( count == 1 ) {
+                return rtDto.getRtNo();
+            }
         } catch (Exception e) {
             System.out.println("RtDao.update" + e);
         }

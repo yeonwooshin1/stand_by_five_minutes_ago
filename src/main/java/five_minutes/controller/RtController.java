@@ -76,8 +76,25 @@ public class RtController {  // class start
     }// [ RT-03 ]  func end
 
     // [ RT-04 ] 역할 템플릿 수정 updateRT()
-    public int updateRT(){
-        return  0;
+    @PutMapping
+    public int updateRT(@RequestBody RtDto rtDto, HttpSession session){
+        System.out.println("RtController.updateRT");
+        System.out.println("rtDto = " + rtDto + ", session = " + session);
+
+        if( session.getAttribute("loginUserNo") == null ||
+                session.getAttribute("loginBnNo") == null ){
+            return -1;
+        }
+        Object loginBnNo = session.getAttribute("loginBnNo");
+        String bnNo = (String) loginBnNo;
+
+        if(rtDto.getRtName() == null || rtDto.getRtName().isEmpty()){
+            return -2;
+        } else if (rtDto.getRtDescription() == null|| rtDto.getRtDescription().isEmpty()){
+            return -3;
+        }
+
+        return  rtService.update(rtDto);
     }// [ RT-04 ]  func end
 
     // [ RT-05 ] 역할 템플릿 삭제(비활성화) deleteRT()
