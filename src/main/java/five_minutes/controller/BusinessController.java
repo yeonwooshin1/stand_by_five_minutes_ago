@@ -1,15 +1,11 @@
 package five_minutes.controller;
 
 import five_minutes.model.dto.BusinessDto;
-import five_minutes.model.dto.EmailRecoverDto;
 
 import five_minutes.service.BusinessService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
@@ -34,6 +30,22 @@ public class BusinessController {  // class start
         return businessService.getBusinessInfo(bnNo);
     }   // func end
 
+    // 회사정보수정
+    @PutMapping("/update/info")
+    public int updateBusinessInfo(@RequestBody BusinessDto businessDto  , HttpSession httpSession ){
+
+        // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
+        if( httpSession == null || httpSession.getAttribute("loginBnNo")== null ){
+            return -1;
+        }   // if end
+
+        // bnNo 를 가져온다.
+        String bnNo = (String) httpSession.getAttribute("loginBnNo");
+
+        // 서비스 호출 후 값을 반환한다.
+        return businessService.updateBusinessInfo( businessDto ,bnNo );
+
+    }   // func end
 
 
 }   // class end
