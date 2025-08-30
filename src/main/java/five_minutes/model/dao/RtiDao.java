@@ -17,30 +17,55 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String>{
     // [ RTI-01 ] 상세 역할 템플릿 생성 create()
     @Override
     public int create(RtiDto dto) {
+        try{
+            String sql = "";
+        } catch (Exception e) {
+            System.out.println("RtiDao.create " + e);
+        }
         return 0;
     } // [ RTI-01 ] func end
 
     // [ RTI-02 ] 상세 역할 템플릿 개별 조회
     @Override
     public List<RtiDto> readAll(String s) {
+        try{
+            String sql = "";
+        } catch (Exception e) {
+            System.out.println("RtiDao.create " + e);
+        }
         return List.of();
     } // [ RTI-02 ] func end
 
     // [ RTI-03 ] 상세 역할 템플릿 전체 조회
     @Override
     public RtiDto read(Integer i, String s) {
+        try{
+            String sql = "";
+        } catch (Exception e) {
+            System.out.println("RtiDao.create " + e);
+        }
         return null;
     } // [ RTI-03 ] func end
 
     // [ RTI-04 ] 상세 역할 템플릿 수정
     @Override
     public int update(RtiDto dto) {
+        try{
+            String sql = "";
+        } catch (Exception e) {
+            System.out.println("RtiDao.create " + e);
+        }
         return 0;
     } // [ RTI-04 ] func end
 
     // [ RTI-05 ] 상세 역할 템플릿 삭제(비활성화)
     @Override
     public int delete(Integer i, String s) {
+        try{
+            String sql = "";
+        } catch (Exception e) {
+            System.out.println("RtiDao.create " + e);
+        }
         return 0;
     } // [ RTI-05 ] func end
 }   // class end
