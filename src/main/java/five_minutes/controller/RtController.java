@@ -4,10 +4,7 @@ import five_minutes.model.dto.RtDto;
 import five_minutes.service.RtService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,11 +41,21 @@ public class RtController {  // class start
             return -3;
         }
         return rtService.create(rtDto);
-    }// [ RT-01 ]  func end
+    } // [ RT-01 ]  func end
 
     // [ RT-02 ] 역할 템플릿 전체 조회 getRT()
-    public List<RtDto> getRT(){
-        return null;
+    @GetMapping
+    public List<RtDto> getRT(HttpSession session){
+        System.out.println("RtController.getRT");
+        System.out.println("session = " + session);
+
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
+            return null;
+        }
+        Object loginBnNo = session.getAttribute("loginBnNo");
+        String bnNo = (String) loginBnNo;
+
+        return rtService.readAll(bnNo);
     }// [ RT-02 ]  func end
 
     // [ RT-03 ] 역할 템플릿 개별 조회 getIndiRT()

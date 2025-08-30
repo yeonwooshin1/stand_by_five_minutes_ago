@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 // Info =========================
@@ -41,12 +42,30 @@ public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
     // [ RT-02 ] 역할 템플릿 전체 조회 readAll()
     @Override
     public List<RtDto> readAll(String bnNo) {
+        List<RtDto> list = new ArrayList<RtDto>();
         try {
-            String sql = "select * from ";
+            String sql = "select * from RoleTemplate where bnNo = ? and rtStatus = 1";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, bnNo);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                RtDto rtDto = new RtDto();
+
+                rtDto.setRtNo(rs.getInt("rtNo"));
+                rtDto.setBnNo( rs.getString("bnNo"));
+                rtDto.setRtName(rs.getString("rtName"));
+                rtDto.setRtDescription(rs.getString("rtDescription"));
+                rtDto.setRtStatus(rs.getInt("rtStatus"));
+                rtDto.setCreateDate(rs.getString("createDate"));
+                rtDto.setUpdateDate(rs.getString("updateDate"));
+
+                list.add(rtDto);
+            }
+            return list;
         } catch (Exception e) {
             System.out.println("RtDao.read" + e);
         }
-        return  List.of();
+        return null;
     } // [ RT-02 ] func end
 
     // [ RT-03 ] 역할 템플릿 개별 조회  read()
