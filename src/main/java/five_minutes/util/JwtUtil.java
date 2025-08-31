@@ -31,6 +31,7 @@ public class JwtUtil {  // class start
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }   // func end
 
+
     // -------------------------------------------------------------------------------------------------
     // [public String createToken(String userNo, String jti)]
     // - 목적: "이 사용자가 비밀번호 재설정을 할 수 있도록" 임시 JWT를 발급한다.
