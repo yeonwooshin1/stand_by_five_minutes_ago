@@ -1,7 +1,7 @@
 package five_minutes.util;
 
 // 비밀번호 유효성 검사 클래스
-public class PasswordValidator {    // class start
+public class PasswordValidatorUtil {    // class start
 
     // 비밀번호 유효성 검사
     // 대문자 1개 이상 포함

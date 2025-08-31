@@ -5,7 +5,7 @@ import five_minutes.model.dto.ChangePasswordDto;
 import five_minutes.model.dto.EmailRecoverDto;
 import five_minutes.model.dto.UsersDto;
 
-import five_minutes.util.PasswordValidator;
+import five_minutes.util.PasswordValidatorUtil;
 import five_minutes.util.PhoneNumberUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -87,7 +87,7 @@ public class UsersService { // class start
         return (getEmail == null || getEmail.trim().isEmpty())?
                 new EmailRecoverDto(false , "" ) : new EmailRecoverDto(true , getEmail );
 
-    }   // if end
+    }   // func end
 
 
     // 비밀번호 변경 서비스
@@ -126,7 +126,7 @@ public class UsersService { // class start
         if(currentPassword.equals(newPassword)) return -4;
 
         // 비밀번호 8글자 대소문자인지 확인하는 유효성 검사
-        if (!PasswordValidator.isValid(newPassword)) return -3;
+        if (!PasswordValidatorUtil.isValid(newPassword)) return -3;
 
         // csv 파일에 있는 해시화된 비밀번호 확인하는 service 호출
         boolean ok = csvPasswordService.changePassword(userNo, currentPassword , newPassword);
