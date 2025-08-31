@@ -1,0 +1,35 @@
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+li {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.indexContainer{
+    margin: 0.5rem auto;
+    max-width: 1280px;
+}
+
+.mainContent {
+    padding: 0.5rem;
+}
+
+.ContentBox {
+    border: 0.25rem solid #eeeeee;
+    border-radius: 1.25rem;
+    padding: 1rem;
+}
+
+.title1{
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}

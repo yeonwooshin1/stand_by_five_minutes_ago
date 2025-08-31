@@ -1,0 +1,89 @@
+<!-- <%@ page language="java" contentType="text/html ; charset=utf-8" pageEncoding="UTF-8" %> -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>역할 템플릿 관리</title>
+    <!--부트스트랩 CDN CSS-->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+    <link rel='stylesheet' href='/CSS/template/roleTem.css'>
+</head>
+
+<body>
+
+    <!-- header 연결 -->
+    <jsp:include page="/header.jsp"></jsp:include>
+
+
+    <!-- 본문 영역 -->
+    <div class="indexContainer">
+        <div class="row">
+            <!-- 사이드 메뉴바 영역 -->
+            <div class="side col-2">
+                <jsp:include page="/template/sideMenu.jsp"></jsp:include>
+            </div>
+            <!-- 본문 작업 영역 -->
+            <div class="mainContent col-10">
+                <div class="title1">역할 템플릿 관리</div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="">생성</button>
+                        <button type="button" class="btn btn-primary " data-bs-toggle="modal"
+                        data-bs-target="">삭제</button>
+                        <!--data-bs-target에 연결할 모달을 연결-->
+                <div class="ContentBox">
+                    <!-- 역할 템플릿 대분류를 표시 / RoleTemplate table-->
+                    <table class="table table-striped table-hover ">
+                        <thead>
+                            <tr>
+                                <th> 선택 </th>
+                                <th> 번호 </th>
+                                <th> 역할 템플릿명 </th>
+                                <th> 역할 템플릿 설명 </th>
+                                <th> 생성일 </th>
+                                <th> 수정일 </th>
+                            </tr>
+                        </thead>
+                        <tbody class="roleTemplateTbody">
+                            <tr>
+                                <td>
+                                    <input class="form-check-input" type="checkbox" value="2000001"> 
+                                </td>
+                                <td>1</td>
+                                <td>삐에로</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" onclick="">미리보기</button>
+                                    <button type="button" class="btn btn-primary" onclick="">수정하기</button>
+                                </td>
+                                <td>2025-06-07 08:38:54</td>
+                                <td>2025-06-07 08:38:54</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 생성 모달 -->
+
+    <!-- content 미리보기 모달 -->
+
+    <!-- Name / content 수정하기 모달 -->
+
+
+    <!-- footer 연결 -->
+    <jsp:include page="/footer.jsp"></jsp:include>
+
+    <!--부트스트랩 CDN JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

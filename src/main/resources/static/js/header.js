@@ -17,7 +17,7 @@ const mainMenu = async () => {
         html = ''
     } else if (userNo == 1) { // 기업 담당자
         html += `<li><a href="#">인력 관리</a></li>
-                 <li><a href="#">템플릿 관리</a></li>
+                 <li><a href="/template/roleTem.jsp">템플릿 관리</a></li>
                  <li><a href="#">프로젝트 관리</a></li>`
     } else if (userNo == 2) { // 일반회원
         html += `<li><a href="#">메뉴1</a></li>
