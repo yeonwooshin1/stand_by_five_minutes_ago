@@ -30,12 +30,17 @@
             </div>
             <!-- 본문 작업 영역 -->
             <div class="mainContent col-10">
-                <div class="title1">역할 템플릿 관리</div>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="">생성</button>
+                <div class="contentHeader">
+                    <div class="title1">역할 템플릿 관리</div>
+                    <div class="titleBtnBox">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="">생성</button>
                         <button type="button" class="btn btn-primary " data-bs-toggle="modal"
-                        data-bs-target="">삭제</button>
-                        <!--data-bs-target에 연결할 모달을 연결-->
+                            data-bs-target="">삭제</button>
+                    </div>
+                </div>
+
+                <!--data-bs-target에 연결할 모달을 연결-->
                 <div class="ContentBox">
                     <!-- 역할 템플릿 대분류를 표시 / RoleTemplate table-->
                     <table class="table table-striped table-hover ">
@@ -52,7 +57,7 @@
                         <tbody class="roleTemplateTbody">
                             <tr>
                                 <td>
-                                    <input class="form-check-input" type="checkbox" value="2000001"> 
+                                    <input class="form-check-input" type="checkbox" value="2000001">
                                 </td>
                                 <td>1</td>
                                 <td>삐에로</td>
@@ -86,4 +91,4 @@
         crossorigin="anonymous"></script>
 </body>
 
-</html>
+</html>`

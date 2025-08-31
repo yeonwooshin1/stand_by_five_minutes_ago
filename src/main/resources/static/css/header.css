@@ -63,12 +63,13 @@
     margin : 0;
 }
 
-.sub-menu a {
+.sub-menu .amyPageNlogout {
     color: #949BA6;
     text-decoration-line: none;
 }
 
-.sub-menu li {
+.sub-menu .myPageNlogout,
+.headerbar {
     color: #949BA6;
     margin-right: 0.5rem;
     font-size: 0.9rem;

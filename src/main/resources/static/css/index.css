@@ -23,13 +23,13 @@ a {
 }
 
 .ContentBox {
-    border: 0.25rem solid #eeeeee;
+    border: 0.12rem solid #efefef;
     border-radius: 1.25rem;
     padding: 1rem;
 }
 
 .title1{
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
