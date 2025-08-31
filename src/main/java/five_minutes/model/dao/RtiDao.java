@@ -124,15 +124,17 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String> {
 
     // [ RTI-05 ] 상세 역할 템플릿 삭제(비활성화)
     @Override
-    public int delete(Integer i, String s) {
+    public int delete(Integer rtiNo, String s) {
         try {
-            String sql = "";
+            String sql = "update RoleTemplateItem set rtiStatus=0 where rtiNo=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, rtiNo);
+            int count = ps.executeUpdate();
+            if(count == 1 ) return rtiNo;
         } catch (Exception e) {
             System.out.println("RtiDao.delete " + e);
         }
         return 0;
     } // [ RTI-05 ] func end
 
-    // [06] 사업자 등록 번호 조회
-    // 해당 레코드의 작성
 }   // class end

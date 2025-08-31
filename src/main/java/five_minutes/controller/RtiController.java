@@ -4,7 +4,6 @@ import five_minutes.model.dto.RtiDto;
 import five_minutes.service.RtiService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -86,17 +85,26 @@ public class RtiController {  // class start
 
         // [04-1] session 확인
         if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null) {
-            return 0;
+            return -1;
         }
         // [04-2] service의 update 메소드 호출
         return rtiService.update(rtiDto);
     } // [ RTI-04 ] func end
 
     // [ RTI-05 ] 상세 역할 템플릿 삭제(비활성화)
-    public int deleteRTItem(){
-        return 0;
-    } // [ RTI-05 ] func end
+    @DeleteMapping
+    public int deleteRTItem(@RequestParam int rtiNo, HttpSession session){
+        System.out.println("RtiController.deleteRTItem");
+        System.out.println("rtiNo = " + rtiNo + ", session = " + session);
 
+        // [05-1] session 확인
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null) {
+            return -1;
+        }
+        String sessionBnno = session.getAttribute("loginBnNo") +"";
+        // [05-2] service의 update 메소드 호출
+        return rtiService.delete(rtiNo, sessionBnno);
+    } // [ RTI-05 ] func end
 
 }   // class end
 

@@ -145,7 +145,7 @@ public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
         return 0;
     }// [ RT-05 ]  func end
 
-    // [ 01 ] rtNo - bnNo 일치 여부 판단
+    // [ 06 ] rtNo - bnNo 일치 여부 판단
     // rtiDao 의 CRUD를 수항하기 전 참조하 rtNo와 로그인 bnNo가 일치하는 지를 확인
     public int checkRtnoBnno(int rtNo, String bnNo){
         try{
