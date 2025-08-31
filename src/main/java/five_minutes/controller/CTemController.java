@@ -17,6 +17,10 @@ public class CTemController {  // class start
     // * DI
     private final CTemService cTemService;
 
+    // 로그인체크
+    // URL : http://localhost:8080/user/login
+    // BODY :   { "email": "mx2ur43n@example.com" , "passwordHash": "NyEUIQeE4N" }
+
     // [1] 체크리스트 템플릿 생성
     // URL : http://localhost:8080/checktem
     // BODY : { "ctName" : "출퇴근 돌파" , "ctDescription" : "네이버 지도를 활용하도록 합니다."}
@@ -113,11 +117,19 @@ public class CTemController {  // class start
             dto.setStatus("NOT_LOGGED_IN");
             return -1;
         }
-
         // 2. 로그인 중일때 세션에서 사업자번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
-
+        CTemDto dto = cTemService.getIndiCtem(bnNo, ctNo);
+        // 3. DTO에서 사용자엑 입력받은 ctNo를 찾지 못했을 경우
+        if(dto == null){
+            dto = new CTemDto();
+            dto.setStatus("NOT_FOUND");
+            return 0;
+        }
+        // 4. 리턴
+        dto.setStatus("ACCESS_OK");
         return cTemService.deleteCTem(bnNo , ctNo);
+
     }
 
 
