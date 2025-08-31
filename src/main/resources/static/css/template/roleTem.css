@@ -38,3 +38,9 @@ a {
     display: flex;
     justify-content: space-between;
 }
+
+.roleTemplateThead th,
+.roleTemplateTbody td {
+    text-align: center;
+    vertical-align: middle;
+}

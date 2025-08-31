@@ -8,11 +8,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>역할 템플릿 관리</title>
     <!--부트스트랩 CDN CSS-->
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <!--부트스트랩 CDN JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
 
+    <!-- roleTem Css -->
     <link rel='stylesheet' href='/CSS/template/roleTem.css'>
+
+    <!-- jquery 최신버전 -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!-- 썸머노트 0.9.1 최신버전 css/js , https://cdnjs.com/ -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.js"></script>
+
+    <!-- 썸머노트 한글 js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/lang/summernote-ko-KR.min.js"></script>
+
 </head>
 
 <body>
@@ -33,17 +48,17 @@
                 <div class="contentHeader">
                     <div class="title1">역할 템플릿 관리</div>
                     <div class="titleBtnBox">
+                        <!-- 모달 연결 버튼 -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="">생성</button>
-                        <button type="button" class="btn btn-primary " data-bs-toggle="modal"
-                            data-bs-target="">삭제</button>
+                            data-bs-target="#createRoleTem">생성</button>
+                        <button type="button" class="btn btn-primary" onclick="deleteRT()">삭제</button>
                     </div>
                 </div>
-
                 <!--data-bs-target에 연결할 모달을 연결-->
+
                 <div class="ContentBox">
                     <!-- 역할 템플릿 대분류를 표시 / RoleTemplate table-->
-                    <table class="table table-striped table-hover ">
+                    <table class="table table-striped table-hover roleTemplateThead">
                         <thead>
                             <tr>
                                 <th> 선택 </th>
@@ -62,7 +77,8 @@
                                 <td>1</td>
                                 <td>삐에로</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" onclick="">미리보기</button>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#reviewRoleTem">미리보기</button>
                                     <button type="button" class="btn btn-primary" onclick="">수정하기</button>
                                 </td>
                                 <td>2025-06-07 08:38:54</td>
@@ -75,9 +91,62 @@
         </div>
     </div>
 
+    <!-- TODO 1화면에 summerNote는 1개 뿐!!! -->
+
     <!-- 생성 모달 -->
+    <div class="modal fade" id="createRoleTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">새 역할 템플릿 만들기</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body createRTContent">
+                    <div>
+                        <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
+                        <input class="form-control" id="recipient-name" type="text" />
+                    </div>
+                    <div>
+                        <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
+                        <textarea class="rtDescription" id="summernote" name="editordata"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary" onclick="createRT()"
+                        data-bs-dismiss="modal">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- content 미리보기 모달 -->
+    <div class="modal fade" id="reviewRoleTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">새 역할 템플릿 만들기</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body createRTContent">
+                    <div>
+                        <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
+                        <input class="form-control" id="recipient-name" type="text" value="삐에로" />
+                    </div>
+                    <div>
+                        <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
+                        <textarea class="rtDescriptionOutput" id="summernote" name="editordata"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary" onclick="createRT()"
+                        data-bs-dismiss="modal">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Name / content 수정하기 모달 -->
 
@@ -85,10 +154,10 @@
     <!-- footer 연결 -->
     <jsp:include page="/footer.jsp"></jsp:include>
 
-    <!--부트스트랩 CDN JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
+    <!-- RoleTemp JS 연결 -->
+    <script src="/JS/template/roleTem.js"></script>
+
+
 </body>
 
 </html>`
