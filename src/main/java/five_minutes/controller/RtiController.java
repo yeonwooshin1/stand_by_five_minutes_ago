@@ -64,6 +64,9 @@ public class RtiController {  // class start
     // [ RTI-03 ] 상세 역할 템플릿 개별 조회
     @GetMapping("/indi")
     public RtiDto getIndiRTItem(@RequestParam int rtiNo, HttpSession session){
+        System.out.println("RtiController.getIndiRTItem");
+        System.out.println("rtiNo = " + rtiNo + ", session = " + session);
+
         // [03-1] session에서 로그인정보와 사업자번호 존재 여부 확인
         if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null) {
             return null;
@@ -76,8 +79,17 @@ public class RtiController {  // class start
     } // [ RTI-03 ] func end
 
     // [ RTI-04 ] 상세 역할 템플릿 수정
-    public int updateRTItem(){
-        return 0;
+    @PutMapping
+    public int updateRTItem(@RequestBody RtiDto rtiDto, HttpSession session){
+        System.out.println("RtiController.updateRTItem");
+        System.out.println("rtiDto = " + rtiDto + ", session = " + session);
+
+        // [04-1] session 확인
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null) {
+            return 0;
+        }
+        // [04-2] service의 update 메소드 호출
+        return rtiService.update(rtiDto);
     } // [ RTI-04 ] func end
 
     // [ RTI-05 ] 상세 역할 템플릿 삭제(비활성화)

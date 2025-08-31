@@ -104,9 +104,18 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String> {
 
     // [ RTI-04 ] 상세 역할 템플릿 수정
     @Override
-    public int update(RtiDto dto) {
+    public int update(RtiDto rtiDto) {
         try {
-            String sql = "";
+            // [04-1] spql 작성
+            String sql = "update RoleTemplateItem set rtiName=?, rtiDescription=? where rtiNo=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, rtiDto.getRtiName());
+            ps.setString(2, rtiDto.getRtiDescription());
+            ps.setInt(3, rtiDto.getRtiNo());
+            // [04-2] sql 실행
+            int count = ps.executeUpdate();
+            // [04-3] 결과 반환
+            if( count == 1 ){return rtiDto.getRtiNo();}
         } catch (Exception e) {
             System.out.println("RtiDao.update " + e);
         }
