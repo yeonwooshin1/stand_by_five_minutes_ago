@@ -1,6 +1,7 @@
 package five_minutes.service;
 
 import five_minutes.model.dao.CommonDao;
+import five_minutes.model.dao.RtDao;
 import five_minutes.model.dao.RtiDao;
 import five_minutes.model.dto.RtiDto;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class RtiService extends AbstractService<RtiDto, Integer, String>{ // class start
 
     private final RtiDao rtiDao;
+    private final RtDao rtDao;
 
     // AbstractService로 부터 getDao 메소드를 Override
     // Controller의 CRUD 요청을 추상메소드를 통해 바로 Dao 단으로 전달
@@ -24,5 +26,21 @@ public class RtiService extends AbstractService<RtiDto, Integer, String>{ // cla
     protected CommonDao<RtiDto, Integer, String> getDao() {
         return (CommonDao<RtiDto, Integer, String>) rtiDao;
     } // func end
+
+    // [00] 참조 rtNo와 로그인 BnNo 검증
+    public int checkRtnoBnno(int rtNo, String sessionBnNo) {
+        // [00-1] rtDao의 checkRtnoBnno 메소드 실행
+        // 반환값 : True : rtNo / false = 0
+        return rtDao.checkRtnoBnno(rtNo, sessionBnNo);
+    }
+
+    // [ RTI-01 ] 상세 역할템플릿 생성
+    public int createRTItem(RtiDto dto, String sessionBnNo) {
+        if (checkRtnoBnno(dto.getRtNo(), sessionBnNo) <= 0) {
+            return -99; // 권한 없음
+        }
+        return rtiDao.create(dto);
+    }
+
 
 }   // class end

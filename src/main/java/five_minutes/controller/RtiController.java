@@ -34,15 +34,18 @@ public class RtiController {  // class start
         if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
             return -1;
         }
-        // [01-3] 매개변수로 받은 rtiDto의 내용이 비어있지 않은지 확인
+        // [01-2] 매개변수로 받은 rtiDto의 내용이 비어있지 않은지 확인
         if(rtiDto.getRtiName() == null || rtiDto.getRtiName().isEmpty()){
             return -2;
         } else if (rtiDto.getRtiDescription() == null|| rtiDto.getRtiDescription().isEmpty()){
             return -3;
         }
 
-        // [01-4] rtiService의 create 메소드 실행
-        return rtiService.create(rtiDto);
+        // [01-3] session에서 bnNo 추출
+        String sessionBnno = (String) session.getAttribute("loginBnNo");
+
+        // [01-3] rtiService의 create 메소드 실행
+        return rtiService.createRTItem(rtiDto, sessionBnno);
     } // [ RTI-01 ] func end
 
     // [ RTI-02 ] 상세 역할 템플릿 개별 조회

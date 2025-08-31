@@ -146,16 +146,20 @@ public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
     }// [ RT-05 ]  func end
 
     // [ 01 ] rtNo - bnNo 일치 여부 판단
+    // rtiDao 의 CRUD를 수항하기 전 참조하 rtNo와 로그인 bnNo가 일치하는 지를 확인
     public int checkRtnoBnno(int rtNo, String bnNo){
         try{
             // [01-1] sql 작성
-            String sql = "select rtNo from RoleTemplate where rtNo = ? and bnNo = ? ";
+            String sql = "select bnNo from RoleTemplate where rtNo = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1,rtNo);
-            ps.setString(2,bnNo);
             // [01-2] sql 실행
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) return rs.getInt("rtNo");
+            if(rs.next()){
+                // [01-3] sql 결과와 매개변수 bnNo의 일치여부 확인 및 결과반환
+                String rsBnno = rs.getString("bnNo");
+                if(rsBnno.equals(bnNo))return rtNo;
+            }
         } catch (Exception e) {
             System.out.println("RtDao.checkRtnoBnNo " + e);
         }
