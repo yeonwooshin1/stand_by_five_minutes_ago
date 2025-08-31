@@ -70,18 +70,36 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String> {
         } catch (Exception e) {
             System.out.println("RtiDao.readAll " + e);
         }
-        return null;
+        // [02-5] 실패 결과
+        RtiDto rtiDto = new RtiDto();
+        rtiDto.setRtNo(0); // 결과 없음
+        list.add(rtiDto);
+        return list;
     } // [ RTI-02 ] func end
 
     // [ RTI-03 ] 상세 역할 템플릿 개별 조회
     @Override
-    public RtiDto read(Integer i, String s) {
+    public RtiDto read(Integer rtiNo, String s) {
+        RtiDto rtiDto = new RtiDto();
         try {
-            String sql = "";
+            String sql = "select * from RoleTemplateItem where rtiNo=? and rtiStatus = 1 ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, rtiNo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                rtiDto.setRtiNo(rs.getInt("rtiNo"));
+                rtiDto.setRtNo(rs.getInt("rtNo"));
+                rtiDto.setRtiName(rs.getString("rtiName"));
+                rtiDto.setRtiDescription(rs.getString("rtiDescription"));
+                rtiDto.setCreateDate(rs.getString("createDate"));
+                rtiDto.setUpdateDate(rs.getString("updateDate"));
+                return rtiDto;
+            }
         } catch (Exception e) {
             System.out.println("RtiDao.read " + e);
         }
-        return null;
+        rtiDto.setRtNo(0);
+        return rtiDto;
     } // [ RTI-03 ] func end
 
     // [ RTI-04 ] 상세 역할 템플릿 수정

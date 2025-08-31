@@ -7,6 +7,7 @@ import five_minutes.model.dto.RtiDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // Info =========================
@@ -47,7 +48,11 @@ public class RtiService extends AbstractService<RtiDto, Integer, String>{ // cla
     // [ RTI-02 ] 상세 역할테플릿 전체 조회
     public List<RtiDto> readAll(int rtNo, String sessionBnNo){
         if (checkRtnoBnno(rtNo, sessionBnNo) <= 0) {
-            return null; // 권한 없음
+            List<RtiDto> list = new ArrayList<>();
+            RtiDto rtiDto = new RtiDto();
+            rtiDto.setRtiNo(-99);
+            list.add(rtiDto);
+            return list; // 권한 없음
         }
         String sRtNo = rtNo+"";
         return rtiDao.readAll(sRtNo);

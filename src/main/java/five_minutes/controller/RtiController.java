@@ -51,21 +51,28 @@ public class RtiController {  // class start
     public List<RtiDto> getRTItem(@RequestParam int rtNo, HttpSession session){
         System.out.println("RtiController.getRTItem");
         System.out.println("rtNo = " + rtNo + ", session = " + session);
-
         // [02-1] session에서 로그인정보와 사업자번호 존재 여부 확인
-        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null) return null;
-
-
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null) {
+            return null;
+        }
         // [02-2] session에서 bnNo 추출
         String sessionBnno = (String) session.getAttribute("loginBnNo");
-
         // [02-3] rtiServcie의 readAll 메소드 실행
         return rtiService.readAll(rtNo, sessionBnno);
     } // [ RTI-02 ] func end
 
     // [ RTI-03 ] 상세 역할 템플릿 개별 조회
-    public RtiDto getIndiRTItem(){
-        return null;
+    @GetMapping("/indi")
+    public RtiDto getIndiRTItem(@RequestParam int rtiNo, HttpSession session){
+        // [03-1] session에서 로그인정보와 사업자번호 존재 여부 확인
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null) {
+            return null;
+        }
+        // [03-2] session에서 사업자번호를 추출
+        Object loginBnNo = session.getAttribute("loginBnNo");
+        String bnNo = (String) loginBnNo;
+        // [03-3] service의 read 메소드 호출
+        return rtiService.read(rtiNo, bnNo);
     } // [ RTI-03 ] func end
 
     // [ RTI-04 ] 상세 역할 템플릿 수정
