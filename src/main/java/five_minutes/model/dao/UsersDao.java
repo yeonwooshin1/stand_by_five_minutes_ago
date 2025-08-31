@@ -120,6 +120,31 @@ public class UsersDao extends Dao { // class start
         return false;
     }   // func end
 
+    // 비밀번호 찾기에 필요한 userNo 반환
+    public int findUserNoResetPwd( UsersDto usersDto ) {
+        try{
+            // email에 맞는 userNo 가져오기
+            String sql = "select userNo from users where email = ? and userName = ? and userPhone = ? ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1 , usersDto.getEmail());
+            ps.setString(2 , usersDto.getUserName());
+            ps.setString(3 , usersDto.getUserPhone());
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // userNo 반환
+                return rs.getInt("userNo");
+            }   // if end
+        } catch (Exception e) {
+            System.out.println("예외 발생");
+        }
+
+        // 없다면 0 반환
+        return 0;
+    }   // func end
+
 
 
 }   // class end
