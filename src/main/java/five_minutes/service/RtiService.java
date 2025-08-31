@@ -7,6 +7,8 @@ import five_minutes.model.dto.RtiDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 // Info =========================
 // RoleTemplateItem Service
 // 역할 템플릿 대분류를 참조하여 역할 템플릿 소분류를 상세히 정의
@@ -35,12 +37,20 @@ public class RtiService extends AbstractService<RtiDto, Integer, String>{ // cla
     }
 
     // [ RTI-01 ] 상세 역할템플릿 생성
-    public int createRTItem(RtiDto dto, String sessionBnNo) {
-        if (checkRtnoBnno(dto.getRtNo(), sessionBnNo) <= 0) {
+    public int createRTItem(RtiDto rtiDto, String sessionBnNo) {
+        if (checkRtnoBnno(rtiDto.getRtNo(), sessionBnNo) <= 0) {
             return -99; // 권한 없음
         }
-        return rtiDao.create(dto);
-    }
+        return rtiDao.create(rtiDto);
+    } // func end
 
+    // [ RTI-02 ] 상세 역할테플릿 전체 조회
+    public List<RtiDto> readAll(int rtNo, String sessionBnNo){
+        if (checkRtnoBnno(rtNo, sessionBnNo) <= 0) {
+            return null; // 권한 없음
+        }
+        String sRtNo = rtNo+"";
+        return rtiDao.readAll(sRtNo);
+    } // func end
 
 }   // class end

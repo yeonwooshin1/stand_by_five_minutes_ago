@@ -4,10 +4,8 @@ import five_minutes.model.dto.RtiDto;
 import five_minutes.service.RtiService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,12 +46,24 @@ public class RtiController {  // class start
         return rtiService.createRTItem(rtiDto, sessionBnno);
     } // [ RTI-01 ] func end
 
-    // [ RTI-02 ] 상세 역할 템플릿 개별 조회
-    public List<RtiDto> getRTItem(){
-        return null;
+    // [ RTI-02 ] 상세 역할 템플릿 전체 조회
+    @GetMapping
+    public List<RtiDto> getRTItem(@RequestParam int rtNo, HttpSession session){
+        System.out.println("RtiController.getRTItem");
+        System.out.println("rtNo = " + rtNo + ", session = " + session);
+
+        // [02-1] session에서 로그인정보와 사업자번호 존재 여부 확인
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null) return null;
+
+
+        // [02-2] session에서 bnNo 추출
+        String sessionBnno = (String) session.getAttribute("loginBnNo");
+
+        // [02-3] rtiServcie의 readAll 메소드 실행
+        return rtiService.readAll(rtNo, sessionBnno);
     } // [ RTI-02 ] func end
 
-    // [ RTI-03 ] 상세 역할 템플릿 전체 조회F
+    // [ RTI-03 ] 상세 역할 템플릿 개별 조회
     public RtiDto getIndiRTItem(){
         return null;
     } // [ RTI-03 ] func end

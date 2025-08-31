@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -16,24 +17,24 @@ import java.util.function.Predicate;
 // Writer : OngTK
 
 @Repository     // Dao 어노테이션
-public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String>{
+public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String> {
 
     // [ RTI-01 ] 상세 역할 템플릿 생성 create()
     @Override
     public int create(RtiDto rtiDto) {
-        try{
+        try {
             // [01-1] sql 작성
             String sql = "insert into RoleTemplateItem(rtNo, rtiName, rtiDescription) values (?,?,?)";
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, rtiDto.getRtNo());
-            ps.setString(2,rtiDto.getRtiName());
+            ps.setString(2, rtiDto.getRtiName());
             ps.setString(3, rtiDto.getRtiDescription());
             // [01-2] sql 실행
             int count = ps.executeUpdate();
-            if(count == 1 ){
+            if (count == 1) {
                 ResultSet rs = ps.getGeneratedKeys();
                 // [01-3] 결과 PK 반환
-                if(rs.next()) return rs.getInt(1);
+                if (rs.next()) return rs.getInt(1);
             }
         } catch (Exception e) {
             System.out.println("RtiDao.create " + e);
@@ -43,20 +44,39 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String>{
 
     // [ RTI-02 ] 상세 역할 템플릿 전체 조회
     @Override
-    public List<RtiDto> readAll(String s) {
-        try{
+    public List<RtiDto> readAll(String rtNo) {
+        List<RtiDto> list = new ArrayList<>();
+        try {
             // [02-1] sql 작성
-            String sql = "";
+            String sql = "select * from RoleTemplateItem where rtNo=? and rtiStatus=1";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, rtNo);
+            // [02-2] sql 실행
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                // [02-3] dto 생성
+                RtiDto rtiDto = new RtiDto();
+                rtiDto.setRtiNo(rs.getInt("rtiNo"));
+                rtiDto.setRtNo(rs.getInt("rtNo"));
+                rtiDto.setRtiName(rs.getString("rtiName"));
+                rtiDto.setRtiDescription(rs.getString("rtiDescription"));
+                rtiDto.setCreateDate(rs.getString("createDate"));
+                rtiDto.setUpdateDate(rs.getString("updateDate"));
+                // [02-4] lsit에 dto 삽입
+                list.add(rtiDto);
+            }
+            // [02-5] 결과 반환
+            return list;
         } catch (Exception e) {
             System.out.println("RtiDao.readAll " + e);
         }
-        return List.of();
+        return null;
     } // [ RTI-02 ] func end
 
     // [ RTI-03 ] 상세 역할 템플릿 개별 조회
     @Override
     public RtiDto read(Integer i, String s) {
-        try{
+        try {
             String sql = "";
         } catch (Exception e) {
             System.out.println("RtiDao.read " + e);
@@ -67,7 +87,7 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String>{
     // [ RTI-04 ] 상세 역할 템플릿 수정
     @Override
     public int update(RtiDto dto) {
-        try{
+        try {
             String sql = "";
         } catch (Exception e) {
             System.out.println("RtiDao.update " + e);
@@ -78,7 +98,7 @@ public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String>{
     // [ RTI-05 ] 상세 역할 템플릿 삭제(비활성화)
     @Override
     public int delete(Integer i, String s) {
-        try{
+        try {
             String sql = "";
         } catch (Exception e) {
             System.out.println("RtiDao.delete " + e);
