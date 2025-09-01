@@ -4,6 +4,9 @@ import com.github.benmanes.caffeine.cache.Cache;
 import five_minutes.model.dao.UsersDao;
 import five_minutes.model.dto.UsersDto;
 import five_minutes.util.JwtUtil;
+import five_minutes.util.PasswordValidatorUtil;
+import five_minutes.util.PhoneNumberUtil;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,9 +38,28 @@ public class PasswordResetService { // class start
     public int sendResetLink( UsersDto usersDto ) {
 
         // 빈 값 들어오는 거 방어용 유효성 검사 추가해야함.
+        String email = usersDto.getEmail() == null ? null : usersDto.getEmail().trim();
+        String userName = usersDto.getUserName() == null ? null : usersDto.getUserName().trim();
+        String userPhone = usersDto.getUserPhone() == null ? null : usersDto.getUserPhone().trim();
+
+        // 만약 들어온 필수 값들이 null 이거나 trim 했는데 null 일시
+        if(email == null || userName == null || userPhone == null || email.isBlank() || userName.isBlank() || userPhone.isBlank()){
+            // -2 값 누락을 반환
+            return -2;
+        }   // if end
+
+        // 전화번호 형식이 다를 경우
+        if(PhoneNumberUtil.isValid(userPhone)){
+            // -3 반환 전화번호 형식 오류
+            return -3;
+        }   // if end
+
+        // 값 다시 재정의
+        UsersDto dto = new UsersDto();
+        dto.setEmail(email);    dto.setUserPhone(userPhone);    dto.setUserName(userName);
 
         // userNo 가져오는 dao를 호출 후 저장
-        int userNo = usersDao.findUserNoResetPwd(usersDto);
+        int userNo = usersDao.findUserNoResetPwd(dto);
 
         // 현재 시간을 초로 변환하는 변수 now=>  Instant : 시간 관련 클래스,  now() : 현재 시간
         // getEpochSecond : 그 시간을 초로 나타낸다.
