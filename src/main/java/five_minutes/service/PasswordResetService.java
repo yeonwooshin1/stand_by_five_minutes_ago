@@ -114,7 +114,8 @@ public class PasswordResetService { // class start
         String link = UriComponentsBuilder.fromHttpUrl(resetBaseUrl)
                 .queryParam("token" ,token ).build().toUriString();
 
-        // 메일 전송한다. link 부분을 꼭 넣어준다. 아직 구현중 추가해야함.
+        // 메일 전송한다. 폼은 만들어야함.
+        emailService.sendHtml( email, "테스트용입니다" , "링크입니다. : "+link);
 
         // 발송 다 했으면 true 값 반환
         return 1;   // 진짜 성공
@@ -122,7 +123,7 @@ public class PasswordResetService { // class start
     }   // func end
 
     // 토큰 (jti)이 아직 미사용인지 확인하고 만료인지 확인하고 막아주는 서비스
-    // 여기서는 jti를 "소모"하지 않는다(최종 제출 단계에서 소모) => 여기는 검증용
+    // 여기서는 jti 를 "소모"하지 않는다(최종 제출 단계에서 소모) => 여기는 검증용
     public int verifyResetToken( String token ) {
         try {
             // JJWT parser로 서명이 맞는 지 만료가 되진 않았는지 검증 한다.
