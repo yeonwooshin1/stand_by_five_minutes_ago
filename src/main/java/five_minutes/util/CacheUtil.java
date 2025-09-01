@@ -17,7 +17,6 @@ import java.time.Duration;
 @Configuration
 public class CacheUtil {    // class start
 
-
     // 1회성 토큰(JTI) 상태 캐시를 만든다.
     // - key: jti(UUID 등), value: TRUE(미사용), 없거나 FALSE면 사용 불가로 판단.
     // Bean을 사용해 수동으로 빈을 등록해 줄 때는 메서드 이름으로 빈 이름이 결정된다.
