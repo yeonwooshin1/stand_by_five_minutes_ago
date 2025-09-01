@@ -60,11 +60,8 @@ const getRT = async () => {
 
     d.forEach((dto) => {
         html += `<tr>
-                    <td>
-                        <input class="form-check-input" type="checkbox" value="${dto.rtNo}">
-                    </td>
                     <td>${dto.rtNo}</td>
-                    <td>${dto.rtName}</td>
+                    <td><a href="/template/roleTemItem.jsp?rtNo=${dto.rtNo}">${dto.rtName}</a></td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#reviewRoleTem"

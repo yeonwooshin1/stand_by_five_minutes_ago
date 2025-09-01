@@ -52,8 +52,8 @@ a {
 }
 
 /* 테이블 내 요소 중앙정렬 */
-.roleTemplateThead th,
-.roleTemplateTbody td {
+.RTIThead th,
+.RTITbody td {
     text-align: center;
     vertical-align: middle;
 }
@@ -62,4 +62,9 @@ a {
 .modalMiddleTitle {
     font-size: 1.12rem;
     font-weight: 600;
+}
+
+.title1 span{
+    font-size: 1.25rem;
+    font-weight: bold;
 }
