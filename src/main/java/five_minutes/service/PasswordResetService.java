@@ -2,8 +2,10 @@ package five_minutes.service;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import five_minutes.model.dao.UsersDao;
+import five_minutes.model.dto.ChangePasswordDto;
 import five_minutes.model.dto.UsersDto;
 import five_minutes.util.JwtUtil;
+
 import five_minutes.util.PasswordValidatorUtil;
 import five_minutes.util.PhoneNumberUtil;
 import io.jsonwebtoken.Claims;
@@ -31,16 +33,18 @@ public class PasswordResetService { // class start
     private final Cache<String, Boolean> issuedTokens;
     // 토큰이 발급됐는데 너무 자주 발급되지 않게 쿨타임을 주는 Caffeine 메소드
     private final Cache<String, Long> actionCooldown;
+    // 새로운 비밀번호를 수정하는 서비스
+    private final CsvPasswordService csvPasswordService;
 
     // application.properties 에서 가져올 메일에서 실제로 링크로 보낼 링크를 저장해서 @Value로 가져온다.
     @Value("${app.link.reset-base-url}")
-    private String resetBaseUrl;  // 예: https://YOUR-HOST/account/password/reset/verify....
+    private String resetBaseUrl;  // http://localhost:8080/password/reset/verify
 
     // 재설정 링크 발송하는 서비스
     public int sendResetLink( UsersDto usersDto ) {
 
         // 빈 값 들어오는 거 방어용 유효성 검사 추가해야함.
-        String email = usersDto.getEmail() == null ? null : usersDto.getEmail().trim();
+        String email = usersDto.getEmail() == null ? null : usersDto.getEmail().trim().toLowerCase();
         String userName = usersDto.getUserName() == null ? null : usersDto.getUserName().trim();
         String userPhone = usersDto.getUserPhone() == null ? null : usersDto.getUserPhone().trim();
 
@@ -51,7 +55,7 @@ public class PasswordResetService { // class start
         }   // if end
 
         // 전화번호 형식이 다를 경우
-        if(PhoneNumberUtil.isValid(userPhone)){
+        if(!PhoneNumberUtil.isValid(userPhone)){
             // -3 반환 전화번호 형식 오류
             return -3;
         }   // if end
@@ -68,7 +72,7 @@ public class PasswordResetService { // class start
         long now = Instant.now().getEpochSecond();
 
         // 검증 키를 생성하는 것.
-        String cooldownKey = "pw:" + usersDto.getEmail();
+        String cooldownKey = "pw:" + email;
 
         // 60초 검증용 인메모리에 해당 키를 넣어서 있는지 확인한다.
         // getIfPresent : 단순 조회용 메서드로, 데이터가 없으면 null을 반환함.
@@ -83,6 +87,8 @@ public class PasswordResetService { // class start
         // 만약 userNo가 0이라면 => 존재하지 않는 계정이어도 "성공처럼" 응답만 함
         // 이유는 실패 반환하면 공격자가 이메일이나 전화번호가 존재하는지 안하는지 확인할 수 있음.
         if(userNo == 0){
+            // 쿨다운 기록 갱신  이번 전송 시각 저장
+            actionCooldown.put(cooldownKey, now);
             // 실제로 메일 보내기 전에 return을 시키는 것.
             return 1;   // 성공 but 실제 메일 발송 안 함.
         }   // if end
@@ -137,12 +143,65 @@ public class PasswordResetService { // class start
             return Integer.parseInt(c.getSubject());
 
         }   catch ( JwtException | NumberFormatException e) {
-            // jws<claim> 파싱 중서명이 불일치 하거나 만료 되거나 형식 오류면 실패
-            // String 으로 토큰에 저장된 UserNo를 int로 타입변환할 때 NumberFormatException 뜨면 실패
+            // JwtException => jws<claim> 파싱 중서명이 불일치 하거나 만료 되거나 형식 오류면 실패
+            // NumberFormatException => String 으로 토큰에 저장된 UserNo를 int로 타입변환할 때 NumberFormatException 뜨면 실패
             return 0;
         }   // try end
     }   // func end
 
+    public int resetPassword( ChangePasswordDto changePasswordDto , String token ) {
+        try {
+            // JJWT parser로 서명이 맞는 지 만료가 되진 않았는지 검증 한다.
+            // 만약 성공하면 parser 할 수 있는 Jws<Claims> 타입의 jms 변수 호출 아니라면 예외 발생하기 때문에 예외처리로 실패를 처리해준다.
+            Jws<Claims> jws = jwtUtil.parseAndValidate(token);
 
+            // 멤버변수 공백제거 후 변수 지정
+            String newPassword = changePasswordDto.getNewPassword() == null? null : changePasswordDto.getNewPassword().trim();
+            String confirmPassword = changePasswordDto.getConfirmPassword() == null? null : changePasswordDto.getConfirmPassword().trim();
+
+            // 얘네들 값이 null 이거나 비어있으면 실패 반환
+            if(newPassword == null || newPassword.isBlank() || confirmPassword == null || confirmPassword.isBlank()) {
+                return -3;   // 값이 유효하지 않음.
+            }   // if end
+
+            // 새 비밀번호랑 일치용 새 비밀번호랑 일치하는지 확인
+            if(!newPassword.equals(confirmPassword)){
+                // 일치 안하면 -1 => 두 개 일치 하지 않는다 반환
+                return -1;
+            }   // if end
+
+            // 비밀번호 8글자 대소문자인지 확인하는 유효성 검사
+            // 유효하지 않은 비밀번호 형식은 -3 반환
+            if (!PasswordValidatorUtil.isValid(newPassword)) return -3;
+
+            // JWT 로 이루어진(header, payload , signature ) 파일을 getPayload()
+            // => 파서해서 Claims(우리가 얻을 수 있는 내용물 => jti = id , sub = userNo, expire = 만료시간)
+            // 를 가진 Claims 객체의 변수를 얻어온다.
+            Claims c = jws.getPayload();
+
+            // jti = (고유 id <= UUID) 를 issuedTokens (사용된 토큰인가?) 확인 => getIfPresent 가져오는거 없으면 null.
+            Boolean ok = issuedTokens.getIfPresent(c.getId());
+            // 토큰 인메모리가 없거나 false가 뜰 경우 실패 반환
+            if (ok == null || !ok ) return 0;
+
+            // String 으로 저장된 userNo를 parseInt 해서 int로 변환후 저장.
+            int userNo = Integer.parseInt(c.getSubject());
+
+            // (4) jti (고유 id <= UUID) 를 즉시 소모 => 인메모리에서 삭제(재사용 차단)
+            // invalidate() => 인메모리에 있는 key의 값을 삭제한다.
+            issuedTokens.invalidate(c.getId());
+
+            // 비밀번호 변경한다.
+            boolean pwdOk = csvPasswordService.changePassword( userNo ,newPassword );
+
+            // 수정 성공시 1 , 오류로 인한 수정 실패시 0 반환
+            return pwdOk ? 1 : 0;
+
+        }catch ( JwtException | NumberFormatException e) {
+            // JwtException => jws<claim> 파싱 중서명이 불일치 하거나 만료 되거나 형식 오류면 실패
+            // NumberFormatException => String 으로 토큰에 저장된 UserNo를 int로 타입변환할 때 NumberFormatException 뜨면 실패
+            return 0;   // 오류로 인한 수정 실패시 0 반환
+        }   // try end
+    }   // func end
 
 }   // class end
