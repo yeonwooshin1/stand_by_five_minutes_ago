@@ -107,7 +107,7 @@
                 <div class="modal-body createRTContent">
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
-                        <input class="form-control" id="recipient-name" type="text" />
+                        <input class="form-control" id="rtNameInput" type="text" />
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>

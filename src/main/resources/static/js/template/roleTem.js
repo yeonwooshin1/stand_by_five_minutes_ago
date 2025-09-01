@@ -20,11 +20,31 @@ $(document).ready(function () {
 
 // [RT-01] 역할템플릿 생성
 const createRT = async () => {
+    console.log("createRT func exe")
+
     // [1.1] HTML 에서 입력받은 정보 불러오기
+    const rtName = document.querySelector("#rtNameInput").value;
+    const rtDescription = document.querySelector("#creatertDescription").value
+    console.log(rtName)
+    console.log(rtDescription)
 
     // [1.2] Fetch
+    const obj = { rtName, rtDescription}
+    const opt = { method : "POST",
+        headers : {"Content-Type":"application/json"},
+        body : JSON.stringify(obj)
+    }
+    const r = await fetch("/roleTem", opt)
+    const d = await r.json()
 
+    if(d > 0 ) {
+        alert("템플릿 저장 성공")
+    } else {
+        alert("템플릿 저장 실패")
+    }
+    
     // [1.3] 저장 후 리스트 update
+    
 
 }
 
