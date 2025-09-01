@@ -25,14 +25,23 @@ public class CTItemService {
     }
 
     // [2] 상세 체크리스트 템플릿 전체조회
-    public List<CTItemDto> getCTItem(){
-        return ctItemDao.getCTItem();
+    public List<CTItemDto> getCTItem(int ctNo){
+        return ctItemDao.getCTItem(ctNo);
     }
 
     // [3] 상세 체크리스트 템플릿 개별조회
+    public CTItemDto getIndiCTItem(int ctNo , int ctiNo){
+        return ctItemDao.getIndiCTItem(ctNo, ctiNo);
+    }
 
     // [4] 상세 체크리스트 템플릿 수정
+    public int updateCTItem(CTItemDto ctItemDto){
+        return ctItemDao.updateCTItem(ctItemDto);
+    }
 
     // [5] 상세 체크리스트 템플릿 삭제
+    public int deleteCTItem(int ctiNo){
+        return ctItemDao.deleteCTItem(ctiNo);
+    }
 
 } // class end

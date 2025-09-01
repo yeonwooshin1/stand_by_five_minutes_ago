@@ -51,7 +51,7 @@ public class CTemController {  // class start
             CTemDto dto = new CTemDto();
             dto.setStatus("NOT_LOGGED_IN");
             list.add(dto);
-            return list; // 비로그인시 null 반환
+            return list; // 비로그인시 status에서 NOT_LOGGED_IN 전송
         }
         // 2. 로그인 중일 때 세션에서 사업자번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
@@ -119,8 +119,8 @@ public class CTemController {  // class start
         }
         // 2. 로그인 중일때 세션에서 사업자번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
-        CTemDto dto = cTemService.getIndiCtem(bnNo, ctNo);
-        // 3. DTO에서 사용자엑 입력받은 ctNo를 찾지 못했을 경우
+        // 3. DTO에서 사용자에게 입력받은 ctNo를 찾지 못했을 경우
+        CTemDto dto = new CTemDto();
         if(dto == null){
             dto = new CTemDto();
             dto.setStatus("NOT_FOUND");
@@ -129,7 +129,6 @@ public class CTemController {  // class start
         // 4. 리턴
         dto.setStatus("ACCESS_OK");
         return cTemService.deleteCTem(bnNo , ctNo);
-
     }
 
 
