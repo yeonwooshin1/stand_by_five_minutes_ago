@@ -22,10 +22,10 @@
             <div class="menuHead">템플릿 관리</div>
             <div class="middleMenu"> <a href="/template/roleTem.jsp">역할 관리</a></div>
             <div class="smallMenu"><a href="/template/roleTem.jsp">역할 템플릿</a></div>
-            <div class="smallMenu"><a href="#">역할상세 템플릿</a></div>
+            <div class="smallMenu"><a href="/template/roleTem.jsp">상세 역할 템플릿</a></div>
             <div class="middleMenu"> <a href="#">체크리스트 관리</a></div>
             <div class="smallMenu"><a href="#">체크리스트 템플릿</a></div>
-            <div class="smallMenu"><a href="#">체크리스트 상세 템플릿</a></div>
+            <div class="smallMenu"><a href="#">상세 체크리스트 템플릿</a></div>
         </div>
     </div>
 
