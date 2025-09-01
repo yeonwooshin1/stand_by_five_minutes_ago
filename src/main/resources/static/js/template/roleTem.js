@@ -24,7 +24,7 @@ const createRT = async () => {
 
     // [1.1] HTML 에서 입력받은 정보 불러오기
     const rtName = document.querySelector("#rtNameInput").value;
-    const rtDescription = document.querySelector("#rtDescriptionInput").value
+    const rtDescription = document.querySelector("#creatertDescription").value
 
     // [1.2] Fetch
     const obj = { rtName, rtDescription }
@@ -144,13 +144,16 @@ const updateRT = async (rtNo) => {
 
 // [RT-05]  역할템플릿 삭제(비활성화)	
 const deleteRT = async (rtNo) => {
+    console.log("deleteRT func exe")
+    console.log(rtNo)
+
     // [5.1] 확인 여부 확인
-    let result = confirm("[경고] 삭제한 템플릿은 복구할 수 없습니다. 정말로 삭제하시겠습니까?")
+    let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. <br/> 정말로 삭제하시겠습니까?`)
     if (result == false) { return }
 
     // [5.2] Fetch
     const opt = {method:"DELETE"}
-    const r = await fetch(`/roleTem?rtNo=${rtNo}`)
+    const r = await fetch(`/roleTem?rtNo=${rtNo}`, opt)
     const d = await r.json()
 
     if (d > 0) {
