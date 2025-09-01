@@ -37,7 +37,8 @@
                 이메일 : <input type="text" class="emailInput" id="emailInput" placeholder="이메일을 입력하세요." /> <br />
                 패스워드 : <input type="password" class="pwdInput" id="pwdInput" placeholder="패스워드를 입력하세요." /> <br />
                 <button type="button" onclick="login()"> 로그인 </button> <br />
-                <a href="/user/findPwd.jsp"> 비밀번호찾기 </a>
+                <a href="/user/findPwd.jsp"> 비밀번호 찾기 </a>
+                <a href="/user/findEmail.jsp"> 이메일 찾기 </a>
             </div>
 
         </div>
