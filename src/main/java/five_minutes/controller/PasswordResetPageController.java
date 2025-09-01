@@ -20,12 +20,6 @@ public class PasswordResetPageController {
     // 보통 redirect랑 forward는 @Controller 에만 해준다. @RestController는 데이터(JSON/XML) 를 주는 용이기 때문.
     // @Controller 는 HTML 뷰 링크를 줄 수 있는 용이다. 참고하시라.
 
-    // 링크를 요청한다. 비밀번호 찾기 페이지로 가는 controller
-    @GetMapping
-    public String requestPage() {
-        return "/reset-request"; // =>  "/WEB-INF/password/reset-request.jsp"   => WEB-INF는 controller를 거쳐야 들어갈 수 있는 링크
-    }   // func end
-
     // 메일 클릭시 토큰 검증 후 세션을 저장하는 controller 그 다음은 redirect 해서 비밀번호 재설정 페이지로 가게 하는 거임
     @GetMapping("/verify")
     public String verifyAndRedirect(@RequestParam String token, HttpSession session) {
