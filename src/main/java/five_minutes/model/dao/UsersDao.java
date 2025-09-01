@@ -144,6 +144,4 @@ public class UsersDao extends Dao { // class start
         return 0;
     }   // func end
 
-
-
 }   // class end
