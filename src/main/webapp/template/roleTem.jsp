@@ -111,7 +111,7 @@
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
-                        <textarea class="rtDescription" id="creatertDescription" name="editordata"></textarea>
+                        <textarea class="rtDescription" id="rtDescriptionInput" name="editordata"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -134,11 +134,11 @@
                 <div class="modal-body createRTContent">
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
-                        <input class="form-control" id="recipient-name" type="text" value="삐에로" disabled />
+                        <input class="form-control" id="rtNampePreview" type="text" value="삐에로" disabled />
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
-                        <div></div>
+                        <div id="rtDescriptionPreview"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -159,7 +159,7 @@
                 <div class="modal-body createRTContent">
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
-                        <input class="form-control" id="recipient-name" type="text" />
+                        <input class="form-control" id="rtNampeOutput" type="text" />
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
