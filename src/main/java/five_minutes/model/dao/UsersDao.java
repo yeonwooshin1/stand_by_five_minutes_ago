@@ -140,7 +140,6 @@ public class UsersDao extends Dao { // class start
         } catch (Exception e) {
             System.out.println("예외 발생");
         }
-
         // 없다면 0 반환
         return 0;
     }   // func end
