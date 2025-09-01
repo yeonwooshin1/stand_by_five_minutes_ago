@@ -162,7 +162,7 @@ public class PasswordResetService { // class start
 
             // 얘네들 값이 null 이거나 비어있으면 실패 반환
             if(newPassword == null || newPassword.isBlank() || confirmPassword == null || confirmPassword.isBlank()) {
-                return -3;   // 값이 유효하지 않음.
+                return -2;   // 값이 유효하지 않음.
             }   // if end
 
             // 새 비밀번호랑 일치용 새 비밀번호랑 일치하는지 확인
@@ -183,7 +183,7 @@ public class PasswordResetService { // class start
             // jti = (고유 id <= UUID) 를 issuedTokens (사용된 토큰인가?) 확인 => getIfPresent 가져오는거 없으면 null.
             Boolean ok = issuedTokens.getIfPresent(c.getId());
             // 토큰 인메모리가 없거나 false가 뜰 경우 실패 반환
-            if (ok == null || !ok ) return 0;
+            if (ok == null || !ok ) return -4;
 
             // String 으로 저장된 userNo를 parseInt 해서 int로 변환후 저장.
             int userNo = Integer.parseInt(c.getSubject());
@@ -201,7 +201,7 @@ public class PasswordResetService { // class start
         }catch ( JwtException | NumberFormatException e) {
             // JwtException => jws<claim> 파싱 중서명이 불일치 하거나 만료 되거나 형식 오류면 실패
             // NumberFormatException => String 으로 토큰에 저장된 UserNo를 int로 타입변환할 때 NumberFormatException 뜨면 실패
-            return 0;   // 오류로 인한 수정 실패시 0 반환
+            return -4;   // 오류로 인한 수정 실패시 -4 반환
         }   // try end
     }   // func end
 
