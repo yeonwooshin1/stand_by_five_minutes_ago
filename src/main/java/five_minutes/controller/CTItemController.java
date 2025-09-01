@@ -107,7 +107,7 @@ public class CTItemController {
         return dto;
     }
 
-    // [4] 상세 체크리스트 템플릿 수정
+    // [4] 상세 체크리스트 템플릿 수정 dfdfsdfsd
     // URL : http://localhost:8080/checkitem
     // BODY : { "ctiTitle" : "현장 도착" , "ctiHelpText" : "현장 도착 시 클라이언트 담당자에게 연락 후, 현장 사진을 5장 촬영하여 공연5분전에 업로드합니다." , "ctiNo" : 5000001}
     @PutMapping("")
