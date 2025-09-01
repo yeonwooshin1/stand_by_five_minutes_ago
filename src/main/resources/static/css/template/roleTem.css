@@ -1,3 +1,4 @@
+/* 글꼴 noto sans import */
 .noto-sans-kr {
   font-family: "Noto Sans KR", sans-serif;
   font-optical-sizing: auto;
@@ -8,6 +9,7 @@
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
+    /* 전체 글꼴 Noto Sans로 지정  */
     font-family: "Noto Sans KR", sans-serif;
 }
 
@@ -29,23 +31,27 @@ a {
     padding: 0.5rem;
 }
 
+/* Content 구역 얇은 회색 선 */
 .ContentBox {
     border: 0.12rem solid #efefef;
     border-radius: 1.25rem;
     padding: 1rem;
 }
 
+/* 상단 제목 */
 .title1{
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
 
+/* 상단 제목과 버튼을 양쪽 끝으로 배치 */
 .contentHeader{
     display: flex;
     justify-content: space-between;
 }
 
+/* 테이블 내 요소 중앙정렬 */
 .roleTemplateThead th,
 .roleTemplateTbody td {
     text-align: center;
