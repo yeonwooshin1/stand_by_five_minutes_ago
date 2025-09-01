@@ -94,18 +94,14 @@ public class CTemDao extends Dao {
     public int updateCTem(CTemDto cTemDto) {
         try {
             String sql = "update checktemplate set ctName = ? , ctDescription = ? where bnNo = ? and ctNo = ? and ctStatus = 1 ";
-            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, cTemDto.getCtName());
             ps.setString(2, cTemDto.getCtDescription());
-            ps.setInt(3, cTemDto.getCtNo());
-            ps.setString(4, cTemDto.getBnNo());
+            ps.setString(3, cTemDto.getBnNo());
+            ps.setInt(4, cTemDto.getCtNo());
             if (ps.executeUpdate() == 1) {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    rs.getInt(1);
-                }
-                rs.close();
                 ps.close();
+                return cTemDto.getCtNo();
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -120,7 +116,10 @@ public class CTemDao extends Dao {
             PreparedStatement ps = conn.prepareStatement(sql );
             ps.setString(1, bnNo);
             ps.setInt(2, ctNo);
-            return ps.executeUpdate();
+            if (ps.executeUpdate() == 1) {
+                ps.close();
+                return ctNo;
+            }
         } catch (Exception e){
             System.out.println(e);
         } // catch end
