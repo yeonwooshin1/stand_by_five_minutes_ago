@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public class CTItemDao extends Dao {
-    // CheckTemplateItem
+    // CheckTemplateItem 테스트
 
     // [*] 해당 ctNo가 로그인한 사용자의 bnNo인지 확인
     public boolean searchCtNo(int ctNo, String bnNo) {
