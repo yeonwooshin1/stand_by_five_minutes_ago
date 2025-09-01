@@ -55,7 +55,7 @@ CREATE TABLE RoleTemplate (
   rtNo 				INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,   				-- 역할 템플릿 식별자 부분 PK
   bnNo 			VARCHAR(30) not null,                             		-- 이 템플릿을 소유/배포하는 사업자 식별 FK
   rtName    		VARCHAR(120) NOT NULL,                         			-- 템플릿 이름 (예: "콘서트_기본_역할군_v1")
-  rtDescription    	text NULL,                             					-- 템플릿 설명부분
+  rtDescription    	longtext NULL,                             					-- 템플릿 설명부분
   rtStatus   		int NOT NULL DEFAULT 1,                 				-- 활성/비활성 삭제시에는 delete 사용. 0 은 비활성 1 은 활성
   createDate  		DATETIME NOT NULL DEFAULT NOW(),						-- 생성 날짜
   updateDate 		DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),		 -- 변경 날짜
@@ -74,7 +74,7 @@ CREATE TABLE RoleTemplateItem (
   rtiNo 			INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, 		-- 역할 템플릿 실제 항목 부분 PK
   rtNo 				INT UNSIGNED NOT NULL,                        	-- 소속 역할템플릿 FK
   rtiName  			VARCHAR(120) NOT NULL,                          -- 역할 표시명(한글명)
-  rtiDescription  	text NULL,                              -- 역할 설명/자격요건 등
+  rtiDescription  	longtext NULL,                              -- 역할 설명/자격요건 등
   rtiStatus			int NOT NULL DEFAULT 1,                 		-- 활성/비활성 삭제시에는 delete 사용. 0 은 비활성 1 은 활성
   createDate 		DATETIME NOT NULL DEFAULT NOW(),				-- 생성 시간
   updateDate 		DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),		 -- 변경 날짜

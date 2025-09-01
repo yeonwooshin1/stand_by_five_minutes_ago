@@ -17,7 +17,7 @@ const mainMenu = async () => {
         html = ''
     } else if (userNo == 1) { // 기업 담당자
         html += `<li><a href="#">인력 관리</a></li>
-                 <li><a href="#">템플릿 관리</a></li>
+                 <li><a href="/template/roleTem.jsp">템플릿 관리</a></li>
                  <li><a href="#">프로젝트 관리</a></li>`
     } else if (userNo == 2) { // 일반회원
         html += `<li><a href="#">메뉴1</a></li>
@@ -39,15 +39,15 @@ const subMenu = async () => {
 
     } else if (userNo == 1) { // 기업 담당자
         html += `<div class="headText">OOO님 환영합니다. <br />(기업 담당자)</div>
-                    <ul><li><a href="#">마이페이지</a></li>
-                    <li> | </li>
-                    <li><a href="#">로그아웃</a></li></ul>`
+                    <ul><li><a href="#" class="myPageNlogout">마이페이지</a></li>
+                    <li class="headerbar"> | </li>
+                    <li><a href="#" class="myPageNlogout">로그아웃</a></li></ul>`
 
     } else if (userNo == 2) { // 일반회원
         html += `<div class="headText" >OOO님 환영합니다. <br />(일반 회원)</div>
-                    <ul><li><a href="#">마이페이지</a></li>
-                    <li> | </li>
-                    <li><a href="#">로그아웃</a></li></ul>`
+                    <ul><li><a href="#" class="myPageNlogout">마이페이지</a></li>
+                    <li class="headerbar"> | </li>
+                    <li><a href="#" class="myPageNlogout">로그아웃</a></li></ul>`
     }
     subMenu.innerHTML = html
 } // func end

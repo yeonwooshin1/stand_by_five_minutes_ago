@@ -14,15 +14,15 @@ import org.springframework.stereotype.Service;
 
 @Service                    // 서비스 어노테이션
 @RequiredArgsConstructor    // 의존성 주입
-public class RtService extends AbstractService<RtDto, Integer>{ // class start
+public class RtService extends AbstractService<RtDto, Integer, String>{ // class start
 
     private final RtDao rtDao;
 
     // AbstractService로 부터 getDao 메소드를 Override
-    // Controller의 요청을 추상메소드를 통해 바로 Dao 단으로 전달
+    // Controller의 CRUD 요청을 추상메소드를 통해 바로 Dao 단으로 전달
     @Override
-    protected CommonDao<RtDto, Integer> getDao() {
-        return (CommonDao<RtDto, Integer>) rtDao;
+    protected CommonDao<RtDto, Integer, String> getDao() {
+        return (CommonDao<RtDto, Integer, String>) rtDao;
     } // func end
 
 }   // class end

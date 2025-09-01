@@ -34,7 +34,7 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.7rem;
+    font-size: 1.4rem;
     font-weight: 800;
     padding : 1.6rem 0;
 }
@@ -49,7 +49,7 @@ a {
 
 .middleMenu > a {
     color: black;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 600;
     padding : 1.4rem 0;
     padding-left: 1.2rem;
@@ -58,9 +58,9 @@ a {
 
 .smallMenu > a {
     color: black;
-    font-size: 1.1rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    padding : 0.9rem 0;
+    padding : 1rem 0;
     padding-left: 1.7rem;
     text-decoration: none;
 }

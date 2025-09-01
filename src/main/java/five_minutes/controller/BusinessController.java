@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor    // 의존성 주입
 @RequestMapping("/business")
 public class BusinessController {  // class start
-    // 비지니스서비스 의존성 주입
+    //
     private final BusinessService businessService;
 
     // 회사 정보 조회
