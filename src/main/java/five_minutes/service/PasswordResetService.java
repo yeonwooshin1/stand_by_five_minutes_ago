@@ -149,6 +149,7 @@ public class PasswordResetService { // class start
         }   // try end
     }   // func end
 
+    // 만료된 토큰인지 확인하고 실제로 비밀번호를 수정하는 서비스
     public int resetPassword( ChangePasswordDto changePasswordDto , String token ) {
         try {
             // JJWT parser로 서명이 맞는 지 만료가 되진 않았는지 검증 한다.
