@@ -63,3 +63,8 @@ a {
     font-size: 1.12rem;
     font-weight: 600;
 }
+
+.title1 span{
+    font-size: 1.25rem;
+    font-weight: bold;
+}

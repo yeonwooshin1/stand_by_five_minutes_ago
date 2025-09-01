@@ -51,7 +51,7 @@
             <div class="mainContent col-10">
                 <div class="contentHeader">
                     <div class="title1">상세 역할 템플릿 관리
-                        <span>대분류 템플릿명</span>
+                        <span></span>
                     </div>
                     <div class="titleBtnBox">
                         <!-- 모달 연결 버튼 -->
