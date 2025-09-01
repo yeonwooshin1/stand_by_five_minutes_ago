@@ -13,6 +13,11 @@
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
     <link rel='stylesheet' href='/CSS/index.css'>
+
+    <!-- 글꼴 Noto Sans -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+    </style>
 </head>
 
 <body>
@@ -33,11 +38,11 @@
                 <div class="title1">제목</div>
                 <div class="ContentBox">
                     본문 작업 영역!!
-                    <br/>
-                    1<br/>
-                    2<br/>
-                    3<br/>
-                    4<br/>
+                    <br />
+                    1<br />
+                    2<br />
+                    3<br />
+                    4<br />
 
                 </div>
             </div>

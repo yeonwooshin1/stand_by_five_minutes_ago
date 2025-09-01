@@ -4,7 +4,6 @@ import five_minutes.model.dto.RtDto;
 import five_minutes.service.RtService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

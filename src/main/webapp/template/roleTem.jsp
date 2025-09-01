@@ -28,6 +28,10 @@
     <!-- 썸머노트 한글 js-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/lang/summernote-ko-KR.min.js"></script>
 
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+    </style>
+
 </head>
 
 <body>
@@ -130,7 +134,7 @@
                 <div class="modal-body createRTContent">
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
-                        <input class="form-control" id="recipient-name" type="text" value="삐에로" disabled/>
+                        <input class="form-control" id="recipient-name" type="text" value="삐에로" disabled />
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
