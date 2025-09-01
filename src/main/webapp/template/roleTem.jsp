@@ -55,7 +55,6 @@
                         <!-- 모달 연결 버튼 -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#createRoleTem">생성</button>
-                        <button type="button" class="btn btn-primary" onclick="deleteRT()">삭제</button>
                     </div>
                 </div>
                 <!--data-bs-target에 연결할 모달을 연결-->
@@ -71,6 +70,7 @@
                                 <th> 역할 템플릿 설명 </th>
                                 <th> 생성일 </th>
                                 <th> 수정일 </th>
+                                <th> 비고 </th>
                             </tr>
                         </thead>
                         <tbody class="roleTemplateTbody">
@@ -111,7 +111,7 @@
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
-                        <textarea class="rtDescription" id="rtDescriptionInput" name="editordata"></textarea>
+                        <textarea class="rtDescription" id="creatertDescription" name="editordata"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -131,7 +131,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">역할 템플릿 조회</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body createRTContent">
+                <div class="modal-body previewRTContent">
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
                         <input class="form-control" id="rtNampePreview" type="text" value="삐에로" disabled />
@@ -156,20 +156,18 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">역할 템플릿 수정</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body createRTContent">
+                <div class="modal-body updateRTContent">
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
-                        <input class="form-control" id="rtNampeOutput" type="text" />
+                        <input class="form-control" id="rtNampeUpdate" type="text" />
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
-                        <textarea class="rtDescription" id="updatertDescription" name="editordata"></textarea>
+                        <textarea class="rtDescription" id="rtDescriptionUpdate" name="editordata"></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer updateBox">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" onclick="updateRT()"
-                        data-bs-dismiss="modal">수정</button>
                 </div>
             </div>
         </div>

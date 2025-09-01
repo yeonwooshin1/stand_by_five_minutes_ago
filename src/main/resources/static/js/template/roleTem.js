@@ -11,7 +11,7 @@ $(document).ready(function () {
 
 // [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
 $(document).ready(function () {
-    $('#updatertDescription').summernote({
+    $('#rtDescriptionUpdate').summernote({
         lang: 'ko-KR', // default: 'en-US'
         // 부가 기능
         minHeight: 300
@@ -75,6 +75,7 @@ const getRT = async () => {
                     </td>
                     <td>${dto.createDate}</td>
                     <td>${dto.updateDate}</td>
+                    <td><button type="button" class="btn btn-danger" onclick="deleteRT(${dto.rtNo})">삭제</button></td>
                 </tr>`
     });
     // [2.3] 화면 표시
@@ -82,23 +83,80 @@ const getRT = async () => {
 } // func end
 getRT()
 
-// [RT-03] 역할템플릿 개별 조회	- 미리보기
-// [미리보기] 버튼 클릭 시, 발생하는 모달 내에 템플릿명과 템플릿 설명을 기재
+// [RT-03] 역할템플릿 개별 조회
+// [미리보기]/[수정하기] 버튼 클릭 시, 발생하는 모달 내에 템플릿명과 템플릿 설명을 기재
 const getIndiRT = async (rtNo) => {
-    console.log("rtNo func exe")
-    
+    console.log("getIndiRT func exe")
+
     // [3.1] 모달 내 표시할 영역 가져오기
+    // 미리보기 모달 구역
     const rtNampePreview = document.querySelector("#rtNampePreview")
     const rtDescriptionPreview = document.querySelector("#rtDescriptionPreview")
+
+    // 수정하기 모달 구역
+    const rtNampeUpdate = document.querySelector("#rtNampeUpdate")
+    const rtDescriptionUpdate = document.querySelector(".updateRTContent .note-editable")
 
     // [3.2] Fetch
     const r = await fetch(`/roleTem/indi?rtNo=${rtNo}`)
     const d = await r.json()
 
     // [3.3] 화면에 표시
-    rtNampePreview.value = `${d.rtName}`
-    rtDescriptionPreview.innerHTML = `${d.rtDescription}`
+    rtNampePreview.value = d.rtName
+    rtDescriptionPreview.innerHTML = d.rtDescription
+    rtNampeUpdate.value = d.rtName
+    rtDescriptionUpdate.innerHTML = d.rtDescription
+
+    // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
+    const updateBox = document.querySelector(".updateBox")
+    const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+    <button type="button" class="btn btn-primary " onclick="updateRT(${rtNo})"
+                        data-bs-dismiss="modal">수정</button>`;
+    updateBox.innerHTML = html;
+
 } // func end
 
 // [RT-04] 역할템플릿 수정	updateRT()
-// [RT-05]  역할템플릿 삭제(비활성화)	deleteRT()
+const updateRT = async (rtNo) => {
+    // [4.1] 수정할 정보 가져오기
+    const rtName = document.querySelector("#rtNampeUpdate").value
+    const rtDescription = document.querySelector("#rtDescriptionUpdate").value
+
+
+    // [4.2] fetch
+    const obj = { rtNo, rtName, rtDescription }
+    const opt = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(obj)
+    }
+    const r = await fetch(`/roleTem`, opt)
+    const d = await r.json()
+
+    // [4.3] 결과 표시 + update
+    if (d > 0) {
+        alert("템플릿 저장 성공")
+        getRT()
+    } else {
+        alert("템플릿 저장 실패")
+    }
+} // func end
+
+// [RT-05]  역할템플릿 삭제(비활성화)	
+const deleteRT = async (rtNo) => {
+    // [5.1] 확인 여부 확인
+    let result = confirm("[경고] 삭제한 템플릿은 복구할 수 없습니다. 정말로 삭제하시겠습니까?")
+    if (result == false) { return }
+
+    // [5.2] Fetch
+    const opt = {method:"DELETE"}
+    const r = await fetch(`/roleTem?rtNo=${rtNo}`)
+    const d = await r.json()
+
+    if (d > 0) {
+        alert("템플릿 삭제 성공")
+        getRT()
+    } else {
+        alert("템플릿 삭제 실패")
+    }
+} // func end
