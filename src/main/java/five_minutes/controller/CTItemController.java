@@ -81,7 +81,7 @@ public class CTItemController {
 
     // [3] 상세 체크리스트 템플릿 개별조회
     // URL : http://localhost:8080/checkitem/indi?ctNo=4000001&ctiNo=5000001 (ctiStatus 0이라서 조회 안 됨)
-    // URL : http://localhost:8080/checkitem/indi?ctNo=4000001&ctiNo=5000002
+    // URL : http://localhost:8080/checkitem/indi?ctNo=4000002&ctiNo=5000003
     @GetMapping("/indi")
     public CTItemDto getIndiCTItem(@RequestParam int ctNo, @RequestParam int ctiNo, HttpSession session) {
         CTItemDto dto = new CTItemDto();
