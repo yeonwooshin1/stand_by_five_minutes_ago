@@ -6,6 +6,8 @@ import five_minutes.model.dto.UsersDto;
 import five_minutes.util.JwtUtil;
 import five_minutes.util.PasswordValidatorUtil;
 import five_minutes.util.PhoneNumberUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -112,6 +114,35 @@ public class PasswordResetService { // class start
         return 1;   // 진짜 성공
 
     }   // func end
+
+    // 토큰 (jti)이 아직 미사용인지 확인하고 만료인지 확인하고 막아주는 서비스
+    // 여기서는 jti를 "소모"하지 않는다(최종 제출 단계에서 소모) => 여기는 검증용
+    public int verifyResetToken( String token ) {
+        try {
+            // JJWT parser로 서명이 맞는 지 만료가 되진 않았는지 검증 한다.
+            // 만약 성공하면 parser 할 수 있는 Jws<Claims> 타입의 jms 변수 호출 아니라면 예외 발생하기 때문에 예외처리로 실패를 처리해준다.
+            Jws<Claims> jws = jwtUtil.parseAndValidate(token);
+
+            // JWT 로 이루어진(header, payload , signature ) 파일을 getPayload()
+            // => 파서해서 Claims(우리가 얻을 수 있는 내용물 => jti = id , sub = userNo, expire = 만료시간)
+            // 를 가진 Claims 객체의 변수를 얻어온다.
+            Claims c = jws.getPayload();
+
+            // jti = (고유 id <= UUID) 를 issuedTokens (사용된 토큰인가?) 확인 => getIfPresent 가져오는거 없으면 null.
+            Boolean ok = issuedTokens.getIfPresent(c.getId());
+            // 토큰 인메모리가 없거나 false가 뜰 경우 실패 반환
+            if (ok == null || !ok ) return 0;
+
+            // String 으로 저장된 userNo를 parseInt 해서 int로 변환후 반환한다.
+            return Integer.parseInt(c.getSubject());
+
+        }   catch ( JwtException | NumberFormatException e) {
+            // jws<claim> 파싱 중서명이 불일치 하거나 만료 되거나 형식 오류면 실패
+            // String 으로 토큰에 저장된 UserNo를 int로 타입변환할 때 NumberFormatException 뜨면 실패
+            return 0;
+        }   // try end
+    }   // func end
+
 
 
 }   // class end
