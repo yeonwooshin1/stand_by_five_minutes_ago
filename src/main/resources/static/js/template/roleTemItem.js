@@ -26,9 +26,22 @@ $(document).ready(function () {
 
 // [역할 템플릿 관련 func] =====================================
 
-// [1] readRT()
+// [1] getIndiRT()
 // rtNo > rtName으로 변환하기 
+const getIndiRT = async () => {
+    console.log("getIndiRT func exe")
 
+    // [1.1] 표시할 영역 가져오기
+    const rtName = document.querySelector(".title1 span")
+    
+    // [1.2] Fetch
+    const r = await fetch(`/roleTem/indi?rtNo=${rtNo}`)
+    const d = await r.json()
 
+    // [3.3] 화면에 표시
+    rtName.innerHTML = `- ${d.rtName}`
+    
+} // func end
+getIndiRT()
 
 // [상세 역할 템플릿 관련 func] =====================================

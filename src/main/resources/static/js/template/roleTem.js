@@ -61,7 +61,7 @@ const getRT = async () => {
     d.forEach((dto) => {
         html += `<tr>
                     <td>${dto.rtNo}</td>
-                    <td><a href="/template/roleTemItem.jsp?rtName=${dto.rtNo}">${dto.rtName}</a></td>
+                    <td><a href="/template/roleTemItem.jsp?rtNo=${dto.rtNo}">${dto.rtName}</a></td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#reviewRoleTem"

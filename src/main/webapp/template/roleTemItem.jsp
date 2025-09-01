@@ -62,7 +62,7 @@
 
                 <div class="ContentBox">
                     <!-- 역할 템플릿 대분류를 표시 / RoleTemplateItem table-->
-                    <table class="table table-striped table-hover RTItemThead">
+                    <table class="table table-striped table-hover RTIThead">
                         <thead>
                             <tr>
                                 <th> 번호 </th>
@@ -73,7 +73,7 @@
                                 <th> 비고 </th>
                             </tr>
                         </thead>
-                        <tbody class="roleTemplateTbody">
+                        <tbody class="RTITbody">
                             <tr>
                                 <td>1</td>
                                 <td>일반 삐에로</td>

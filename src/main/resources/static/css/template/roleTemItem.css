@@ -52,8 +52,8 @@ a {
 }
 
 /* 테이블 내 요소 중앙정렬 */
-.roleTemplateThead th,
-.roleTemplateTbody td {
+.RTIThead th,
+.RTITbody td {
     text-align: center;
     vertical-align: middle;
 }
