@@ -35,7 +35,7 @@ public class PasswordResetPageController {
             session.setAttribute("pwResetToken", token);
             return "redirect:/password/reset/form";
         }
-        return "account/reset-invalid";
+        return "/reset-invalid";
     }
     // form 확인 후 실패면 실패페이지 , 확인 되면 재설정 페이지로 이동하는 controller
     @GetMapping("/form")
@@ -43,19 +43,19 @@ public class PasswordResetPageController {
         // 토큰이 세션이 있는지 확인한다.
         String token = (String) session.getAttribute("pwResetToken");
         // 있으면 비밀번호 재설정 페이지으로 이동한다. 없으면 실패 페이지로 간다.
-        return (token != null) ? "password/reset-form" : "password/reset-invalid";
+        return (token != null) ? "/reset-form" : "/reset-invalid";
     }   // func end
 
     // 비밀번호 설정 완료 페이지로 이동
     @GetMapping("/success")
     public String successPage() {
-        return "account/reset-success";
+        return "/reset-success";
     }   // func end
 
     // 토큰이 무효하거나 없거나 만료 됐을 때 페이지로 이동.
     @GetMapping("/invalid")
     public String invalidPage() {
-        return "account/reset-invalid";
+        return "/reset-invalid";
     }   // func end
 
 }   // class end
