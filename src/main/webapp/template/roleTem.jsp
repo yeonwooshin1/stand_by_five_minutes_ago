@@ -98,7 +98,7 @@
 
     <!-- 생성 모달 -->
     <div class="modal fade" id="createRoleTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">새 역할 템플릿 생성</h1>
@@ -125,7 +125,7 @@
 
     <!-- content 미리보기 모달 -->
     <div class="modal fade" id="reviewRoleTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">역할 템플릿 조회</h1>
@@ -150,7 +150,7 @@
 
     <!-- Name / content 수정하기 모달 -->
     <div class="modal fade" id="updateRoleTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">역할 템플릿 수정</h1>
