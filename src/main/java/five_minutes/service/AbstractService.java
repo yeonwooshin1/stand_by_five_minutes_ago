@@ -1,14 +1,16 @@
 package five_minutes.service;
 
-
-// info ========================
-// CommonService를 상속 받아 CRUD 기능을 구현
-// getDao 추상 클래스를 정의
-// Writer : OngTK
-
 import five_minutes.model.dao.CommonDao;
 
 import java.util.List;
+
+/// **info** ========================
+///
+/// CommonService를 상속 받아 CRUD 기능을 구현
+///
+/// getDao 추상 클래스를 정의
+///
+/// @author OngTK
 
 public abstract class AbstractService<T, ID, S> implements CommonService<T, ID, S> {
 

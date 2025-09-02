@@ -31,7 +31,7 @@ public class UsersService { // class start
         Map<String , Object> result = new HashMap<>();
 
         // 이메일 유효성 검사 후 변수에 저장, email이 null 이면 null 값 , 아니면 공백제거
-        String email = usersDto.getEmail() == null ? null : usersDto.getEmail().trim();
+        String email = usersDto.getEmail() == null ? null : usersDto.getEmail().trim().toLowerCase();
         // 평문 비밀번호 변수에 저장
         String plainPassword = usersDto.getPasswordHash() == null ? null : usersDto.getPasswordHash().trim();
 
@@ -133,7 +133,7 @@ public class UsersService { // class start
 
         // boolean 반환값에 따라 다른 반환
         if (ok) { return 1; }
-        else { return 0; }
+        else { return -2; } // 비밀번호가 다름. -2 반환
 
     }   // func end
 

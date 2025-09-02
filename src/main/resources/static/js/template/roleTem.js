@@ -27,21 +27,24 @@ const createRT = async () => {
     const rtDescription = document.querySelector("#creatertDescription").value
 
     // [1.2] Fetch
-    const obj = { rtName, rtDescription }
-    const opt = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(obj)
-    }
-    const r = await fetch("/roleTem", opt)
-    const d = await r.json()
+    try {
+        const obj = { rtName, rtDescription }
+        const opt = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(obj)
+        }
+        const r = await fetch("/roleTem", opt)
+        const d = await r.json()
 
-    if (d > 0) {
-        alert("템플릿 저장 성공")
-    } else {
-        alert("템플릿 저장 실패")
+        if (d > 0) {
+            alert("템플릿 저장 성공")
+        } else {
+            alert("템플릿 저장 실패")
+        }
+    } catch (error) {
+        console.log(error)
     }
-
     // [1.3] 저장 후 리스트 조뢰
     getRT()
 } // func end
@@ -54,12 +57,13 @@ const getRT = async () => {
     let html = '';
 
     // [2.2] Fetch
-    const r = await fetch("/roleTem")
-    const d = await r.json()
-    console.log(d)
+    try {
+        const r = await fetch("/roleTem")
+        const d = await r.json()
+        console.log(d)
 
-    d.forEach((dto) => {
-        html += `<tr>
+        d.forEach((dto) => {
+            html += `<tr>
                     <td>${dto.rtNo}</td>
                     <td><a href="/template/roleTemItem.jsp?rtNo=${dto.rtNo}">${dto.rtName}</a></td>
                     <td>
@@ -74,9 +78,14 @@ const getRT = async () => {
                     <td>${dto.updateDate}</td>
                     <td><button type="button" class="btn btn-danger" onclick="deleteRT(${dto.rtNo})">삭제</button></td>
                 </tr>`
-    });
-    // [2.3] 화면 표시
-    roleTemplateTbody.innerHTML = html;
+        });
+
+        // [2.3] 화면 표시
+        roleTemplateTbody.innerHTML = html;
+    } catch (error) {
+        console.log(error)
+    }
+
 } // func end
 getRT()
 
@@ -95,22 +104,25 @@ const getIndiRT = async (rtNo) => {
     const rtDescriptionUpdate = document.querySelector(".updateRTContent .note-editable")
 
     // [3.2] Fetch
-    const r = await fetch(`/roleTem/indi?rtNo=${rtNo}`)
-    const d = await r.json()
+    try {
+        const r = await fetch(`/roleTem/indi?rtNo=${rtNo}`)
+        const d = await r.json()
 
-    // [3.3] 화면에 표시
-    rtNampePreview.value = d.rtName
-    rtDescriptionPreview.innerHTML = d.rtDescription
-    rtNampeUpdate.value = d.rtName
-    rtDescriptionUpdate.innerHTML = d.rtDescription
+        // [3.3] 화면에 표시
+        rtNampePreview.value = d.rtName
+        rtDescriptionPreview.innerHTML = d.rtDescription
+        rtNampeUpdate.value = d.rtName
+        rtDescriptionUpdate.innerHTML = d.rtDescription
 
-    // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
-    const updateBox = document.querySelector(".updateBox")
-    const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
+        const updateBox = document.querySelector(".updateBox")
+        const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
     <button type="button" class="btn btn-primary " onclick="updateRT(${rtNo})"
                         data-bs-dismiss="modal">수정</button>`;
-    updateBox.innerHTML = html;
-
+        updateBox.innerHTML = html;
+    } catch (error) {
+        console.log(error)
+    }
 } // func end
 
 // [RT-04] 역할템플릿 수정	updateRT()
@@ -121,21 +133,25 @@ const updateRT = async (rtNo) => {
 
 
     // [4.2] fetch
-    const obj = { rtNo, rtName, rtDescription }
-    const opt = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(obj)
-    }
-    const r = await fetch(`/roleTem`, opt)
-    const d = await r.json()
+    try {
+        const obj = { rtNo, rtName, rtDescription }
+        const opt = {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(obj)
+        }
+        const r = await fetch(`/roleTem`, opt)
+        const d = await r.json()
 
-    // [4.3] 결과 표시 + update
-    if (d > 0) {
-        alert("템플릿 저장 성공")
-        getRT()
-    } else {
-        alert("템플릿 저장 실패")
+        // [4.3] 결과 표시 + update
+        if (d > 0) {
+            alert("템플릿 저장 성공")
+            getRT()
+        } else {
+            alert("템플릿 저장 실패")
+        }
+    } catch (error) {
+        console.log(error)
     }
 } // func end
 
@@ -144,19 +160,23 @@ const deleteRT = async (rtNo) => {
     console.log("deleteRT func exe")
     console.log(rtNo)
 
-    // [5.1] 확인 여부 확인
-    let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. <br/> 정말로 삭제하시겠습니까?`)
-    if (result == false) { return }
+    try {
+        // [5.1] 확인 여부 확인
+        let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. <br/> 정말로 삭제하시겠습니까?`)
+        if (result == false) { return }
 
-    // [5.2] Fetch
-    const opt = {method:"DELETE"}
-    const r = await fetch(`/roleTem?rtNo=${rtNo}`, opt)
-    const d = await r.json()
+        // [5.2] Fetch
+        const opt = { method: "DELETE" }
+        const r = await fetch(`/roleTem?rtNo=${rtNo}`, opt)
+        const d = await r.json()
 
-    if (d > 0) {
-        alert("템플릿 삭제 성공")
-        getRT()
-    } else {
-        alert("템플릿 삭제 실패")
+        if (d > 0) {
+            alert("템플릿 삭제 성공")
+            getRT()
+        } else {
+            alert("템플릿 삭제 실패")
+        }
+    } catch (error) {
+        console.log(error)
     }
 } // func end

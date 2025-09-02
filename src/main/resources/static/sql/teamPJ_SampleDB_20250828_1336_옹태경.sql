@@ -297,7 +297,6 @@ INSERT INTO pjPerform (pfNo, pjChkItemNo, userNo,  pfStart, pfEnd, notifyType, n
 (10000009, 9000016, '업무파일_9.jpg', '2025-06-07 10:00:00'),
 (10000010, 9000017, '업무파일_10.jpg', '2025-06-07 10:00:00');
 
- 
 select * from Users;
 select * from BusinessUser;
 select * from RoleTemplate;

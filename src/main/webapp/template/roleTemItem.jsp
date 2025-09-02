@@ -50,7 +50,7 @@
             <!-- 본문 작업 영역 -->
             <div class="mainContent col-10">
                 <div class="contentHeader">
-                    <div class="title1">상세 역할 템플릿 관리
+                    <div class="titleBox">상세 역할 템플릿 관리
                         <span></span>
                     </div>
                     <div class="titleBtnBox">
@@ -103,13 +103,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body RTItemContent">
-                    <div>
-                        <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 역할 템플릿명</label>
-                        <input class="form-control" id="rtiNameInput" type="text" />
-                    </div>
-                    <div>
-                        <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 역할 템플릿 설명</label>
-                        <textarea class="rtDescription" id="rtiDescription" name="editordata"></textarea>
+                    <div class="rtContent">
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명
+                                <span
+                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※ 대분류 템플릿 수정은 [ 역할 템플릿 ] 메뉴에서 가능합니다.</span></label>
+                            <input class="form-control rtName01" type="text" disabled />
+                        </div>
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명</label>
+                            <div class="form-control rtDescription01" type="text"></div>
+                        </div>
+
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 역할 템플릿명</label>
+                            <input class="form-control" id="rtiNameInput" type="text" />
+                        </div>
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 역할 템플릿 설명</label>
+                            <textarea class="rtiDescription" id="rtiDescription" name="editordata"></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -130,13 +143,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body previewRTIContent">
-                    <div>
-                        <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 역할 템플릿명</label>
-                        <input class="form-control" id="previewRtiNampe" type="text" disabled />
-                    </div>
-                    <div>
-                        <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 역할 템플릿 설명</label>
-                        <div id="previewRtiDescription"></div>
+                    <div class="rtContent">
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명
+                                <span
+                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※ 대분류 템플릿 수정은 [ 역할 템플릿 ] 메뉴에서 가능합니다.</span></label>
+                            <input class="form-control rtName02" type="text" disabled />
+                        </div>
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿 설명</label>
+                            <div class="form-control rtDescription02" type="text"></div>
+                        </div>
+
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 역할 템플릿명</label>
+                            <input class="form-control" id="previewRtiName" type="text" disabled />
+                        </div>
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 역할 템플릿 설명</label>
+                            <div id="previewRtiDescription"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -155,13 +181,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body updateRTIContent">
-                    <div>
-                        <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿명</label>
-                        <input class="form-control" id="updateRtiName" type="text" />
-                    </div>
-                    <div>
-                        <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿 설명</label>
-                        <textarea class="updateRtiDescription" id="updateRtiDescription" name="editordata"></textarea>
+                    <div class="rtContent">
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명
+                                <span
+                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※ 대분류 템플릿 수정은 [ 역할 템플릿 ] 메뉴에서 가능합니다.</span></label>
+                            <input class="form-control rtName03" type="text" disabled />
+                        </div>
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿 설명</label>
+                            <div class="form-control rtDescription03" type="text" aria-disabled="true"></div>
+                        </div>
+
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿명</label>
+                            <input class="form-control" id="updateRtiName" type="text" />
+                        </div>
+                        <div>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿 설명</label>
+                            <textarea class="updateRtiDescription" id="updateRtiDescription"
+                                name="editordata"></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer updateBox">

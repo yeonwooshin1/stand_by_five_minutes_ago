@@ -2,9 +2,11 @@ package five_minutes.service;
 
 import java.util.List;
 
-// info ========================
-// Service class 들의 공통기능인 CRUD 인터페이스
-// Writer : OngTK
+/// **info** ========================
+///
+/// Service class 들의 공통기능인 CRUD 인터페이스
+///
+/// @author OngTK
 
 public interface CommonService<T, ID, S> {
     // 제네릭

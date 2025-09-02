@@ -4,6 +4,7 @@ console.log("roleTemItem js func")
 const params = new URL(location.href).searchParams;
 const rtNo = params.get("rtNo")
 console.log(rtNo)
+const rtInfo = { rtNo: rtNo, rtDescription: "" }
 
 // [ 상세 역할 템플릿 생성 모달 내 Summer Note 연동 ]
 $(document).ready(function () {
@@ -32,16 +33,158 @@ const getIndiRT = async () => {
     console.log("getIndiRT func exe")
 
     // [1.1] 표시할 영역 가져오기
-    const rtName = document.querySelector(".title1 span")
-    
+    // 상단 타이틀 옆에 대분류 명을 표시
+    const rtNameBox = document.querySelector(".titleBox span")
+    const rtName01 = document.querySelector(".rtName01");
+    const rtDescription01 = document.querySelector(".rtDescription01");
+    const rtName02 = document.querySelector(".rtName02");
+    const rtDescription02 = document.querySelector(".rtDescription02");
+    const rtName03 = document.querySelector(".rtName03");
+    const rtDescription03 = document.querySelector(".rtDescription03");
+
+    // 세부 템플릿 미리보기/수정하기 내에 대분류 탬플릿도 함께 표시
+
     // [1.2] Fetch
     const r = await fetch(`/roleTem/indi?rtNo=${rtNo}`)
     const d = await r.json()
+    console.log(d)
 
     // [3.3] 화면에 표시
-    rtName.innerHTML = `- ${d.rtName}`
-    
+    rtNameBox.innerHTML = `- ${d.rtName}`
+    rtName01.value = d.rtName;
+    rtDescription01.innerHTML = d.rtDescription;
+    rtName02.value = d.rtName;
+    rtDescription02.innerHTML = d.rtDescription;
+    rtName03.value = d.rtName;
+    rtDescription03.innerHTML = d.rtDescription;
 } // func end
 getIndiRT()
 
 // [상세 역할 템플릿 관련 func] =====================================
+
+// [RTI-01] 상세역할템플릿 생성 
+const createRTI = async () => {
+    console.log("createRTItem func exe")
+    // [1.1] 입력할 데이터 가져오기
+    const rtiName = document.querySelector("#rtiNameInput").value;
+    const rtiDescription = document.querySelector("#rtiDescription").value;
+
+    try {
+        // [1.2] Fetch
+        const obj = { rtNo, rtiName, rtiDescription }
+        console.log(obj)
+        const opt = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(obj)
+        }
+        const r = await fetch("/roleTem/Item", opt)
+        const d = await r.json()
+        console.log(d)
+        // [1.3] 결과
+        if (d > 0) {
+            alert("템플릿 저장 성공")
+            getRT()
+        } else {
+            alert("템플릿 저장 실패")
+        }
+        // [1.4] getRTItem() func exe
+        getRTItem()
+    } catch (error) {
+        console.log(error)
+    }
+} // func end
+
+// [RTI-02] 상세역할템플릿 전체 조회 getRTItem()
+const getRTItem = async () => {
+    console.log("getRTItem func exe")
+
+    // [2.1] 정보를 표시할 구역
+    const RTITbody = document.querySelector(".RTITbody")
+
+    try {
+        // [2.2] Fetch
+        const r = await fetch(`/roleTem/Item?rtNo=${rtNo}`)
+        const d = await r.json()
+        console.log(d)
+
+        // [2.3] 결과 처리
+        let html = '';
+        d.forEach(value => {
+            html += `<tr>
+                        <td>${value.rtiNo}</td>
+                        <td>${value.rtiName}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#reviewRTI">미리보기</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#updateRTI">수정하기</button>
+                        </td>
+                        <td>${value.createDate}</td>
+                        <td>${value.updateDate}</td>
+                        <td><button type="button" class="btn btn-danger" onclick="">삭제</button></td>
+                    </tr>`
+        });
+        RTITbody.innerHTML = html;
+    } catch (error) {
+        console.log(error)
+    }
+} // func end
+getRTItem()
+
+// [RTI-03] 역할템플릿 개별 조회 getIndiRTItem()
+
+const getIndiRTItem = async () => {
+    console.log("getIndiRTItem func exe")
+
+    // [2.1] 정보를 표시할 구역
+
+
+    try {
+        // [2.2] Fetch
+
+        // [2.3] 결과
+    } catch (error) {
+        console.log(error)
+    }
+
+
+} // func end
+
+// [RTI-04] 역할템플릿 수정	updateRTItem()
+
+const updateRTItem = async () => {
+    console.log("updateRTItem func exe")
+
+    // [2.1] 정보를 표시할 구역
+
+
+    try {
+        // [2.2] Fetch
+
+        // [2.3] 결과
+    } catch (error) {
+        console.log(error)
+    }
+
+
+} // func end
+
+// [RTI-05] 역할템플릿 삭제(비활성화) deleteRTItem()
+
+const deleteRTItem = async () => {
+    console.log("deleteRTItem func exe")
+
+    // [2.1] 정보를 표시할 구역
+
+
+    try {
+        // [2.2] Fetch
+
+        // [2.3] 결과
+    } catch (error) {
+        console.log(error)
+    }
+
+
+} // func end

@@ -4,11 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// Info =========================
-// RoleTemplateItem DTO
-// 역할 템플릿 대분류를 참조하여 역할 템플릿 소분류를 상세히 정의
-// Google sheet > 21.테이블 > 2-2
-// Writer : OngTK
+/// **Info** =========================
+///
+/// RoleTemplateItem DTO
+///
+/// 역할 템플릿 대분류를 참조하여 역할 템플릿 소분류를 상세히 정의
+///
+/// Google sheet > 21.테이블 > 2-2
+///
+/// @author OngTK
 
 @AllArgsConstructor @NoArgsConstructor @Data    // lombok
 public class RtiDto {

@@ -87,6 +87,7 @@ public class UsersDao extends Dao { // class start
             ResultSet rs = ps.executeQuery();
             if( rs.next() ){
                 UsersDto usersDto  = new UsersDto(); // 패스워드 제외한
+                usersDto.setUserNo(userNo);
                 usersDto.setEmail( rs.getString( "email" ) );
                 usersDto.setUserName( rs.getString( "userName" ) );
                 usersDto.setUserPhone( rs.getString( "userPhone" ) );
