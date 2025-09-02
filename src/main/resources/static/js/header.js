@@ -83,7 +83,7 @@ const logout= async() => {
         // 1. fetch 실행 
         const option = { method : "GET"}
         const response = await fetch( "/user/logout" , option );
-        const data = await response.json();
+        const data = await response.text();
         // 2. fetch 통신 결과
         if( data == 1 ){
             alert('로그아웃 했습니다');
