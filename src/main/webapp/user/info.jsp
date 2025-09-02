@@ -91,8 +91,8 @@
 
                                 <!-- ✅ 내 정보 카드 - 액션 버튼 (오른쪽 하단) -->
                                 <div class="d-flex justify-content-end gap-2 mt-3">
-                                  <button class="btn btn-outline-secondary btn-sm" id="btn-user-edit">내 정보 수정</button>
-                                  <button class="btn btn-warning btn-sm" id="btn-user-password">비밀번호 변경</button>
+                                    <button class="btn btn-outline-secondary btn-sm" id="btn-user-edit">내 정보 수정</button>
+                                    <button class="btn btn-warning btn-sm" id="btn-user-password">비밀번호 변경</button>
                                 </div>
                             </div>
                         </div>
@@ -153,14 +153,15 @@
 
                                 <!-- ✅ 회사 정보 카드 - 액션 버튼 (오른쪽 하단) -->
                                 <div class="d-flex justify-content-end mt-3">
-                                  <button class="btn btn-primary btn-sm" id="btn-edit-business" data-bs-toggle="modal" data-bs-target="#bizEditModal">
-                                    사업자 정보 수정
-                                  </button>
+                                    <button class="btn btn-primary btn-sm" id="btn-edit-business" data-bs-toggle="modal"
+                                        data-bs-target="#bizEditModal">
+                                        사업자 정보 수정
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- ▼▼▼ 내 정보 수정 모달 추가 ▼▼▼ -->
                     <div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel"
                         aria-hidden="true">
@@ -198,8 +199,9 @@
                                         role="alert"></div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-                                    <button class="btn btn-primary" id="btn-user-save">저장</button>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-primary" id="btn-user-save">저장</button>
                                 </div>
                             </div>
                         </div>
@@ -248,7 +250,7 @@
                                                 placeholder="종목" />
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label">사업자등록증 이미지 (선택)</label>
+                                            <label class="form-label">사업자등록증 이미지(선택)</label>
                                             <input type="file" class="form-control" id="bizEditDocuFile"
                                                 accept="image/*" />
                                             <div class="form-text">기존 이미지는 유지됩니다. 새 파일을 선택하면 교체됩니다.</div>
@@ -258,14 +260,15 @@
                                         role="alert"></div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-                                    <button class="btn btn-primary" id="btn-biz-save">저장</button>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-primary" id="btn-biz-save">저장</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- ▲▲▲ 사업자 정보 수정 모달 끝 ▲▲▲ -->
-                     
+
 
                 </div>
             </div>
@@ -281,6 +284,7 @@
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
     <script src="/js/user/info.js"></script>
+
 
 </body>
 
