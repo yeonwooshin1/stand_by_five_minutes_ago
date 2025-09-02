@@ -25,7 +25,6 @@
     <!-- header 연결 -->
     <jsp:include page="/header.jsp"></jsp:include>
 
-
     <!-- 본문 영역 -->
     <div class="indexContainer">
         <div class="row">
@@ -149,7 +148,7 @@
                     </div>
                     
                     <!-- ▼▼▼ 내 정보 수정 모달 추가 ▼▼▼ -->
-                    <!-- <div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel"
+                    <div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
@@ -190,11 +189,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- ▲▲▲ 내 정보 수정 모달 끝 ▲▲▲ -->
 
                     <!-- ▼▼▼ (업데이트된) 사업자 정보 수정 모달 추가 ▼▼▼ -->
-                    <!-- <div class="modal fade" id="bizEditModal" tabindex="-1" aria-labelledby="bizEditModalLabel"
+                    <div class="modal fade" id="bizEditModal" tabindex="-1" aria-labelledby="bizEditModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
@@ -203,9 +202,9 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="닫기"></button>
                                 </div>
-                                <div class="modal-body"> -->
+                                <div class="modal-body">
                                     <!-- BS-04 명세에 맞춘 필드(수정 가능: 담당자명/번호, 이미지, 업태, 종목) -->
-                                    <!-- <form id="bizEditForm" class="row g-3" enctype="multipart/form-data">
+                                    <form id="bizEditForm" class="row g-3" enctype="multipart/form-data">
                                         <div class="col-md-6">
                                             <label class="form-label">사업자번호</label>
                                             <input type="text" class="form-control" id="bizEditBnNo" readonly />
@@ -250,7 +249,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- ▲▲▲ 사업자 정보 수정 모달 끝 ▲▲▲ -->
                      
 
