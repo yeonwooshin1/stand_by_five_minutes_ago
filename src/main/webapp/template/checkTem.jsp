@@ -54,7 +54,7 @@
                     <div class="titleBtnBox">
                         <!-- 모달 연결 버튼 -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#createCheckTem">생성</button>
+                            data-bs-target="#createCheckTem">생성</button> <!-- data-bs-target="#createCheckTem"으로 변경 -->
                     </div>
                 </div>
                 <!--data-bs-target에 연결할 모달을 연결-->
@@ -65,23 +65,23 @@
                         <thead>
                             <tr> <!-- 선택 체크박스는 뺍니다 -->
                                 <th> 번호 </th>
-                                <th> 역할 템플릿명 </th>
-                                <th> 역할 템플릿 설명 </th>
+                                <th> 체크리스트 템플릿 이름 </th>
+                                <th> 체크리스트 템플릿 설명 </th>
                                 <th> 생성일 </th>
                                 <th> 수정일 </th>
                                 <th> 비고 </th>
                             </tr>
                         </thead>
-                        <tbody class="roleTemplateTbody">
+                        <tbody class="checkTemplateTbody"> <!-- class="checkTemplateTbody" 으로 변경 -->
                             <tr>
                                 <!-- 선택 체크박스는 뺍니다 -->
                                 <td>1</td>
-                                <td>삐에로</td>
+                                <td>출근확인</td>
                                 <td>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#reviewRoleTem">미리보기</button>
+                                        data-bs-target="#reviewCheckTem">미리보기</button> <!-- 개별항목 미리보기 #reviewCheckTem으로 변경 -->
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#updateRoleTem">수정하기</button>
+                                        data-bs-target="#updateCheckTem">수정하기</button> <!-- 수정 #updateCheckTem으로 변경 -->
                                 </td>
                                 <td>2025-06-07 08:38:54</td>
                                 <td>2025-06-07 08:38:54</td>
@@ -93,21 +93,21 @@
         </div>
     </div>
 
-    <!-- 생성 모달 -->
-    <div class="modal fade" id="createRoleTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- 생성 모달 --> <!-- id="createCheckTem"으로 변경 -->
+    <div class="modal fade" id="createCheckTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">체크리스트 템플릿 생성</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body createRTContent">
+                <div class="modal-body createCTContent"> <!-- class="modal-body createCTContent"으로 변경 -->
                     <div>
                         <label for="recipient-name" class="col-form-label">체크리스트 템플릿명</label>
-                        <input class="form-control" id="rtNameInput" type="text" />
+                        <input class="form-control" id="ctNameInput" type="text" /> <!-- ctNameInput으로 변경 -->
                     </div>
                     <div>
-                        <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
+                        <label for="recipient-name" class="col-form-label">체크리스트 설명</label>
                         <textarea class="rtDescription" id="creatertDescription" name="editordata"></textarea>
                     </div>
                 </div>
