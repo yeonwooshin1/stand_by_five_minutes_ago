@@ -60,12 +60,12 @@
                 <!--data-bs-target에 연결할 모달을 연결-->
 
                 <div class="ContentBox">
-                    <!-- 역할 템플릿 대분류를 표시 / RoleTemplate table-->
-                    <table class="table table-striped table-hover roleTemplateThead">
+                    <!-- 체크리스트 템플릿 대분류를 표시 / checkTemplate table-->
+                    <table class="table table-striped table-hover checkTemplateThead"> <!-- table class="checkTemplateThead"으로 변경 -->
                         <thead>
                             <tr> <!-- 선택 체크박스는 뺍니다 -->
                                 <th> 번호 </th>
-                                <th> 체크리스트 템플릿 이름 </th>
+                                <th> 체크리스트 템플릿명 </th>
                                 <th> 체크리스트 템플릿 설명 </th>
                                 <th> 생성일 </th>
                                 <th> 수정일 </th>
@@ -103,39 +103,39 @@
                 </div>
                 <div class="modal-body createCTContent"> <!-- class="modal-body createCTContent"으로 변경 -->
                     <div>
-                        <label for="recipient-name" class="col-form-label">체크리스트 템플릿명</label>
+                        <label for="recipient-name" class="col-form-label modalMiddleTitle">체크리스트 템플릿명</label>
                         <input class="form-control" id="ctNameInput" type="text" /> <!-- ctNameInput으로 변경 -->
                     </div>
                     <div>
-                        <label for="recipient-name" class="col-form-label">체크리스트 설명</label>
-                        <textarea class="rtDescription" id="creatertDescription" name="editordata"></textarea>
+                        <label for="recipient-name" class="col-form-label modalMiddleTitle">체크리스트 템플릿 설명</label>
+                        <textarea class="ctDescription" id="creatertDescription" name="editordata"></textarea> <!-- class = ctDescription으로 변경 -->
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" onclick="createCTem()"
-                        data-bs-dismiss="modal">저장</button>
+                    <button type="button" class="btn btn-primary" onclick="createCT()" 
+                        data-bs-dismiss="modal">저장</button> <!-- onclick="createCT()" 으로 변경 -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- content 미리보기 모달 -->
-    <div class="modal fade" id="reviewRoleTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- content 미리보기 모달 --> <!-- id="reviewCheckTem" 으로 변경 -->
+    <div class="modal fade" id="reviewCheckTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">역할 템플릿 조회</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">체크리스트 템플릿 조회</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body previewRTContent">
                     <div>
-                        <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
-                        <input class="form-control" id="rtNampePreview" type="text" value="삐에로" disabled />
-                    </div>
+                        <label for="recipient-name" class="col-form-label modalMiddleTitle">체크리스트 템플릿명</label>
+                        <input class="form-control" id="ctNamePreview" type="text" value="출근확인" disabled />
+                    </div> <!-- id="ctNamePreview" -->
                     <div>
-                        <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
-                        <div id="rtDescriptionPreview"></div>
+                        <label for="recipient-name" class="col-form-label modalMiddleTitle">체크리스트 템플릿 설명</label>
+                        <div id="ctDescriptionPreview"></div> <!-- id="ctDescriptionPreview" -->
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -145,23 +145,23 @@
         </div>
     </div>
 
-    <!-- Name / content 수정하기 모달 -->
-    <div class="modal fade" id="updateRoleTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Name / content 수정하기 모달 -->  <!-- id="updateCheckTem" -->
+    <div class="modal fade" id="updateCheckTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">역할 템플릿 수정</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body updateRTContent">
+                <div class="modal-body updateCTContent"> <!-- class="updateCTContent"-->
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿명</label>
-                        <input class="form-control" id="rtNampeUpdate" type="text" />
+                        <input class="form-control" id="ctNameUpdate" type="text" /> <!-- id="ctNameUpdate" -->
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label">역할 템플릿 설명</label>
-                        <textarea class="rtDescription" id="rtDescriptionUpdate" name="editordata"></textarea>
-                    </div>
+                        <textarea class="ctDescription" id="ctDescriptionUpdate" name="editordata"></textarea>
+                    </div> <!-- class="ctDescription" id="ctDescriptionUpdate" -->
                 </div>
                 <div class="modal-footer updateBox">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
