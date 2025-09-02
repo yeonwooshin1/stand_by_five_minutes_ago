@@ -102,11 +102,11 @@ const getIndiRT = async (rtNo) => {
 
     // [3.1] 모달 내 표시할 영역 가져오기
     // 미리보기 모달 구역
-    const rtNampePreview = document.querySelector("#rtNampePreview")
+    const rtNamePreview = document.querySelector("#rtNamePreview")
     const rtDescriptionPreview = document.querySelector("#rtDescriptionPreview")
 
     // 수정하기 모달 구역
-    const rtNampeUpdate = document.querySelector("#rtNampeUpdate")
+    const rtNameUpdate = document.querySelector("#rtNameUpdate")
     const rtDescriptionUpdate = document.querySelector(".updateRTContent .note-editable")
 
     // [3.2] Fetch
@@ -115,15 +115,15 @@ const getIndiRT = async (rtNo) => {
         const d = await r.json()
 
         // [3.3] 화면에 표시
-        rtNampePreview.value = d.rtName
+        rtNamePreview.value = d.rtName
         rtDescriptionPreview.innerHTML = d.rtDescription
-        rtNampeUpdate.value = d.rtName
+        rtNameUpdate.value = d.rtName
         rtDescriptionUpdate.innerHTML = d.rtDescription
 
         // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
         const updateBox = document.querySelector(".updateBox")
         const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-    <button type="button" class="btn btn-primary " onclick="updateRT(${rtNo})"
+                        <button type="button" class="btn btn-primary " onclick="updateRT(${rtNo})"
                         data-bs-dismiss="modal">수정</button>`;
         updateBox.innerHTML = html;
     } catch (error) {

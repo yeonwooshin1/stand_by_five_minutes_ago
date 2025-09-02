@@ -118,9 +118,9 @@ const getRTItem = async () => {
                         <td>${value.rtiName}</td>
                         <td>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#reviewRTI">미리보기</button>
+                                data-bs-target="#reviewRTI" onclick="getIndiRTItem(${value.rtiNo})">미리보기</button>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#updateRTI">수정하기</button>
+                                data-bs-target="#updateRTI" onclick="getIndiRTItem(${value.rtiNo})">수정하기</button>
                         </td>
                         <td>${value.createDate}</td>
                         <td>${value.updateDate}</td>
@@ -141,40 +141,70 @@ getRTItem()
 
 // [RTI-03] 역할템플릿 개별 조회 getIndiRTItem()
 
-const getIndiRTItem = async () => {
+const getIndiRTItem = async (rtiNo) => {
     console.log("getIndiRTItem func exe")
 
     // [3.1] 정보를 표시할 구역
+    // 미리보기 모달 구역
+    const previewRtiName = document.querySelector("#previewRtiName")
+    const previewRtiDescription = document.querySelector("#previewRtiDescription")
 
+    // 수정하기 모달 구역
+    const updateRtiName = document.querySelector("#updateRtiName")
+    const updateRtiDescription = document.querySelector(".rtiContent .note-editable")
 
     try {
         // [3.2] Fetch
+        const r = await fetch(`/roleTem/Item/indi?rtiNo=${rtiNo}`)
+        const d = await r.json()
 
-        // [3.3] 결과
+        // [3.3] 화면에 표시
+        previewRtiName.value = d.rtiName
+        previewRtiDescription.innerHTML = d.rtiDescription
+        updateRtiName.value = d.rtiName
+        updateRtiDescription.innerHTML = d.rtiDescription
+
+        // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
+        const updateBox = document.querySelector(".updateBox")
+        const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary " onclick="updateRTItem(${rtiNo})"
+                        data-bs-dismiss="modal">수정</button>`;
+        updateBox.innerHTML = html;
     } catch (error) {
         console.log(error)
     }
-
-
 } // func end
 
 // [RTI-04] 역할템플릿 수정	updateRTItem()
 
-const updateRTItem = async () => {
+const updateRTItem = async (rtiNo) => {
     console.log("updateRTItem func exe")
 
-    // [2.1] 정보를 표시할 구역
-
+    // [4.1] 정보를 표시할 구역
+    const rtiName = document.querySelector("#updateRtiName").value
+    const rtiDescription = document.querySelector("#updateRtiDescription").value
 
     try {
-        // [2.2] Fetch
+        // [4.2] Fetch
+        const obj = { rtiNo, rtiName, rtiDescription }
+        const opt = {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(obj)
+        }
+        const r = await fetch(`/roleTem/Item`, opt)
+        const d = await r.json()
 
-        // [2.3] 결과
+        // [4.3] 결과 표시 + update
+        if (d > 0) {
+            alert("템플릿 저장 성공")
+            getIndiRTItem()
+        } else {
+            alert("템플릿 저장 실패")
+        }
     } catch (error) {
         console.log(error)
     }
-
-
 } // func end
 
 // [RTI-05] 역할템플릿 삭제(비활성화) deleteRTItem()
@@ -182,13 +212,13 @@ const updateRTItem = async () => {
 const deleteRTItem = async () => {
     console.log("deleteRTItem func exe")
 
-    // [2.1] 정보를 표시할 구역
+    // [5.1] 정보를 표시할 구역
 
 
     try {
-        // [2.2] Fetch
+        // [5.2] Fetch
 
-        // [2.3] 결과
+        // [5.3] 결과
     } catch (error) {
         console.log(error)
     }

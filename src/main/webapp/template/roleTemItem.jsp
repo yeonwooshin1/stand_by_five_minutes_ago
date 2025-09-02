@@ -103,7 +103,7 @@
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명</label>
-                            <div class="form-control rtDescription01" type="text"></div>
+                            <div class="form-control rtDescription01" type="text" style="background-color: #e9ecef;"></div>
                         </div>
 
                         <div>
@@ -144,7 +144,7 @@
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿 설명</label>
-                            <div class="form-control rtDescription02" type="text"></div>
+                            <div class="form-control rtDescription02" type="text" style="background-color: #e9ecef;"></div>
                         </div>
 
                         <div>
@@ -173,7 +173,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body updateRTIContent">
-                    <div class="rtContent">
+                    <div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명
                                 <span
@@ -183,17 +183,16 @@
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿 설명</label>
-                            <div class="form-control rtDescription03" type="text" aria-disabled="true"></div>
+                            <div class="form-control rtDescription03" type="text" aria-disabled="true" style="background-color: #e9ecef;"></div>
                         </div>
 
-                        <div>
+                        <div class="">
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿명</label>
                             <input class="form-control" id="updateRtiName" type="text" />
                         </div>
-                        <div>
+                        <div class="rtiContent">
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿 설명</label>
-                            <textarea class="updateRtiDescription" id="updateRtiDescription"
-                                name="editordata"></textarea>
+                            <textarea class="updateRtiDescription" id="updateRtiDescription" name="editordata"></textarea>
                         </div>
                     </div>
                 </div>
@@ -213,4 +212,4 @@
 
 </body>
 
-</html>`
+</html>
