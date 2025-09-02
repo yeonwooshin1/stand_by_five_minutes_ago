@@ -25,6 +25,7 @@
     <!-- header 연결 -->
     <jsp:include page="/header.jsp"></jsp:include>
 
+
     <!-- 본문 영역 -->
     <div class="indexContainer">
         <div class="row">
@@ -87,6 +88,12 @@
                                         <div class="text-muted" id="createDate">-</div>
                                     </div>
                                 </div>
+
+                                <!-- ✅ 내 정보 카드 - 액션 버튼 (오른쪽 하단) -->
+                                <div class="d-flex justify-content-end gap-2 mt-3">
+                                  <button class="btn btn-outline-secondary btn-sm" id="btn-user-edit">내 정보 수정</button>
+                                  <button class="btn btn-warning btn-sm" id="btn-user-password">비밀번호 변경</button>
+                                </div>
                             </div>
                         </div>
 
@@ -142,6 +149,13 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <!-- ✅ 회사 정보 카드 - 액션 버튼 (오른쪽 하단) -->
+                                <div class="d-flex justify-content-end mt-3">
+                                  <button class="btn btn-primary btn-sm" id="btn-edit-business" data-bs-toggle="modal" data-bs-target="#bizEditModal">
+                                    사업자 정보 수정
+                                  </button>
                                 </div>
                             </div>
                         </div>
