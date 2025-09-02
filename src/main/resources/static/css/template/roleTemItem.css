@@ -1,8 +1,8 @@
 /* 글꼴 noto sans import */
 .noto-sans-kr {
-  font-family: "Noto Sans KR", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 * {
@@ -22,7 +22,7 @@ a {
     color: black;
 }
 
-.indexContainer{
+.indexContainer {
     margin: 0.5rem auto;
     max-width: 1280px;
 }
@@ -39,14 +39,15 @@ a {
 }
 
 /* 상단 제목 */
-.title1{
+.titleBox {
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.7rem;
+    margin-left: 0.75rem;
 }
 
 /* 상단 제목과 버튼을 양쪽 끝으로 배치 */
-.contentHeader{
+.contentHeader {
     display: flex;
     justify-content: space-between;
 }
@@ -64,7 +65,9 @@ a {
     font-weight: 600;
 }
 
-.title1 span{
-    font-size: 1.25rem;
+/* 상단 제목 몇 템플릿 대분류 명칭 */
+.title1 span {
+    font-size: 1.3rem;
     font-weight: bold;
+    margin-left: 0.75rem;
 }
