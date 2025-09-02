@@ -73,7 +73,9 @@
                             </tr>
                         </thead>
                         <tbody class="roleTemplateTbody">
-
+                            <tr>
+                                <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
