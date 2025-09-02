@@ -13,7 +13,7 @@ public class BusinessDao extends Dao { // class start
     public BusinessDto getBusinessInfo( String bnNo ){
         try{
             // 사업자등록번호,  기업명 , 담당자명 , 담당자번호 , 사업자이미지 , 업태 , 종목 , 기업등록일 ,  기업정보수정일 가져옴.
-            String sql = "select bnName, managerName, managerPhone, bnDocuImg, bnType, bnItem , createDate from BusinessUser where bnNo = ?";
+            String sql = "select bnName, managerName, managerPhone, bnDocuImg, bnType, bnItem , createDate , updateDate from BusinessUser where bnNo = ?";
             PreparedStatement ps = conn.prepareStatement( sql );
             ps.setString( 1 , bnNo );
             ResultSet rs = ps.executeQuery();
@@ -28,6 +28,7 @@ public class BusinessDao extends Dao { // class start
                 businessDto.setBnType( rs.getString( "bnType" ) );
                 businessDto.setBnItem( rs.getString( "bnItem" ) );
                 businessDto.setCreateDate( rs.getString( "createDate" ) );
+                businessDto.setUpdateDate( rs.getString("updateDate"));
 
                 // dto 반환
                 return businessDto;
