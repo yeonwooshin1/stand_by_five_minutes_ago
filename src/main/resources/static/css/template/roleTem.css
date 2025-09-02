@@ -42,7 +42,8 @@ a {
 .title1{
     font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.7rem;
+    margin-left: 0.75rem;
 }
 
 /* 상단 제목과 버튼을 양쪽 끝으로 배치 */

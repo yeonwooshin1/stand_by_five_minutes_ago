@@ -73,21 +73,7 @@
                             </tr>
                         </thead>
                         <tbody class="roleTemplateTbody">
-                            <tr>
-                                <td>
-                                    <input class="form-check-input" type="checkbox" value="2000001">
-                                </td>
-                                <td>1</td>
-                                <td>삐에로</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#reviewRoleTem">미리보기</button>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#updateRoleTem">수정하기</button>
-                                </td>
-                                <td>2025-06-07 08:38:54</td>
-                                <td>2025-06-07 08:38:54</td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </div>
