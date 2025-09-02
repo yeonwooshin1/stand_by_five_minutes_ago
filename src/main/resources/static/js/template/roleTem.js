@@ -151,10 +151,10 @@ const updateRT = async (rtNo) => {
 
         // [4.3] 결과 표시 + update
         if (d > 0) {
-            alert("템플릿 저장 성공")
+            alert("템플릿 수정 성공")
             getRT()
         } else {
-            alert("템플릿 저장 실패")
+            alert("템플릿 수정 실패")
         }
     } catch (error) {
         console.log(error)
@@ -167,8 +167,8 @@ const deleteRT = async (rtNo) => {
     console.log(rtNo)
 
     try {
-        // [5.1] 확인 여부 확인
-        let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. <br/> 정말로 삭제하시겠습니까?`)
+        // [5.1] 삭제 여부 확인
+        let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. \n정말로 삭제하시겠습니까?`)
         if (result == false) { return }
 
         // [5.2] Fetch

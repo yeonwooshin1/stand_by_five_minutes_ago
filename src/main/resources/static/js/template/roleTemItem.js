@@ -84,12 +84,10 @@ const createRTI = async () => {
         // [1.3] 결과
         if (d > 0) {
             alert("템플릿 저장 성공")
-            getRT()
+            getRTItem()
         } else {
             alert("템플릿 저장 실패")
         }
-        // [1.4] getRTItem() func exe
-        getRTItem()
     } catch (error) {
         console.log(error)
     }
@@ -124,7 +122,7 @@ const getRTItem = async () => {
                         </td>
                         <td>${value.createDate}</td>
                         <td>${value.updateDate}</td>
-                        <td><button type="button" class="btn btn-danger" onclick="">삭제</button></td>
+                        <td><button type="button" class="btn btn-danger" onclick="deleteRTItem(${value.rtiNo})">삭제</button></td>
                     </tr>`
             });
         } else {
@@ -197,10 +195,10 @@ const updateRTItem = async (rtiNo) => {
 
         // [4.3] 결과 표시 + update
         if (d > 0) {
-            alert("템플릿 저장 성공")
-            getIndiRTItem()
+            alert("템플릿 수정 성공")
+            getRTItem()
         } else {
-            alert("템플릿 저장 실패")
+            alert("템플릿 수정 실패")
         }
     } catch (error) {
         console.log(error)
@@ -208,20 +206,27 @@ const updateRTItem = async (rtiNo) => {
 } // func end
 
 // [RTI-05] 역할템플릿 삭제(비활성화) deleteRTItem()
-
-const deleteRTItem = async () => {
+const deleteRTItem = async (rtiNo) => {
     console.log("deleteRTItem func exe")
 
-    // [5.1] 정보를 표시할 구역
-
+    // [5.1] 삭제 여부 확인
+    let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. \n정말로 삭제하시겠습니까?`)
+    if (result == false) { return }
 
     try {
         // [5.2] Fetch
+        const opt = { method: "DELETE" }
+        const r = await fetch(`/roleTem/Item?rtiNo=${rtiNo}`, opt)
+        const d = await r.json()
 
         // [5.3] 결과
+        if (d > 0) {
+            alert("템플릿 삭제 성공")
+            getRTItem()
+        } else {
+            alert("템플릿 삭제 실패")
+        }
     } catch (error) {
         console.log(error)
     }
-
-
 } // func end
