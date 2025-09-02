@@ -30,6 +30,7 @@ const mainMenu = async () => {
         const response = await fetch( "/business/find/info" , option );
         const data = await response.json();
         businessNo = data.bnNo;
+        managerName = data.managerName;
         }catch{
             businessNo = null ;
         }
@@ -61,11 +62,11 @@ const subMenu = async () => {
         html = `<ul class='main-menu' ><li><a href="/user/login.jsp" style="color:black">로그인</a></li>
                     <li><a href="#" style="color:black">회원가입(추후 구현)</a></li></ul>`
 
-    } else if (businessNo == null ) { // 기업 담당자
+    } else if (businessNo != null ) { // 기업 담당자
         html += `<div class="headText">${managerName}님 환영합니다. <br />(기업 담당자)</div>
                     <ul><li><a href="/user/info" class="myPage">마이페이지</a></li>
                     <li class="headerbar"> | </li>
-                    <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li>로그아웃</a></li></ul>`
+                    <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
 
     } else if (userNo > 0) { // 일반회원
         html += `<div class="headText" >${userName}님 환영합니다. <br />(일반 회원)</div>
