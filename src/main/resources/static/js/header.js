@@ -61,7 +61,7 @@ const subMenu = async () => {
         html = `<ul class='main-menu' ><li><a href="/user/login.jsp" style="color:black">로그인</a></li>
                     <li><a href="#" style="color:black">회원가입(추후 구현)</a></li></ul>`
 
-    } else if (businessNo > 1) { // 기업 담당자
+    } else if (businessNo == null ) { // 기업 담당자
         html += `<div class="headText">${managerName}님 환영합니다. <br />(기업 담당자)</div>
                     <ul><li><a href="/user/info" class="myPage">마이페이지</a></li>
                     <li class="headerbar"> | </li>
