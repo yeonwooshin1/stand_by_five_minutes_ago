@@ -276,7 +276,13 @@ $('#btn-user-save')?.addEventListener('click', async (e) => {
     else if (data === -3) msg = '모든 항목 입력 필수입니다.';
     
     if (data !== 1) { err.textContent = msg ?? `수정 실패 (${msg})`; show(err); return; }
-
+    
+    // 성공이면 header에 있는 이름도 변경하기 위해서 한 번 렌더링
+    if(data ===1 ) {
+      // 예: 내 정보 저장 성공
+      try { userNameHeader = obj.userName; } catch {}
+      if (typeof subMenu === 'function') { subMenu(); }
+    }
     // 화면 갱신
     // setText라는 기능 추가
     // domId에는 위에 유틸에 있는 dom을 간소화한 값임. 그것을 isDom이라는 상수에 넣고 그 dom이 있다면 textContent에 data
@@ -370,7 +376,12 @@ $('#btn-biz-save')?.addEventListener('click', async (e) => {
     setText('#managerPhone', managerPhone);
     setText('#bnType',       bnType);
     setText('#bnItem',       bnItem);
-
+    // 성공이면 header에 있는 이름도 변경하기 위해서 한 번 렌더링
+    if(data ===1 ) {
+      // 예: 내 정보 저장 성공
+      try { managerNameHeader = managerName; } catch {}
+      if (typeof subMenu === 'function') { subMenu(); }
+    }
     // 파일 보냈으면 이미지 캐시 무효화(이미지 태그가 있다면)
     const imgEl = $('#bnDocuImg');
     if (fileInput?.files?.[0] && imgEl && imgEl.src) {
@@ -387,4 +398,155 @@ $('#btn-biz-save')?.addEventListener('click', async (e) => {
     err.textContent = '네트워크 오류가 발생했습니다.'; show(err);
     // 실패시에는 닫지 않음(UX)
   } // try end
+});
+
+
+// ========================== 비밀번호 변경 (US-05) ==========================
+
+// 모달 열기
+// 비밀번호 모달 초기값은 null
+let _userPwdInst = null;
+// 비밀번호 변경을 클릭했을 때 해당 클래스를 dom화 시킨다.
+$('#btn-user-password')?.addEventListener('click', () => {
+  const el = document.getElementById('userPwdModal');
+  // 만약에 그 dom이 없으면 return한다.
+  if (!el) return;
+  // 해당 모달 초기값이 없으면 새로운 모달 인스턴스를 만든다. (해당 dom객체)
+  // 이렇게 하는 이유는 모달 인스턴스가 계속 생기면 꼬일 수 있기 때문임.
+  _userPwdInst = _userPwdInst || new bootstrap.Modal(el);
+  // 그것을 연다. show()
+  _userPwdInst.show();
+});
+
+// 해당 userPwdModal의 돔의 이벤트 리스너를 실행 
+// 돔이 있으면 가져오고 그것이 이벤트 리스너 즉 show.bs.modal 열릴 때 이벤트를 실행하라.
+document.getElementById('userPwdModal')?.addEventListener('show.bs.modal', () => {
+  
+  // 열 때 value값 ''로 바꾼다.
+  $('#pwdCurrent').value = '';
+  $('#pwdNew').value = '';
+  $('#pwdNew2').value = '';
+  
+  // 에러 메세지와 완료 메세지를 가린다.
+  hide($('#userPwdError'));
+  hide($('#userPwdOk'));
+
+});
+
+// 엔터키로 변경 실행
+// userPwdForm 즉 이 돔이 있고 만약 키보드 누르는게 enter라면 실행될 때 저장 버튼을 클릭하는 것.
+document.getElementById('userPwdForm')?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); $('#btn-pwd-save')?.click(); }
+});
+
+// 눈모양 토글(표시/숨김)
+// userPwdModal id를 가진 dom을 불러오는데 없으면 그냥 넘어가라, 있으면 click시 이벤트를 실행해라. 라는 뜻
+document.getElementById('userPwdModal')?.addEventListener('click', (e) => {
+  // 클릭한 곳의 부모와 조상을 찾아서 근처에 closest() 안에 있는 것을 찾는다.
+  // []는 그 요소들을 가진 모든 것을 찾는다. => 그 속성이 있으면 다 잡힘 (값은 상관 없음)
+  const btn = e.target.closest('[data-toggle-eye]');
+  // 없으면 return;
+  if (!btn) return;
+  // getAttibute(). 그 안에 있는 속성값을 가져온다. value 값을 가져온다는 뜻
+  const sel = btn.getAttribute('data-toggle-eye');
+  // 그것을 dom화 한다.
+  const input = document.querySelector(sel);
+  // 그 dom 값이 없으면 return 한다.
+  if (!input) return;
+  // 그 input의 타입이 password이면 text로 바꾸고 아니면 password로 바꾼다.
+  input.type = input.type === 'password' ? 'text' : 'password';
+  // 그 btn의 text값을 바꾸는데 type 이 password면 표시로 뜨게 아니면 숨김으로 뜨게 한다.
+  btn.textContent = input.type === 'password' ? '표시' : '숨김';
+});
+
+// 비밀번호 형식 유효성 검사 함수(프론트엔드에서 검증, 자바도 -3으로 검증한다!!!)
+const strongPwd = (s) => {
+  const v = String(s || '');
+  return (
+    v.length >= 8 &&
+    /[A-Za-z]/.test(v)   // 영문 대소문자 최소 1개 포함
+  );
+};
+
+// 변경 눌렀을 때 이벤트리스너를 한다. 클릭으로 비동기로 해준다.
+$('#btn-pwd-save')?.addEventListener('click', async (e) => {
+  // fetch 로만 이 폼이 동작하게 막아줌. => 기본적으로 브라우저에서 기본 동작을 막아줌
+  // submit은 기본적으로 폼 전송하고 새로고침을 하는데 그것을 막아준다는 것
+  e.preventDefault();
+  // dom 객체화
+  const err = $('#userPwdError');
+  const ok  = $('#userPwdOk');
+  // 성공 실패 메세지는 기본적으로 가린다 => 위에 참고
+  hide(err); hide(ok);
+  // fetch할 obj를 객체로 만든다.
+  const obj = {
+    currentPassword: $('#pwdCurrent')?.value?.trim() ?? '',
+    newPassword:     $('#pwdNew')?.value?.trim() ?? '',
+    confirmPassword: $('#pwdNew2')?.value?.trim() ?? ''
+  };
+
+  // 프론트 안에서 유효성검사
+  // .some(함수) => 배열 안에서 하나라도 함수 조건을 만족하면 true를 반환 아니면 false
+  // 여기서는 이 세개의 DOM 객체의 값에서 공백이 하나라도 있으면 true를 반환해줌!
+  // 고로 여기서 하나라도 공백이면 모두 입력하세요가 뜨는거임.
+  if ([obj.currentPassword, obj.newPassword, obj.confirmPassword].some(isBlank)) {
+    err.textContent = '모든 항목 입력 필수입니다.'; show(err); return;
+  }
+  if (obj.newPassword !== obj.confirmPassword) {
+    err.textContent = '새 비밀번호와 확인 비밀번호가 일치하지 않습니다.'; show(err); return; // -> 서버코드 -1과 동일한 정책
+  }
+  if (obj.newPassword === obj.currentPassword) {
+    err.textContent = '새 비밀번호가 기존 비밀번호와 동일합니다.'; show(err); return;     // -> 서버코드 -4와 동일
+  }
+  if (!strongPwd(obj.newPassword)) {
+    err.textContent = '비밀번호 형식이 올바르지 않습니다. (대소문자/영문 포함 8자 이상)'; show(err); return; // -> 서버코드 -3과 동일
+  }
+
+  // fetch 부분
+  try {
+    const response = await fetch('/user/update/password', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(obj)
+    });
+    // text 형식으로 요청을 받겠다.
+    const txt  = await response.text();
+    // 그 text를 10진수 int로 가지고 오겠다.
+    const code = parseInt(txt, 10);
+    let message;
+
+    // 반환값에 따른 메세지 출력
+    if (code === -4) {
+      message = '새 비밀번호가 기존 비밀번호와 동일합니다.';
+    } else if (code === -3) {
+      message = '비밀번호 형식이 올바르지 않습니다.';
+    } else if (code === -2) {
+      message = '세션이 존재하지 않습니다. 재로그인 해주세요.';
+    } else if (code === -1) {
+      message = '새 비밀번호와 확인 비밀번호가 일치하지 않습니다.';
+    } else if (code === 0) {
+      message = '현재 비밀번호가 일치하지 않습니다.';
+    } else if (code === 1) {
+      message = '비밀번호가 변경되었습니다.';
+    } // if end
+    // 성공 메세지일 경우
+    if (code === 1) {
+      // ok는 성공 메세지를 뜻함 그 text 안에 변경되었다고 하고 그것을 show 보여준다.
+      // show는 내가 위에 만든 유틸성 함수로  remove('d-none'); 이것, 즉 보여준다는 뜻
+      ok.textContent = message; show(ok);
+      // setTimeout())=> {}, 밀리초) => 이건 지정한 밀리초 뒤에 {} 안에 있는 함수를 콜백한다는뜻.
+      // 즉 2초 뒤에 취소 창을 눌러서 콜백해준다. 
+      // 그냥 성공하면 2초 뒤에 모달 창 닫아준다고 생각하면 편하다.
+      setTimeout(() => {
+      document.querySelector('#userPwdModal [data-bs-dismiss="modal"]')?.click();
+      }, 2000)
+    } else {
+      // 이건 변경 실패를 알려주는 건데. 반환한 message 변수에 값이 있다면 그걸 text에 넣고
+      // 없다면 ?? 뒤에 값을 보여준다, 그리고 그 에러 메세지를 보여준다.
+      err.textContent = message ?? `변경 실패(${code})`; show(err);
+    }
+  } catch (ex) {
+    // catch 되면 에러 메세지에 네크워크 오류가 떴다고 보여준다.
+    err.textContent = '네트워크 오류가 발생했습니다.'; show(err);
+  }
 });
