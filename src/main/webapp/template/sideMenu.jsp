@@ -22,10 +22,8 @@
             <div class="menuHead">템플릿 관리</div>
             <div class="middleMenu"> <a href="/template/roleTem.jsp">역할 관리</a></div>
             <div class="smallMenu"><a href="/template/roleTem.jsp">역할 템플릿</a></div>
-            <div class="smallMenu"><a href="/template/roleTemItem.jsp">상세 역할 템플릿</a></div>
             <div class="middleMenu"> <a href="/template/checkTem.jsp">체크리스트 관리</a></div>
             <div class="smallMenu"><a href="/template/checkTem.jsp">체크리스트 템플릿</a></div>
-            <div class="smallMenu"><a href="/template/checkTemItem.jsp">상세 체크리스트 템플릿</a></div>
         </div>
     </div>
 

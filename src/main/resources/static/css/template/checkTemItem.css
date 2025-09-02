@@ -1,8 +1,10 @@
+/* 일단 복붙 다시 봐야함 */
+
 /* 글꼴 noto sans import */
 .noto-sans-kr {
-  font-family: "Noto Sans KR", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
 
 * {
@@ -22,7 +24,7 @@ a {
     color: black;
 }
 
-.indexContainer{
+.indexContainer {
     margin: 0.5rem auto;
     max-width: 1280px;
 }
@@ -39,7 +41,7 @@ a {
 }
 
 /* 상단 제목 */
-.title1{
+.titleBox {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 0.7rem;
@@ -47,14 +49,14 @@ a {
 }
 
 /* 상단 제목과 버튼을 양쪽 끝으로 배치 */
-.contentHeader{
+.contentHeader {
     display: flex;
     justify-content: space-between;
 }
 
 /* 테이블 내 요소 중앙정렬 */
-.checkTemplateThead th,
-.checkTemplateTbody td {
+.CTIThead th,
+.CTITbody td {
     text-align: center;
     vertical-align: middle;
 }
@@ -63,4 +65,11 @@ a {
 .modalMiddleTitle {
     font-size: 1.12rem;
     font-weight: 600;
+}
+
+/* 상단 제목 몇 템플릿 대분류 명칭 */
+.title1 span {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-left: 0.75rem;
 }
