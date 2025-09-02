@@ -50,7 +50,7 @@
             <!-- 본문 작업 영역 -->
             <div class="mainContent col-10">
                 <div class="contentHeader">
-                    <div class="title1">역할 템플릿 관리</div>
+                    <div class="title1">체크리스트 템플릿 관리</div>
                     <div class="titleBtnBox">
                         <!-- 모달 연결 버튼 -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
