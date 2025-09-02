@@ -29,7 +29,7 @@ const mainMenu = async () => {
         const option = { method : "GET"}
         const response = await fetch( "/business/find/info" , option );
         const data = await response.json();
-        businessNo = data.businessNo;
+        businessNo = data.bnNo;
         }catch{
             businessNo = null ;
         }
