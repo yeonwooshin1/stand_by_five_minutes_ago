@@ -1,5 +1,6 @@
 package five_minutes.model.dao;
 
+import five_minutes.model.Repository.CommonRepository;
 import five_minutes.model.dto.RtDto;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ import java.util.List;
 /// @author OngTK
 
 @Repository     // Dao 어노테이션
-public class RtDao extends Dao implements CommonDao<RtDto, Integer, String>{
+public class RtDao extends Dao implements CommonRepository<RtDto, Integer, String> {
 
     // [ RT-01 ] 역할 템플릿 생성 create()
     @Override

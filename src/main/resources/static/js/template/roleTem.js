@@ -62,8 +62,10 @@ const getRT = async () => {
         const d = await r.json()
         console.log(d)
 
-        d.forEach((dto) => {
-            html += `<tr>
+        let html = '';
+        if (d.length != 0) {
+            d.forEach((dto) => {
+                html += `<tr>
                     <td>${dto.rtNo}</td>
                     <td><a href="/template/roleTemItem.jsp?rtNo=${dto.rtNo}">${dto.rtName}</a></td>
                     <td>
@@ -78,8 +80,12 @@ const getRT = async () => {
                     <td>${dto.updateDate}</td>
                     <td><button type="button" class="btn btn-danger" onclick="deleteRT(${dto.rtNo})">삭제</button></td>
                 </tr>`
-        });
-
+            });
+        } else {
+            html += `<tr>
+                     <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
+                     </tr>`
+        }
         // [2.3] 화면 표시
         roleTemplateTbody.innerHTML = html;
     } catch (error) {
@@ -96,11 +102,11 @@ const getIndiRT = async (rtNo) => {
 
     // [3.1] 모달 내 표시할 영역 가져오기
     // 미리보기 모달 구역
-    const rtNampePreview = document.querySelector("#rtNampePreview")
+    const rtNamePreview = document.querySelector("#rtNamePreview")
     const rtDescriptionPreview = document.querySelector("#rtDescriptionPreview")
 
     // 수정하기 모달 구역
-    const rtNampeUpdate = document.querySelector("#rtNampeUpdate")
+    const rtNameUpdate = document.querySelector("#rtNameUpdate")
     const rtDescriptionUpdate = document.querySelector(".updateRTContent .note-editable")
 
     // [3.2] Fetch
@@ -109,15 +115,15 @@ const getIndiRT = async (rtNo) => {
         const d = await r.json()
 
         // [3.3] 화면에 표시
-        rtNampePreview.value = d.rtName
+        rtNamePreview.value = d.rtName
         rtDescriptionPreview.innerHTML = d.rtDescription
-        rtNampeUpdate.value = d.rtName
+        rtNameUpdate.value = d.rtName
         rtDescriptionUpdate.innerHTML = d.rtDescription
 
         // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
         const updateBox = document.querySelector(".updateBox")
         const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-    <button type="button" class="btn btn-primary " onclick="updateRT(${rtNo})"
+                        <button type="button" class="btn btn-primary " onclick="updateRT(${rtNo})"
                         data-bs-dismiss="modal">수정</button>`;
         updateBox.innerHTML = html;
     } catch (error) {
@@ -145,10 +151,10 @@ const updateRT = async (rtNo) => {
 
         // [4.3] 결과 표시 + update
         if (d > 0) {
-            alert("템플릿 저장 성공")
+            alert("템플릿 수정 성공")
             getRT()
         } else {
-            alert("템플릿 저장 실패")
+            alert("템플릿 수정 실패")
         }
     } catch (error) {
         console.log(error)
@@ -161,8 +167,8 @@ const deleteRT = async (rtNo) => {
     console.log(rtNo)
 
     try {
-        // [5.1] 확인 여부 확인
-        let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. <br/> 정말로 삭제하시겠습니까?`)
+        // [5.1] 삭제 여부 확인
+        let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. \n정말로 삭제하시겠습니까?`)
         if (result == false) { return }
 
         // [5.2] Fetch

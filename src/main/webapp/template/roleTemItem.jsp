@@ -75,17 +75,7 @@
                         </thead>
                         <tbody class="RTITbody">
                             <tr>
-                                <td>1</td>
-                                <td>일반 삐에로</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#reviewRTI">미리보기</button>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#updateRTI">수정하기</button>
-                                </td>
-                                <td>2025-06-07 08:38:54</td>
-                                <td>2025-06-07 08:38:54</td>
-                                <td><button type="button" class="btn btn-danger" onclick="">삭제</button></td>
+                                <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -107,12 +97,13 @@
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명
                                 <span
-                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※ 대분류 템플릿 수정은 [ 역할 템플릿 ] 메뉴에서 가능합니다.</span></label>
+                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※
+                                    대분류 템플릿 수정은 [ 역할 템플릿 ] 메뉴에서 가능합니다.</span></label>
                             <input class="form-control rtName01" type="text" disabled />
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명</label>
-                            <div class="form-control rtDescription01" type="text"></div>
+                            <div class="form-control rtDescription01" type="text" style="background-color: #e9ecef;"></div>
                         </div>
 
                         <div>
@@ -147,12 +138,13 @@
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명
                                 <span
-                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※ 대분류 템플릿 수정은 [ 역할 템플릿 ] 메뉴에서 가능합니다.</span></label>
+                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※
+                                    대분류 템플릿 수정은 [ 역할 템플릿 ] 메뉴에서 가능합니다.</span></label>
                             <input class="form-control rtName02" type="text" disabled />
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿 설명</label>
-                            <div class="form-control rtDescription02" type="text"></div>
+                            <div class="form-control rtDescription02" type="text" style="background-color: #e9ecef;"></div>
                         </div>
 
                         <div>
@@ -181,26 +173,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body updateRTIContent">
-                    <div class="rtContent">
+                    <div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명
                                 <span
-                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※ 대분류 템플릿 수정은 [ 역할 템플릿 ] 메뉴에서 가능합니다.</span></label>
+                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※
+                                    대분류 템플릿 수정은 [ 역할 템플릿 ] 메뉴에서 가능합니다.</span></label>
                             <input class="form-control rtName03" type="text" disabled />
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿 설명</label>
-                            <div class="form-control rtDescription03" type="text" aria-disabled="true"></div>
+                            <div class="form-control rtDescription03" type="text" aria-disabled="true" style="background-color: #e9ecef;"></div>
                         </div>
 
-                        <div>
+                        <div class="">
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿명</label>
                             <input class="form-control" id="updateRtiName" type="text" />
                         </div>
-                        <div>
+                        <div class="rtiContent">
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿 설명</label>
-                            <textarea class="updateRtiDescription" id="updateRtiDescription"
-                                name="editordata"></textarea>
+                            <textarea class="updateRtiDescription" id="updateRtiDescription" name="editordata"></textarea>
                         </div>
                     </div>
                 </div>
@@ -220,4 +212,4 @@
 
 </body>
 
-</html>`
+</html>

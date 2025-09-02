@@ -73,7 +73,9 @@
                             </tr>
                         </thead>
                         <tbody class="roleTemplateTbody">
-
+                            <tr>
+                                <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -119,7 +121,7 @@
                 <div class="modal-body previewRTContent">
                     <div>
                         <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿명</label>
-                        <input class="form-control" id="rtNampePreview" type="text" value="삐에로" disabled />
+                        <input class="form-control" id="rtNamePreview" type="text" value="삐에로" disabled />
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿 설명</label>
@@ -144,7 +146,7 @@
                 <div class="modal-body updateRTContent">
                     <div>
                         <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿명</label>
-                        <input class="form-control" id="rtNampeUpdate" type="text" />
+                        <input class="form-control" id="rtNameUpdate" type="text" />
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿 설명</label>
@@ -167,4 +169,4 @@
 
 </body>
 
-</html>`
+</html>

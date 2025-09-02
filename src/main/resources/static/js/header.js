@@ -42,7 +42,7 @@ const mainMenu = async () => {
     if (userNo == 0) {
         html = ''
     } else if (businessNo != null ) { // 기업 담당자
-        html += `<li><a href="#">인력 관리</a></li>
+        html += `<li><a href="#" style="color: #A6A6A6;">인력 관리</a></li>
                  <li><a href="/template/roleTem.jsp">템플릿 관리</a></li>
                  <li><a href="#">프로젝트 관리</a></li>`
     } else if (userNo > 1 ) { // 일반회원

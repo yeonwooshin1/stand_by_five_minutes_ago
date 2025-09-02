@@ -1,5 +1,6 @@
 package five_minutes.model.dao;
 
+import five_minutes.model.Repository.CommonRepository;
 import five_minutes.model.dto.RtiDto;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 /// **Info** =========================
 ///
@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 /// @author OngTK
 
 @Repository     // Dao 어노테이션
-public class RtiDao extends Dao implements CommonDao<RtiDto, Integer, String> {
+public class RtiDao extends Dao implements CommonRepository<RtiDto, Integer, String> {
 
     // [ RTI-01 ] 상세 역할 템플릿 생성 create()
     @Override
