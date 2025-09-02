@@ -12,7 +12,6 @@ import java.util.List;
 ///
 /// @author OngTK
 
-
 public abstract class AbstractService<T, ID, S> implements CommonService<T, ID, S> {
 
     // [1] 추상 메소드
