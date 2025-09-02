@@ -4,8 +4,8 @@ let userNo;
 // [공통] businessNo 저장
 let businessNo;
 // 이름 저장
-let managerName;
-let userName;
+let managerNameHeader;
+let userNameHeader;
 
 // [1] 메인 메뉴 
 
@@ -17,7 +17,7 @@ const mainMenu = async () => {
         const response = await fetch( "/user/find/info" , option );
         const data = await response.json();
         userNo = data.userNo;
-        userName = data.userName;
+        userNameHeader = data.userName;
     }catch{
         userNo = 0;
     }
@@ -30,7 +30,7 @@ const mainMenu = async () => {
         const response = await fetch( "/business/find/info" , option );
         const data = await response.json();
         businessNo = data.bnNo;
-        managerName = data.managerName;
+        managerNameHeader = data.managerName;
         }catch{
             businessNo = null ;
         }
@@ -63,13 +63,13 @@ const subMenu = async () => {
                     <li><a href="#" style="color:black">회원가입(추후 구현)</a></li></ul>`
 
     } else if (businessNo != null ) { // 기업 담당자
-        html += `<div class="headText">${managerName}님 환영합니다. <br />(기업 담당자)</div>
+        html += `<div class="headText">${managerNameHeader}님 환영합니다. <br />(기업 담당자)</div>
                     <ul><li><a href="/user/info.jsp" class="myPage">마이페이지</a></li>
                     <li class="headerbar"> | </li>
                     <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
 
     } else if (userNo > 0) { // 일반회원
-        html += `<div class="headText" >${userName}님 환영합니다. <br />(일반 회원)</div>
+        html += `<div class="headText" >${userNameHeader}님 환영합니다. <br />(일반 회원)</div>
                     <ul><li><a href="/user/info.jsp" class="myPage">마이페이지</a></li>
                     <li class="headerbar"> | </li>
                     <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
