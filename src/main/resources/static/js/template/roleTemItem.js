@@ -99,10 +99,92 @@ const createRTI = async () => {
 const getRTItem = async () => {
     console.log("getRTItem func exe")
 
-}
+    // [2.1] 정보를 표시할 구역
+    const RTITbody = document.querySelector(".RTITbody")
+
+    try {
+        // [2.2] Fetch
+        const r = await fetch("/roleTem/Item")
+        const d = await r.json()
+        console.log(d)
+
+        // [2.3] 결과 처리
+        let html = '';
+        d.forEach(value => {
+            html += `tr>
+                        <td>${value.rtiNo}</td>
+                        <td>${value.rtiName}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#reviewRTI">미리보기</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#updateRTI">수정하기</button>
+                        </td>
+                        <td>${value.createDate}</td>
+                        <td>${value.updateDate}</td>
+                        <td><button type="button" class="btn btn-danger" onclick="">삭제</button></td>
+                    </tr> `
+        });
+    } catch (error) {
+        console.log(error)
+    }
+
+
+} // func end
 
 // [RTI-03] 역할템플릿 개별 조회 getIndiRTItem()
 
+const getIndiRTItem = async () => {
+    console.log("getIndiRTItem func exe")
+
+    // [2.1] 정보를 표시할 구역
+
+
+    try {
+        // [2.2] Fetch
+
+        // [2.3] 결과
+    } catch (error) {
+        console.log(error)
+    }
+
+
+} // func end
+
 // [RTI-04] 역할템플릿 수정	updateRTItem()
 
+const updateRTItem = async () => {
+    console.log("updateRTItem func exe")
+
+    // [2.1] 정보를 표시할 구역
+
+
+    try {
+        // [2.2] Fetch
+
+        // [2.3] 결과
+    } catch (error) {
+        console.log(error)
+    }
+
+
+} // func end
+
 // [RTI-05] 역할템플릿 삭제(비활성화) deleteRTItem()
+
+const deleteRTItem = async () => {
+    console.log("deleteRTItem func exe")
+
+    // [2.1] 정보를 표시할 구역
+
+
+    try {
+        // [2.2] Fetch
+
+        // [2.3] 결과
+    } catch (error) {
+        console.log(error)
+    }
+
+
+} // func end
