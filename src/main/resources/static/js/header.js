@@ -64,13 +64,13 @@ const subMenu = async () => {
 
     } else if (businessNo != null ) { // 기업 담당자
         html += `<div class="headText">${managerName}님 환영합니다. <br />(기업 담당자)</div>
-                    <ul><li><a href="/user/info" class="myPage">마이페이지</a></li>
+                    <ul><li><a href="/user/info.jsp" class="myPage">마이페이지</a></li>
                     <li class="headerbar"> | </li>
                     <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
 
     } else if (userNo > 0) { // 일반회원
         html += `<div class="headText" >${userName}님 환영합니다. <br />(일반 회원)</div>
-                    <ul><li><a href="/user/info" class="myPage">마이페이지</a></li>
+                    <ul><li><a href="/user/info.jsp" class="myPage">마이페이지</a></li>
                     <li class="headerbar"> | </li>
                     <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
     }

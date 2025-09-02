@@ -37,8 +37,222 @@
             <div class="mainContent col-10">
                 <div class="title1">마이페이지</div>
                 <div class="ContentBox">
-                    
+                    <!-- ▼▼▼ 여기에 그대로 붙여넣기 ▼▼▼ -->
+                    <div class="container-fluid p-0">
+                        <!-- 안내 -->
+                        <div class="alert alert-dark border-0 small mb-3" role="alert">
+                            <strong>마이페이지</strong> · 회원 정보
+                            (관리자 한정 <b>회사 정보</b>도 함께 표시)
+                        </div>
 
+                        <!-- 내 정보 카드 -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header d-flex align-items-center justify-content-between">
+                                <div class="fw-bold">내 정보</div>
+                                <div class="d-flex gap-2 align-items-center">
+                                    <span class="badge text-bg-secondary" id="userNo-badge">-</span>
+                                    <button class="btn btn-sm btn-primary" id="btn-refresh-user">새로고침</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <!-- 로딩 표시 -->
+                                <div id="user-loading" class="d-flex align-items-center gap-2 mb-3">
+                                    <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                    </div>
+                                    <span class="text-muted small">불러오는 중…</span>
+                                </div>
+                                <!-- 오류 표시 -->
+                                <div id="user-error" class="alert alert-danger py-2 px-3 d-none" role="alert"></div>
+
+                                <!-- 데이터 영역 -->
+                                <div id="user-info" class="row gy-3">
+                                    <div class="col-md-6">
+                                        <div class="form-text mb-1">이메일</div>
+                                        <div class="fw-semibold" id="email">-</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-text mb-1">이름</div>
+                                        <div class="fw-semibold" id="userName">-</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-text mb-1">연락처</div>
+                                        <div class="fw-semibold" id="userPhone">-</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-text mb-1">주소</div>
+                                        <div class="fw-semibold" id="address">-</div>
+                                        <div class="fw-semibold" id="address-detail"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-text mb-1">가입일</div>
+                                        <div class="text-muted" id="createDate">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 회사 정보 카드 (관리자인 경우만 표시; 기본은 숨김) -->
+                        <div class="card shadow-sm d-none" id="business-card">
+                            <div class="card-header d-flex align-items-center justify-content-between">
+                                <div class="fw-bold">회사 정보 (관리자)</div>
+                                <button class="btn btn-sm btn-outline-primary" id="btn-refresh-business">새로고침</button>
+                            </div>
+                            <div class="card-body">
+                                <!-- 로딩/오류 -->
+                                <div id="biz-loading" class="d-flex align-items-center gap-2 mb-3 d-none">
+                                    <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                                    </div>
+                                    <span class="text-muted small">불러오는 중…</span>
+                                </div>
+                                <div id="biz-error" class="alert alert-danger py-2 px-3 d-none" role="alert"></div>
+
+                                <div class="row gy-3">
+                                    <div class="col-lg-8">
+                                        <div class="row gy-3">
+                                            <div class="col-md-4">
+                                                <div class="form-text mb-1">사업자번호</div>
+                                                <div class="fw-semibold" id="bnNo">-</div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-text mb-1">기업명</div>
+                                                <div class="fw-semibold" id="bnName">-</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-text mb-1">담당자명</div>
+                                                <div class="fw-semibold" id="managerName">-</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-text mb-1">담당자번호</div>
+                                                <div class="fw-semibold" id="managerPhone">-</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-text mb-1">업태</div>
+                                                <div class="fw-semibold" id="bnType">-</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-text mb-1">종목</div>
+                                                <div class="fw-semibold" id="bnItem">-</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-text mb-1">기업등록일</div>
+                                                <div class="text-muted" id="bizCreateDate">-</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-text mb-1">기업정보수정일</div>
+                                                <div class="text-muted" id="bizUpdateDate">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ▼▼▼ 내 정보 수정 모달 추가 ▼▼▼ -->
+                    <!-- <div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="userEditModalLabel">내 정보 수정</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="닫기"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="userEditForm" class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">이름</label>
+                                            <input type="text" class="form-control" id="userEditName"
+                                                placeholder="이름" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">연락처</label>
+                                            <input type="text" class="form-control" id="userEditPhone"
+                                                placeholder="010-0000-0000" />
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">도로명 주소</label>
+                                            <input type="text" class="form-control" id="userEditRoad"
+                                                placeholder="도로명 주소" />
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">상세 주소</label>
+                                            <input type="text" class="form-control" id="userEditDetail"
+                                                placeholder="상세 주소" />
+                                        </div>
+                                    </form>
+                                    <div id="userEditError" class="alert alert-danger py-2 px-3 d-none mt-2"
+                                        role="alert"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                                    <button class="btn btn-primary" id="btn-user-save">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- ▲▲▲ 내 정보 수정 모달 끝 ▲▲▲ -->
+
+                    <!-- ▼▼▼ (업데이트된) 사업자 정보 수정 모달 추가 ▼▼▼ -->
+                    <!-- <div class="modal fade" id="bizEditModal" tabindex="-1" aria-labelledby="bizEditModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="bizEditModalLabel">사업자 정보 수정</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="닫기"></button>
+                                </div>
+                                <div class="modal-body"> -->
+                                    <!-- BS-04 명세에 맞춘 필드(수정 가능: 담당자명/번호, 이미지, 업태, 종목) -->
+                                    <!-- <form id="bizEditForm" class="row g-3" enctype="multipart/form-data">
+                                        <div class="col-md-6">
+                                            <label class="form-label">사업자번호</label>
+                                            <input type="text" class="form-control" id="bizEditBnNo" readonly />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">기업명</label>
+                                            <input type="text" class="form-control" id="bizEditBnName" readonly />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">담당자명</label>
+                                            <input type="text" class="form-control" id="bizEditManagerName"
+                                                placeholder="담당자명" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">담당자번호</label>
+                                            <input type="text" class="form-control" id="bizEditManagerPhone"
+                                                placeholder="010-0000-0000" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">업태</label>
+                                            <input type="text" class="form-control" id="bizEditBnType"
+                                                placeholder="업태" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">종목</label>
+                                            <input type="text" class="form-control" id="bizEditBnItem"
+                                                placeholder="종목" />
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">사업자등록증 이미지 (선택)</label>
+                                            <input type="file" class="form-control" id="bizEditDocuFile"
+                                                accept="image/*" />
+                                            <div class="form-text">기존 이미지는 유지됩니다. 새 파일을 선택하면 교체됩니다.</div>
+                                        </div>
+                                    </form>
+                                    <div id="bizEditError" class="alert alert-danger py-2 px-3 d-none mt-2"
+                                        role="alert"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                                    <button class="btn btn-primary" id="btn-biz-save">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- ▲▲▲ 사업자 정보 수정 모달 끝 ▲▲▲ -->
+                     
 
                 </div>
             </div>
@@ -53,7 +267,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
-    <script src = "/js/user/info.js"></script>
+    <script src="/js/user/info.js"></script>
 
 </body>
 
