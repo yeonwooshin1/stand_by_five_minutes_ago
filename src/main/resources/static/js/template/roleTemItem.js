@@ -108,10 +108,12 @@ const getRTItem = async () => {
         const d = await r.json()
         console.log(d)
 
+
         // [2.3] 결과 처리
         let html = '';
-        d.forEach(value => {
-            html += `<tr>
+        if (d.length != 0) {
+            d.forEach(value => {
+                html += `<tr>
                         <td>${value.rtiNo}</td>
                         <td>${value.rtiName}</td>
                         <td>
@@ -124,7 +126,12 @@ const getRTItem = async () => {
                         <td>${value.updateDate}</td>
                         <td><button type="button" class="btn btn-danger" onclick="">삭제</button></td>
                     </tr>`
-        });
+            });
+        } else {
+            html += `<tr>
+                     <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
+                     </tr>`
+        }
         RTITbody.innerHTML = html;
     } catch (error) {
         console.log(error)
@@ -137,13 +144,13 @@ getRTItem()
 const getIndiRTItem = async () => {
     console.log("getIndiRTItem func exe")
 
-    // [2.1] 정보를 표시할 구역
+    // [3.1] 정보를 표시할 구역
 
 
     try {
-        // [2.2] Fetch
+        // [3.2] Fetch
 
-        // [2.3] 결과
+        // [3.3] 결과
     } catch (error) {
         console.log(error)
     }

@@ -62,8 +62,10 @@ const getRT = async () => {
         const d = await r.json()
         console.log(d)
 
-        d.forEach((dto) => {
-            html += `<tr>
+        let html = '';
+        if (d.length != 0) {
+            d.forEach((dto) => {
+                html += `<tr>
                     <td>${dto.rtNo}</td>
                     <td><a href="/template/roleTemItem.jsp?rtNo=${dto.rtNo}">${dto.rtName}</a></td>
                     <td>
@@ -78,8 +80,12 @@ const getRT = async () => {
                     <td>${dto.updateDate}</td>
                     <td><button type="button" class="btn btn-danger" onclick="deleteRT(${dto.rtNo})">삭제</button></td>
                 </tr>`
-        });
-
+            });
+        } else {
+            html += `<tr>
+                     <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
+                     </tr>`
+        }
         // [2.3] 화면 표시
         roleTemplateTbody.innerHTML = html;
     } catch (error) {
