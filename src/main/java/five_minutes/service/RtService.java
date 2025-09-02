@@ -6,11 +6,15 @@ import five_minutes.model.dto.RtDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-// Info =========================
-// RoleTemplate Service
-// 역할 템플릿 대분류를 정의
-// Google sheet > 21.테이블 > 2-1
-// Writer : OngTK
+/// **Info** =========================
+///
+/// RoleTemplate Service
+///
+/// 역할 템플릿 대분류를 정의
+///
+/// Google sheet > 21.테이블 > 2-1
+///
+/// @author OngTK
 
 @Service                    // 서비스 어노테이션
 @RequiredArgsConstructor    // 의존성 주입
