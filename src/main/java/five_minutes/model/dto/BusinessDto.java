@@ -19,5 +19,4 @@ public class BusinessDto { // class start
     private String createDate;          // 기업등록일
     private String updateDate;          // 기업정보수정일
     private String bnStatus;            // 상태
-
 }   // class end
