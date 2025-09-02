@@ -4,7 +4,7 @@ console.log("roleTemItem js func")
 const params = new URL(location.href).searchParams;
 const rtNo = params.get("rtNo")
 console.log(rtNo)
-const rtDescription = "";
+const rtInfo = {rtNo : rtNo, rtDescription : ""}
 
 // [ 상세 역할 템플릿 생성 모달 내 Summer Note 연동 ]
 $(document).ready(function () {
@@ -46,16 +46,23 @@ const getIndiRT = async () => {
 
     // [3.3] 화면에 표시
     rtName.innerHTML = `- ${d.rtName}`
-
-    
+    rtInfo.rtDescription = d.rtDescription;
 } // func end
-getIndiRT()
+
+getIndiRT().then(() => {
+    console.log(rtInfo.rtNo);
+    console.log(rtInfo.rtDescription);
+});
 
 // [상세 역할 템플릿 관련 func] =====================================
 
 // [RTI-01] 상세역할템플릿 생성 
 const createRTItem = () => {
+    // [1.1] 입력할 데이터 가져오기
     
+    // [1.2] Fetch
+
+    // [1.3] 결과
 }
 
 // [RTI-02] 상세역할템플릿 전체 조회 getRTItem()
