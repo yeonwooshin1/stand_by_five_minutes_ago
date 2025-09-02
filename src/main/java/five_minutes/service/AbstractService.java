@@ -1,6 +1,6 @@
 package five_minutes.service;
 
-import five_minutes.model.dao.CommonDao;
+import five_minutes.model.Repository.CommonRepository;
 
 import java.util.List;
 
@@ -12,10 +12,10 @@ import java.util.List;
 ///
 /// @author OngTK
 
-public abstract class AbstractService<T, ID, S> implements CommonService<T, ID, S> {
+public abstract class AbstractService<T, ID, S> implements CommonRepository<T, ID, S> {
 
     // [1] 추상 메소드
-    protected abstract CommonDao<T, ID, S> getDao();
+    protected abstract CommonRepository<T, ID, S> getDao();
     
     // [2] CommonService 구현
     @Override

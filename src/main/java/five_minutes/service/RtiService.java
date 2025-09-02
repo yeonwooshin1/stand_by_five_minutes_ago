@@ -1,6 +1,6 @@
 package five_minutes.service;
 
-import five_minutes.model.dao.CommonDao;
+import five_minutes.model.Repository.CommonRepository;
 import five_minutes.model.dao.RtDao;
 import five_minutes.model.dao.RtiDao;
 import five_minutes.model.dto.RtiDto;
@@ -30,8 +30,8 @@ public class RtiService extends AbstractService<RtiDto, Integer, String>{ // cla
     // AbstractService로 부터 getDao 메소드를 Override
     // Controller의 CRUD 요청을 추상메소드를 통해 바로 Dao 단으로 전달
     @Override
-    protected CommonDao<RtiDto, Integer, String> getDao() {
-        return (CommonDao<RtiDto, Integer, String>) rtiDao;
+    protected CommonRepository<RtiDto, Integer, String> getDao() {
+        return rtiDao;
     } // func end
 
     // [00] 참조 rtNo와 로그인 BnNo 검증

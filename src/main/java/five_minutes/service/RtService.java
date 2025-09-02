@@ -1,6 +1,6 @@
 package five_minutes.service;
 
-import five_minutes.model.dao.CommonDao;
+import five_minutes.model.Repository.CommonRepository;
 import five_minutes.model.dao.RtDao;
 import five_minutes.model.dto.RtDto;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,8 @@ public class RtService extends AbstractService<RtDto, Integer, String>{ // class
     // AbstractService로 부터 getDao 메소드를 Override
     // Controller의 CRUD 요청을 추상메소드를 통해 바로 Dao 단으로 전달
     @Override
-    protected CommonDao<RtDto, Integer, String> getDao() {
-        return (CommonDao<RtDto, Integer, String>) rtDao;
+    protected CommonRepository<RtDto, Integer, String> getDao() {
+        return rtDao;
     } // func end
 
 }   // class end
