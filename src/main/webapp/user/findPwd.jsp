@@ -70,11 +70,17 @@
                                         <div class="form-text">예) 010-1234-5678</div>
                                     </div>
 
+
+
                                     <!-- 제출 버튼 (onclick 그대로 유지) -->
                                     <div class="col-12 d-grid">
-                                        <button type="button" class="btn btn-primary" onclick="">링크 발송</button>
+                                        <button type="button" class="btn btn-primary" onclick="sendEmail()">링크
+                                            발송</button>
                                     </div>
+
                                 </form>
+                                <!-- 메시지 박스 -->
+                                <div id="msg" class="mt-3 text-center small"></div>
                             </div>
                         </div>
                     </div>
@@ -91,7 +97,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
-    <script src="/js/password/reset.js"></script>
+    <script src="/js/password/reset-request.js"></script>
 </body>
 
 </html>
