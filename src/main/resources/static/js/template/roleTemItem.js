@@ -104,14 +104,14 @@ const getRTItem = async () => {
 
     try {
         // [2.2] Fetch
-        const r = await fetch("/roleTem/Item")
+        const r = await fetch(`/roleTem/Item?rtNo=${rtNo}`)
         const d = await r.json()
         console.log(d)
 
         // [2.3] 결과 처리
         let html = '';
         d.forEach(value => {
-            html += `tr>
+            html += `<tr>
                         <td>${value.rtiNo}</td>
                         <td>${value.rtiName}</td>
                         <td>
@@ -123,14 +123,14 @@ const getRTItem = async () => {
                         <td>${value.createDate}</td>
                         <td>${value.updateDate}</td>
                         <td><button type="button" class="btn btn-danger" onclick="">삭제</button></td>
-                    </tr> `
+                    </tr>`
         });
+        RTITbody.innerHTML = html;
     } catch (error) {
         console.log(error)
     }
-
-
 } // func end
+getRTItem()
 
 // [RTI-03] 역할템플릿 개별 조회 getIndiRTItem()
 
