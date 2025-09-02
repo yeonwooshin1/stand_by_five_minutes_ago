@@ -270,6 +270,66 @@
                     <!-- ▲▲▲ 사업자 정보 수정 모달 끝 ▲▲▲ -->
 
 
+                    <!-- ▼▼▼ 비밀번호 변경 모달 추가 ▼▼▼ -->
+                    <div class="modal fade" id="userPwdModal" tabindex="-1" aria-labelledby="userPwdModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-md modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="userPwdModalLabel">비밀번호 변경</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="닫기"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="userPwdForm" class="row g-3">
+                                        <div class="col-12">
+                                            <label for="pwdCurrent" class="form-label">현재 비밀번호</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="pwdCurrent"
+                                                    placeholder="현재 비밀번호" />
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    data-toggle-eye="#pwdCurrent">표시</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label for="pwdNew" class="form-label">새 비밀번호</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="pwdNew"
+                                                    placeholder="영문/숫자 포함 8~20자" />
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    data-toggle-eye="#pwdNew">표시</button>
+                                            </div>
+                                            <div class="form-text">영문/숫자 조합 8~20자 권장</div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label for="pwdNew2" class="form-label">새 비밀번호 확인</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="pwdNew2"
+                                                    placeholder="새 비밀번호 재입력" />
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    data-toggle-eye="#pwdNew2">표시</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <!-- 에러/안내 -->
+                                    <div id="userPwdError" class="alert alert-danger py-2 px-3 d-none mt-2"
+                                        role="alert"></div>
+                                    <div id="userPwdOk" class="alert alert-success py-2 px-3 d-none mt-2" role="alert">
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-primary" id="btn-pwd-save">변경</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ▲▲▲ 비밀번호 변경 모달 끝 ▲▲▲ -->
                 </div>
             </div>
         </div>
