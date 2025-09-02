@@ -63,22 +63,43 @@ getIndiRT()
 // [상세 역할 템플릿 관련 func] =====================================
 
 // [RTI-01] 상세역할템플릿 생성 
-const createRTItem = async () => {
+const createRTI = async () => {
+    console.log("createRTItem func exe")
     // [1.1] 입력할 데이터 가져오기
-    const rtiName = document.querySelector("#rtiNameInput")
-    const rtiDescription = document.querySelector("#rtiDescription")
-    
-    // [1.2] Fetch
-    const obj = {rtNo, rtiName, rtiDescription}
-    const opt = {method : "POST",
-        headers : {"Content-Type":"application/json"},
-        body : JSON.stringify(obj)
+    const rtiName = document.querySelector("#rtiNameInput").value;
+    const rtiDescription = document.querySelector("#rtiDescription").value;
+
+    try {
+        // [1.2] Fetch
+        const obj = { rtNo, rtiName, rtiDescription }
+        console.log(obj)
+        const opt = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(obj)
+        }
+        const r = await fetch("/roleTem/Item", opt)
+        const d = await r.json()
+        console.log(d)
+        // [1.3] 결과
+        if (d > 0) {
+            alert("템플릿 저장 성공")
+            getRT()
+        } else {
+            alert("템플릿 저장 실패")
+        }
+        // [1.4] getRTItem() func exe
+        getRTItem()
+    } catch (error) {
+        console.log(error)
     }
-    const r = await fetch()
-    // [1.3] 결과
 } // func end
 
 // [RTI-02] 상세역할템플릿 전체 조회 getRTItem()
+const getRTItem = async () => {
+    console.log("getRTItem func exe")
+
+}
 
 // [RTI-03] 역할템플릿 개별 조회 getIndiRTItem()
 
