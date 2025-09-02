@@ -37,21 +37,47 @@
             <div class="mainContent col-10">
                 <div class="title1">비밀번호 재설정 링크 요청</div>
                 <div class="ContentBox">
-                    <form id="requestForm">
-                        <div>
-                             <label>이름</label>
-                             <input id="userName" name="userName" type="text" required>
+                    <div class="container-fluid p-0" style="max-width: 520px;">
+                        <!-- 안내 -->
+                        <div class="alert alert-dark border-0 small mb-3" role="alert">
+                            <strong>비밀번호 재설정 링크 요청</strong> · 본인 확인 정보를 입력하세요.
                         </div>
-                        <div>
-                             <label>이메일</label>
-                             <input id="email" name="email" type="email" required>
+
+                        <!-- 카드 -->
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <form id="requestForm" class="row g-3" onsubmit="return false;">
+                                    <!-- 이름 -->
+                                    <div class="col-12">
+                                        <label for="userName" class="form-label">이름</label>
+                                        <input id="userName" name="userName" type="text" class="form-control" required
+                                            placeholder="이름을 입력하세요" />
+                                    </div>
+
+                                    <!-- 이메일 -->
+                                    <div class="col-12">
+                                        <label for="email" class="form-label">이메일</label>
+                                        <input id="email" name="email" type="email" class="form-control" required
+                                            placeholder="you@example.com" />
+                                        <div class="form-text">가입 시 사용한 이메일 주소를 입력하세요.</div>
+                                    </div>
+
+                                    <!-- 전화번호 -->
+                                    <div class="col-12">
+                                        <label for="userPhone" class="form-label">전화번호</label>
+                                        <input id="userPhone" name="userPhone" type="tel" class="form-control" required
+                                            placeholder="010-1234-5678" />
+                                        <div class="form-text">예) 010-1234-5678</div>
+                                    </div>
+
+                                    <!-- 제출 버튼 (onclick 그대로 유지) -->
+                                    <div class="col-12 d-grid">
+                                        <button type="button" class="btn btn-primary" onclick="">링크 발송</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div>
-                            <label>전화번호</label>
-                            <input id="userPhone" name="userPhone" type="tel" placeholder="010-1234-5678" required>
-                        </div>
-                        <button type="button" onclick="">링크 발송</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
