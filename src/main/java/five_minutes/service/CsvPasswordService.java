@@ -194,7 +194,7 @@ public class CsvPasswordService {   // class start
 
     }   // func end
 
-    // 기존 비밀번호를 새 비밀번호로 바꾸는 메소드
+    // 비밀번호 변경 csv 에 해시화 비밀번호 넣기
     public boolean changePassword(int userNo, String newPassword) {
 
         // 새 비밀번호 bcrypt 해시 생성 한다.

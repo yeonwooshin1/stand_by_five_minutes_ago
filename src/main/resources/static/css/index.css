@@ -40,3 +40,11 @@ a {
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
+
+/* 신연우 info.jsp 모달 쪽 css */
+/* ===== 읽기전용 표시(흑백) : 모달의 readonly 인풋 ===== */
+#bizEditForm input[readonly]{
+  background-color: #f8f9fa; /* 밝은 회색 배경 */
+  color: #6c757d;            /* 회색 텍스트 */
+  opacity: .9;
+}

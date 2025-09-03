@@ -5,10 +5,7 @@ import five_minutes.model.dto.UsersDto;
 import five_minutes.service.PasswordResetService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +23,7 @@ public class PasswordResetApiController {   // class start
     }   // func end
 
     // 최종 비밀번호 변경 controller
-    @PostMapping("/confirm")
+    @PutMapping("/confirm")
     public int confirm(@RequestBody ChangePasswordDto changePasswordDto, HttpSession session) {
         // 세션에 토큰이 있는지 확인한다.
         String token = (String) session.getAttribute("pwResetToken");

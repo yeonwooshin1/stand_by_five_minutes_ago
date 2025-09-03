@@ -9,7 +9,7 @@
     <title>footer 영역</title>
 
     <!-- Footer CSS -->
-    <link rel='stylesheet' href='../css/footer.css'>
+    <link rel='stylesheet' href='/css/footer.css'>
 </head>
 
 <body>

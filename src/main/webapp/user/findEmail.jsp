@@ -31,22 +31,46 @@
         <div class="row">
             <!-- 사이드 메뉴바 영역 -->
             <div class="side col-2">
-                <jsp:include page="/sideMenu.jsp"></jsp:include>
             </div>
             <!-- 본문 작업 영역 -->
             <div class="mainContent col-10">
                 <div class="title1">이메일 찾기</div>
                 <div class="ContentBox">
-                    <div>
-                        <label>이름</label>
-                        <input id="userName" name="userName" type="text" required>
+                    <div class="container-fluid p-0" style="max-width: 520px;">
+                        <!-- 안내 -->
+                        <div class="alert alert-dark border-0 small mb-3" role="alert">
+                            <strong>이메일 찾기</strong> · 이름과 연락처를 입력하세요.
+                        </div>
+
+                        <!-- 카드 -->
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <form class="row g-3" onsubmit="return false;">
+                                    <!-- 이름 -->
+                                    <div class="col-12">
+                                        <label for="userName" class="form-label">이름</label>
+                                        <input id="userName" name="userName" type="text" class="form-control" required
+                                            placeholder="이름을 입력하세요" />
+                                    </div>
+
+                                    <!-- 전화번호 -->
+                                    <div class="col-12">
+                                        <label for="userPhone" class="form-label">전화번호</label>
+                                        <div class="input-group">
+                                            <input id="userPhone" name="userPhone" type="tel" class="form-control"
+                                                required placeholder="010-1234-5678" />
+                                            <button type="button" class="btn btn-primary" onclick="findEmail()">이메일
+                                                찾기</button>
+                                        </div>
+                                        <div class="form-text">예) 010-1234-5678</div>
+                                    </div>
+                                </form>
+
+                                <!-- 결과 영역 (기존 id 유지) -->
+                                <div id="getDataBox" class="mt-3"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label>전화번호</label>
-                        <input id="userPhone" name="userPhone" type="tel" placeholder="010-1234-5678" required>
-                    </div>
-                    <button type="button" onclick="findEmail()"> 이메일 찾기 </button>
-                    <div id="getDataBox"> </div>
                 </div>
             </div>
         </div>
