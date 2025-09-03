@@ -15,7 +15,7 @@
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
 
-    <!-- roleTem Css -->
+    <!-- checkTem Css -->
     <link rel='stylesheet' href='/CSS/template/checkTem.css'>
 
     <!-- jquery 최신버전 -->
@@ -108,7 +108,7 @@
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label modalMiddleTitle">체크리스트 템플릿 설명</label>
-                        <textarea class="ctDescription" id="creatertDescription" name="editordata"></textarea> <!-- class = ctDescription으로 변경 -->
+                        <textarea class="ctDescription" id="createctDescription" name="editordata"></textarea> <!-- class="ctDescription" id="createctDescription" -->
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -128,7 +128,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">체크리스트 템플릿 조회</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body previewRTContent">
+                <div class="modal-body previewCTContent"> <!-- class="previewCTContent" -->
                     <div>
                         <label for="recipient-name" class="col-form-label modalMiddleTitle">체크리스트 템플릿명</label>
                         <input class="form-control" id="ctNamePreview" type="text" value="출근확인" disabled />
