@@ -47,3 +47,7 @@ bin/
 /src/main/resources/application.properties
 
 intelliLang
+
+# ────────────────────────────────────────
+# 외부 설정 파일 (민감 정보, Git 추적 제외 , 깡통 구글 계정)
+application.properties
