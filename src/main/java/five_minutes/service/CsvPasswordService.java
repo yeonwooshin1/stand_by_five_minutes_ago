@@ -136,6 +136,8 @@ public class CsvPasswordService {   // class start
         // 읽기 쓰기 다 가능한 RandomAccessFile 클래스
         // "rw" 는 읽기 쓰기 다 하겠단 것.
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(path , "rw") ){
+            // ADD: 첫 줄(헤더)만 건너뛰기 위해서 필요한 것 => NumberFormatException 예외 때문에 필요하다 => String을 int로 파서할 때 'userNo' 는 int로 파서할 수 없어서 뜨는 예외를 막아줌
+            boolean skipHeader = true;
             String line;            // 현재 읽은 한 줄 문자열
             long pointerLine;       // 현재 줄이 시작되는 파일 위치를 기억하기 위한 변수
 
@@ -146,6 +148,12 @@ public class CsvPasswordService {   // class start
 
                 // readLine() 현재 위치에서 한 줄을 읽는 걸 기억하는 변수
                 line = randomAccessFile.readLine();
+
+                // 첫 줄(헤더) continue 해주는 것.
+                if (skipHeader) {
+                    skipHeader = false;
+                    continue;
+                }   // if end
 
                 // null 이면 다 읽었다는 뜻이니까 반복문 종료
                 if(line == null) break;
