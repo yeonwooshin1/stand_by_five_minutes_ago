@@ -30,7 +30,7 @@ public class CTemDto {
     private String bnNo;
 
     // DB 없는 멤버변수
-    @Schema(description = "상태(성공, 찾기실패, 로그인실패)", name = "성공" , example = "ACCESS_OK")
+    @Schema(description = "상태(성공, 찾기실패, 로그인실패)", example = "ACCESS_OK")
     private String status;  // 세션 실패, 쿼리스트링 실패를 체크할 수 있도록 하는 멤버변수
 
 } // class end
