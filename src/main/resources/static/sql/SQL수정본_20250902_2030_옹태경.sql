@@ -135,7 +135,7 @@ CREATE TABLE ProjectInfo (
   roadAddress   	text NOT NULL,							-- 도로명 주소
   detailAddress 	VARCHAR(255)  NOT NULL,							-- 상세 주소
   clientName		VARCHAR(20)  NOT NULL,							-- 클라이언트명	
-  clientRepresent	varchar(30)  not null,							-- 클라이언트 담당자
+  clientRepresent	varchar(30)  not null,							-- 클라이언트 담당자 // 20250902_2030_옹태경 추가
   clientPhone		VARCHAR(15)  NOT NULL, 							-- 클라이언트연락처
   clientMemo		longtext NULL,                            	-- 클라이언트 업무요청사항
   pjStatus			TINYINT NOT NULL DEFAULT 1,						-- 상태 초기값 '1' => 1: 작성중() , 2: 작성완료 3: 진행중 4: 수행완료
