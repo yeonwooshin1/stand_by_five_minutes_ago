@@ -2,6 +2,13 @@ package five_minutes.controller;
 
 import five_minutes.model.dto.CTemDto;
 import five_minutes.service.CTemService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "CheckTem APIs", description = "체크리스트 템플릿 관련 API 명세서")
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
 @RequestMapping("/checktem")
@@ -24,6 +32,24 @@ public class CTemController {  // class start
     // [1] 체크리스트 템플릿 생성
     // URL : http://localhost:8080/checktem
     // BODY : { "ctName" : "출퇴근 돌파" , "ctDescription" : "네이버 지도를 활용하도록 합니다."}
+    @Operation(summary = "체크리스트 템플릿 생성", description = "체크리스트 템플릿의 대분류를 생성합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "생성 성공", content = @Content(schema = @Schema(implementation = CTemDto.class))),
+            // HTTP 200 응답이 성공하면, JSON 형태로 UserDto 구조의 데이터를 반환한다
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "조회 실패 (사용자 없음)",
+                    content = @Content(schema = @Schema(type = "integer", example = "0"))
+            ),
+            // HTTP 200 응답이 성공하고 생성에 실패하면, 0을 반환한다
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "세션 실패",
+                    content = @Content(schema = @Schema(type = "integer", example = "-1"))
+            ),
+            // HTTP 200 응답이 성공하고 로그인 세션에 실패하면, -1을 반환한다
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
+    })
     @PostMapping("")
     public int createCTem(@RequestBody CTemDto cTemDto, HttpSession session) {
         // 1. 로그인상태 확인
@@ -110,9 +136,9 @@ public class CTemController {  // class start
     // [5] 체크리스트 템플릿 삭제
     // URL : http://localhost:8080/checktem?ctNo=4000001
     @DeleteMapping("")
-    public int deleteCTem(@RequestParam int ctNo , HttpSession session){
+    public int deleteCTem(@RequestParam int ctNo, HttpSession session) {
         // 1. 로그인 상태 확인
-        if(session.getAttribute("loginUserNo") == null){
+        if (session.getAttribute("loginUserNo") == null) {
             CTemDto dto = new CTemDto();
             dto.setStatus("NOT_LOGGED_IN");
             return -1;
@@ -121,14 +147,14 @@ public class CTemController {  // class start
         String bnNo = (String) session.getAttribute("loginBnNo");
         // 3. DTO에서 사용자에게 입력받은 ctNo를 찾지 못했을 경우
         CTemDto dto = new CTemDto();
-        if(dto == null){
+        if (dto == null) {
             dto = new CTemDto();
             dto.setStatus("NOT_FOUND");
             return 0;
         }
         // 4. 리턴
         dto.setStatus("ACCESS_OK");
-        return cTemService.deleteCTem(bnNo , ctNo);
+        return cTemService.deleteCTem(bnNo, ctNo);
     }
 
 
