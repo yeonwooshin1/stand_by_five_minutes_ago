@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import five_minutes.model.dao.UsersDao;
 import five_minutes.model.dto.ChangePasswordDto;
 import five_minutes.model.dto.UsersDto;
+import five_minutes.util.EmailSendFormat;
 import five_minutes.util.JwtUtil;
 
 import five_minutes.util.PasswordValidatorUtil;
@@ -113,9 +114,16 @@ public class PasswordResetService { // class start
         // build : 만든다.         // toUriString : 최종 안전한 URL 문자열로 생성한다.
         String link = UriComponentsBuilder.fromHttpUrl(resetBaseUrl)
                 .queryParam("token" ,token ).build().toUriString();
-
-        // 메일 전송한다. 폼은 만들어야함.
-        emailService.sendHtml( email, "테스트용입니다" , "링크입니다. : "+link);
+        // 이메일 양식 서비스에서 가져온 것을 html로 추가
+        String html = EmailSendFormat.passwordResetHtmlWithBase(
+                userName,       // userName
+                resetBaseUrl,   // 기본 url
+                token,          // url 뒤에 쿼리스트링
+                15,             // 만료시간
+                "standbyfiveminutesago@gmail.com"   // 서포팅 이메일 = 우리 이메일
+        );
+        // 메일 전송한다.
+        emailService.sendHtml( email, "[Stand by five minutes ago] 비밀번호 재설정 안내" , html);
 
         // 발송 다 했으면 true 값 반환
         return 1;   // 진짜 성공
@@ -144,7 +152,7 @@ public class PasswordResetService { // class start
             return Integer.parseInt(c.getSubject());
 
         }   catch ( JwtException | NumberFormatException e) {
-            // JwtException => jws<claim> 파싱 중서명이 불일치 하거나 만료 되거나 형식 오류면 실패
+            // JwtException => jws<claim> 파싱 중 서명이 불일치 하거나 만료 되거나 형식 오류면 실패
             // NumberFormatException => String 으로 토큰에 저장된 UserNo를 int로 타입변환할 때 NumberFormatException 뜨면 실패
             return 0;
         }   // try end
