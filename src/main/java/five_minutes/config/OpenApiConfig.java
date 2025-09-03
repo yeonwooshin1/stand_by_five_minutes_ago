@@ -8,9 +8,19 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/// **Info** =========================
+///
+/// OpenApiConfig
+///
+/// OpenAPI의 Authorize 기능 활성화
+///
+/// Swagger 라이브러리 사용을 위한 Authorize 기능 활성화
+///
+/// @author dongjin
+
 @Configuration // 설정용 Bean(객체) 등록
 public class OpenApiConfig {
-    // 스웨거 UI에서 Taland API처럼 테스트할 수 있는 "Authorize" 버튼을 생성하는 Class
+
     @Bean // 스프링 빈 등록
     public OpenAPI openAPI() {
         // 1. 기본 정보 입력(제목, 버전, 설명)

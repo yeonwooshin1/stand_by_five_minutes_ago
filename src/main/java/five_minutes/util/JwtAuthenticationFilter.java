@@ -12,6 +12,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/// **Info** =========================
+///
+/// JwtAuthenticationFilter
+///
+/// JWT 토큰을 검증하는 필터 클래스입니다.
+///
+/// Swagger 라이브러리 사용을 위한 토큰 발행용
+///
+/// @author dongjin
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

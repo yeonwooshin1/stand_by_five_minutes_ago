@@ -8,6 +8,7 @@ import five_minutes.service.UsersService;
 import five_minutes.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,10 @@ public class UsersController {  // class start
     // service
     private final UsersService usersService;
 
+    // @Valid : DTO에서 어노테이션으로 유효성 검사 추가한 내용을 스프링에서 확인할 수 있도록 하는 어노테이션
     // 로그인
     @PostMapping("/login")
-    public int login(@RequestBody UsersDto usersDto, HttpSession httpSession) {
+    public int login(@Valid @RequestBody UsersDto usersDto, HttpSession httpSession) {
         // 서비스 호출하여 유효한 로그인인지 검사
         Map<String, Object> loginResult = usersService.login(usersDto);
 
@@ -89,7 +91,7 @@ public class UsersController {  // class start
 
     // 이메일찾기 (=id)
     @GetMapping("/recoverEmail")
-    public EmailRecoverDto recoverUserEmail(UsersDto usersDto) {
+    public EmailRecoverDto recoverUserEmail(@Valid UsersDto usersDto) {
 
         // 서비스 호출해서 유효성 검사 후 반환
         return usersService.recoverUserEmail(usersDto);
@@ -98,7 +100,7 @@ public class UsersController {  // class start
 
     // 비밀번호 변경
     @PutMapping("/update/password")
-    public int updatePassword(@RequestBody ChangePasswordDto changePasswordDto, HttpSession httpSession) {
+    public int updatePassword(@Valid @RequestBody ChangePasswordDto changePasswordDto, HttpSession httpSession) {
 
         // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
         if (httpSession == null || httpSession.getAttribute("loginUserNo") == null) {
@@ -115,7 +117,7 @@ public class UsersController {  // class start
 
     // 유저 정보 조회
     @GetMapping("/find/info")
-    public UsersDto getUserInfo(HttpSession httpSession) {
+    public UsersDto getUserInfo(@Valid HttpSession httpSession) {
 
         // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
         if (httpSession == null || httpSession.getAttribute("loginUserNo") == null) {
@@ -133,7 +135,7 @@ public class UsersController {  // class start
 
     // 유저 정보 변경
     @PutMapping("/update/info")
-    public int updateUserInfo(@RequestBody UsersDto usersDto, HttpSession httpSession) {
+    public int updateUserInfo(@Valid @RequestBody UsersDto usersDto, HttpSession httpSession) {
 
         // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
         if (httpSession == null || httpSession.getAttribute("loginUserNo") == null) {

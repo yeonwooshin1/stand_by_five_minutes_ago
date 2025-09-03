@@ -9,6 +9,16 @@ import com.lowagie.text.pdf.PdfWriter;
 
 import java.io.FileOutputStream;
 
+/// **Info** =========================
+///
+/// PdfGeneratorUtil
+///
+/// PDF 파일을 생성합니다.
+///
+/// OpenPDF 라이브러리 사용 테스트
+///
+/// @author dongjin
+
 public class PdfGeneratorUtil {
     public static void main(String[] args) {
         // 1. Document 객체를 생성합니다.
