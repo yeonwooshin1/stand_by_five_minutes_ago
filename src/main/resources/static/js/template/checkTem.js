@@ -2,7 +2,7 @@ console.log('checkTem XXOK');
 
 // [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
 $(document).ready(function () {
-    $('#creatertDescription').summernote({
+    $('#createctDescription').summernote({
         lang: 'ko-KR', // default: 'en-US'
         // 부가 기능
         minHeight: 300
@@ -25,7 +25,7 @@ const createCT = async () => {
 
     // [1.1] HTML 에서 입력받은 정보 불러오기
     const ctName = document.querySelector("#ctNameInput").value;
-    const ctDescription = document.querySelector("#creatertDescription").value
+    const ctDescription = document.querySelector("#createctDescription").value
 
     // [1.2] Fetch
     try {
@@ -47,7 +47,7 @@ const createCT = async () => {
         console.log(error)
     }
     // [1.3] 저장 후 리스트 조뢰
-    getRT()
+    getCT()
 } // func end
 
 // [2] 체크리스트 전체 조회
@@ -66,7 +66,7 @@ const getCT = async () => {
         d.forEach((dto) => {
             html += `<tr>
                     <td>${dto.ctNo}</td>
-                    <td><a href="/template/checkTemItem.jsp?rtNo=${dto.ctNo}">${dto.ctName}</a></td>
+                    <td><a href="/template/checkTemItem.jsp?ctNo=${dto.ctNo}">${dto.ctName}</a></td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#reviewCheckTem"
@@ -77,7 +77,7 @@ const getCT = async () => {
                     </td>
                     <td>${dto.createDate}</td>
                     <td>${dto.updateDate}</td>
-                    <td><button type="button" class="btn btn-danger" onclick="deleteCT(${dto.rtNo})">삭제</button></td>
+                    <td><button type="button" class="btn btn-danger" onclick="deleteCT(${dto.ctNo})">삭제</button></td>
                 </tr>`
         });
 
@@ -113,7 +113,7 @@ const getIndiCT = async (ctNo) => {
         ctNameUpdate.value = d.ctName
         ctDescriptionUpdate.innerHTML = d.ctDescription
 
-        // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
+        // [3.4] 수정하기 버튼에 ctNo를 매개변수로 삽입해놓기
         const updateBox = document.querySelector(".updateBox")
         const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
     <button type="button" class="btn btn-primary " onclick="updateCT(${ctNo})"

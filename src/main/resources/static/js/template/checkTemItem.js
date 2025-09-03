@@ -4,7 +4,7 @@ console.log('CTI XXOK');
 const params = new URL(location.href).searchParams;
 const ctNo = params.get("ctNo")
 console.log(ctNo)
-const ctInfo = { ctNo, ctDescription: "" }
+const ctInfo = { ctNo, ctName: "", ctDescription: "" }
 
 // [ 상세 체크리스트 템플릿 생성 모달 내 Summer Note 연동 ]
 $(document).ready(function () {
@@ -17,7 +17,7 @@ $(document).ready(function () {
 
 // [ 체크리스트템플릿 만들기 모달 내 Summer Note 연동 ]
 $(document).ready(function () {
-    $('#updateCtiDescription').summernote({
+    $('#updateCtiHelpText').summernote({
         lang: 'ko-KR', // default: 'en-US'
         // 부가 기능
         minHeight: 300
@@ -45,6 +45,10 @@ const getIndiCT = async () => {
     const d = await r.json()
     console.log(d)
 
+    // 전역변수에 데이터 저장
+    ctInfo.ctName = d.ctName;
+    ctInfo.ctDescription = d.ctDescription;
+
     // [3.3] 화면에 표시
     ctNameBox.innerHTML = `- ${d.ctName}`
     ctName01.value = d.ctName;
@@ -60,12 +64,12 @@ getIndiCT(); // 초기화
 const createCTI = async () => {
     console.log("createCTItem func exe")
     // [1.1] 입력할 데이터 가져오기
-    const ctiName = document.querySelector("#ctiNameInput").value;
-    const ctiDescription = document.querySelector("#ctiDescription").value;
+    const ctiTitle = document.querySelector("#ctiTitleInput").value;
+    const ctiHelpText = document.querySelector("#ctiHelpText").value;
 
     try {
         // [1.2] Fetch
-        const obj = { ctNo, ctiName, ctiDescription }
+        const obj = { ctNo, ctiTitle, ctiHelpText }
         console.log(obj)
         const opt = {
             method: "POST",
@@ -78,12 +82,10 @@ const createCTI = async () => {
         // [1.3] 결과
         if (d > 0) {
             alert("템플릿 저장 성공")
-            getCT()
+            getCTItem()
         } else {
             alert("템플릿 저장 실패")
         }
-        // [1.4] getRTItem() func exe
-        getCTItem()
     } catch (error) {
         console.log(error)
     }
@@ -104,30 +106,135 @@ const getCTItem = async () => {
 
         // [2.3] 결과 처리
         let html = '';
-        d.forEach(value => {
-            html += `<tr>
+        if (d.length != 0) {
+            d.forEach(value => {
+                html += `<tr>
                         <td>${value.ctiNo}</td>
-                        <td>${value.ctiName}</td>
+                        <td>${value.ctiTitle}</td>
                         <td>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#reviewCTI">미리보기</button>
+                                data-bs-target="#reviewCTI" onclick="getIndiCTItem(${value.ctNo} , ${value.ctiNo})">미리보기</button>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#updateCTI">수정하기</button>
+                                data-bs-target="#updateCTI" onclick="getIndiCTItem(${value.ctNo} , ${value.ctiNo})">수정하기</button>
                         </td>
                         <td>${value.createDate}</td>
                         <td>${value.updateDate}</td>
-                        <td><button type="button" class="btn btn-danger" onclick="">삭제</button></td>
+                        <td><button type="button" class="btn btn-danger" onclick="deleteCTItem(${value.ctiNo})">삭제</button></td>
                     </tr>`
-        });
+            });
+        } else {
+            html += `<tr>
+                     <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
+                     </tr>`
+        }
         CTITbody.innerHTML = html;
     } catch (error) {
         console.log(error)
     }
 } // func end
-getRTItem()
+getCTItem()
 
 // [3] 상세 체크리스트 템플릿 개별조회
+const getIndiCTItem = async (ctNo, ctiNo) => {
+    console.log("getIndiCTItem func exe")
+
+    try {
+        // [3.1] Fetch로 정보 가져오기
+        const r = await fetch(`/checkitem/indi?ctNo=${ctNo}&ctiNo=${ctiNo}`)
+        const d = await r.json()
+
+        // [3.2] 정보를 표시할 구역
+        // 미리보기 모달 구역
+        const previewCtName = document.querySelector('#reviewCTI .ctName02');
+        const previewCtDescription = document.querySelector('#reviewCTI .ctDescription02');
+        const previewCtiTitle = document.querySelector("#previewCtiTitle");
+        const previewCtiHelpText = document.querySelector("#previewCtiHelpText");
+
+        // 수정하기 모달 구역
+        const updateCtName = document.querySelector('#updateCTI .ctName03');
+        const updateCtDescription = document.querySelector('#updateCTI .ctDescription03');
+        const updateCtiTitle = document.querySelector("#updateCtiTitle")
+        // const updateCtiHelpText = document.querySelector(".ctiContent .note-editable") 썸머노트로 관리
+
+
+
+        // [3.3] 화면에 표시
+        // 미리보기 모달 데이터 설정
+        previewCtName.value = ctInfo.ctName;                     // 대분류 템플릿명 (전역변수 가져오기)
+        previewCtDescription.innerHTML = ctInfo.ctDescription;   // 대분류 템플릿 설명 (전역변수 가져오기)
+        previewCtiTitle.value = d.ctiTitle;                     // 상세 템플릿 제목
+        previewCtiHelpText.innerHTML = d.ctiHelpText;           // 상세 템플릿 도움말
+
+        // 수정하기 모달 데이터 설정
+        updateCtName.value = ctInfo.ctName;                     // 대분류 템플릿명 (전역변수 가져오기)
+        updateCtDescription.innerHTML = ctInfo.ctDescription;   // 대분류 템플릿 설명 (전역변수 가져오기)
+        updateCtiTitle.value = d.ctiTitle;
+        // $('#updateCtiHelpText').summernote('code', d.ctiHelpText); // Summernote 내용 설정 (최상단 썸머노트로 관리)
+
+        // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
+        const updateBox = document.querySelector(".updateBox")
+        const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary " onclick="updateCTItem(${ctiNo})"
+                        data-bs-dismiss="modal">수정</button>`;
+        updateBox.innerHTML = html;
+    } catch (error) {
+        console.log(error)
+    }
+} // func end
 
 // [4] 상세 체크리스트 템플릿 수정
+const updateCTItem = async (ctiNo) => {
+    console.log("updateCTItem func exe")
+
+    // [4.1] 정보를 표시할 구역
+    const ctiTitle = document.querySelector("#updateCtiTitle").value
+    const ctiHelpText = document.querySelector("#updateCtiHelpText").value
+
+    try {
+        // [4.2] Fetch
+        const obj = { ctiNo, ctiTitle, ctiHelpText }
+        const opt = {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(obj)
+        }
+        const r = await fetch(`/checkitem`, opt)
+        const d = await r.json()
+
+        // [4.3] 결과 표시 + update
+        if (d > 0) {
+            alert("템플릿 수정 성공")
+            getCTItem()
+        } else {
+            alert("템플릿 수정 실패")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+} // func end
 
 // [5] 상세 체크리스트 템플릿 삭제
+const deleteCTItem = async (ctiNo) => {
+    console.log("deleteCTItem func exe")
+
+    // [5.1] 삭제 여부 확인
+    let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. \n정말로 삭제하시겠습니까?`)
+    if (result == false) { return }
+
+    try {
+        // [5.2] Fetch
+        const opt = { method: "DELETE" }
+        const r = await fetch(`/checkitem?ctiNo=${ctiNo}`, opt)
+        const d = await r.json()
+
+        // [5.3] 결과
+        if (d > 0) {
+            alert("템플릿 삭제 성공")
+            getCTItem()
+        } else {
+            alert("템플릿 삭제 실패")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+} // func end
