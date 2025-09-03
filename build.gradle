@@ -61,6 +61,8 @@ dependencies {
 
     // GraphHopper (오픈소스 경로 탐색 & 거리/시간 계산 라이브러리)
     implementation 'com.graphhopper:graphhopper-core:9.0'
+    implementation 'com.graphhopper:graphhopper-reader-osm:9.0'
+    implementation 'com.graphhopper:graphhopper-web:9.0'
 
 }
 
