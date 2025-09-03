@@ -16,7 +16,7 @@ public class PjDao extends Dao {    // class start
         try{
             // 프로젝트에 필요한 정보들 insert
             String sql = "insert into ProjectInfo( pjName, pjMemo, pjStartDate, pjEndDate, roadAddress, detailAddress" +
-                    ", clientName, clientPhone, clientMemo , bnNo )values(?,?,?,?,?,?,?,?,?,?)";
+                    ", clientName, clientPhone, clientMemo , bnNo , clientRepresent )values(?,?,?,?,?,?,?,?,?,?)";
 
             // SQL 기재한다. + ***auto_increment(자동 PK)값 결과를 반환 설정***
             PreparedStatement ps = conn.prepareStatement( sql , Statement.RETURN_GENERATED_KEYS );
@@ -26,6 +26,7 @@ public class PjDao extends Dao {    // class start
             ps.setString( 5 , pjDto.getRoadAddress() );   ps.setString( 6, pjDto.getDetailAddress() );
             ps.setString( 7 , pjDto.getClientName() );   ps.setString( 8, pjDto.getClientPhone() );
             ps.setString( 9 , pjDto.getClientMemo() );   ps.setString( 10, bnNo );
+            ps.setString(11 , pjDto.getClientRepresent());
 
             // 4. 기재된 sql 실행 한 결과 레코드 저장 개수 반환
             int count = ps.executeUpdate();

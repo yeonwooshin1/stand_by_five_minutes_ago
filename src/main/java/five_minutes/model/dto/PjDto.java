@@ -16,6 +16,7 @@ public class PjDto {    // class start
     private String roadAddress;     // 도로명주소
     private String detailAddress;   // 상세 주소
     private String clientName;      // 클라이언트명
+    private String clientRepresent; // 클라이언트 담당자
     private String clientPhone;     // 클라이언트연락처
     private String clientMemo;      // 업무요청사항
     private String pjStatus;        // 상태
