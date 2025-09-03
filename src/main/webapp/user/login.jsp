@@ -24,44 +24,48 @@
 
     <!-- header 연결 -->
     <jsp:include page="/header.jsp"></jsp:include>
+    <!-- 본문 영역 -->
+    <div class="indexContainer">
+        <div class="row">
+            <!-- 본문 작업 영역 -->
+            <div class="mainContent col-10">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body p-4">
+                                    <h3 class="text-center mb-4">로그인</h3>
 
-    <!-- 본문 작업 영역 -->
-    <div class="mainContent col-10">
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-12 col-sm-10 col-md-8 col-lg-5">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body p-4">
-                            <h3 class="text-center mb-4">로그인</h3>
+                                    <!-- 로그인 폼 (JS 셀렉터 유지: #emailInput, #pwdInput, onclick="login()") -->
+                                    <div class="mb-3">
+                                        <label for="emailInput" class="form-label">이메일</label>
+                                        <input type="text" class="form-control emailInput" id="emailInput"
+                                            placeholder="이메일을 입력하세요." />
+                                    </div>
 
-                            <!-- 로그인 폼 (JS 셀렉터 유지: #emailInput, #pwdInput, onclick="login()") -->
-                            <div class="mb-3">
-                                <label for="emailInput" class="form-label">이메일</label>
-                                <input type="text" class="form-control emailInput" id="emailInput"
-                                       placeholder="이메일을 입력하세요." />
-                            </div>
+                                    <div class="mb-2">
+                                        <label for="pwdInput" class="form-label">패스워드</label>
+                                        <input type="password" class="form-control pwdInput" id="pwdInput"
+                                            placeholder="패스워드를 입력하세요." />
+                                    </div>
 
-                            <div class="mb-2">
-                                <label for="pwdInput" class="form-label">패스워드</label>
-                                <input type="password" class="form-control pwdInput" id="pwdInput"
-                                       placeholder="패스워드를 입력하세요." />
-                            </div>
+                                    <div class="d-grid mt-3">
+                                        <button type="button" class="btn btn-primary" onclick="login()">로그인</button>
+                                    </div>
 
-                            <div class="d-grid mt-3">
-                                <button type="button" class="btn btn-primary" onclick="login()">로그인</button>
-                            </div>
-
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <a href="/user/findPwd.jsp" class="small text-decoration-none">비밀번호 찾기</a>
-                                <a href="/user/findEmail.jsp" class="small text-decoration-none">이메일 찾기</a>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <a href="/user/findPwd.jsp" class="small text-decoration-none">비밀번호 찾기</a>
+                                        <a href="/user/findEmail.jsp" class="small text-decoration-none">이메일 찾기</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- // 본문 작업 영역 끝 -->
         </div>
     </div>
-    <!-- // 본문 작업 영역 끝 -->
 
     <!-- footer 연결 -->
     <jsp:include page="/footer.jsp"></jsp:include>
