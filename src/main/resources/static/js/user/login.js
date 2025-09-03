@@ -19,7 +19,7 @@ const login = async() =>{
     try{ // 4. fetch 실행 
         const option = {  method : "POST",  headers : { "Content-Type" : "application/json"},  body : JSON.stringify( obj ) }
         const response = await fetch( "/user/login" , option ); // login API 요청 
-        const data = await response.json();
+        const data = await response.text();
         
         // 5. fetch 응답
         if( data > 0 ){ // 0보다 크면 로그인성공이고 회원번호 반환 

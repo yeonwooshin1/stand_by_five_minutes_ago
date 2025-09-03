@@ -32,7 +32,7 @@ public class BusinessController {  // class start
 
     // 회사정보수정
     @PutMapping("/update/info")
-    public int updateBusinessInfo(@RequestBody BusinessDto businessDto  , HttpSession httpSession ){
+    public int updateBusinessInfo(@ModelAttribute BusinessDto businessDto  , HttpSession httpSession ){
 
         // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
         if( httpSession == null || httpSession.getAttribute("loginBnNo")== null ){

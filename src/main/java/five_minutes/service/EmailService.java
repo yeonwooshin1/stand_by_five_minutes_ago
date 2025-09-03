@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class EmailService { // class start
 
     private final JavaMailSender mailSender; // 스프링 메일 오토설정이 만든 전송기. properties 값으로 세팅됨.
-
+    @Async
     public void sendHtml(String to, String subject, String htmlBody) {
         try {
             // 1) 빈 MimeMessage 객체 생성 (HTML, 첨부파일 전송 가능)
@@ -31,7 +32,7 @@ public class EmailService { // class start
             mailSender.send(mime);
         } catch (Exception e) {
             // 모든 예외를 RuntimeException 으로 감싸서 던짐
-            throw new RuntimeException("메일 전송 실패", e);
+            System.out.println("메일 발송 실패");
         }   // try end
     }   // func end
 

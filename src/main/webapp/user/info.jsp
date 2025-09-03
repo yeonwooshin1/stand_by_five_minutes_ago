@@ -29,10 +29,6 @@
     <!-- 본문 영역 -->
     <div class="indexContainer">
         <div class="row">
-            <!-- 사이드 메뉴바 영역 -->
-            <div class="side col-2">
-                <jsp:include page="/sideMenu.jsp"></jsp:include>
-            </div>
             <!-- 본문 작업 영역 -->
             <div class="mainContent col-10">
                 <div class="title1">마이페이지</div>
@@ -87,6 +83,12 @@
                                         <div class="form-text mb-1">가입일</div>
                                         <div class="text-muted" id="createDate">-</div>
                                     </div>
+                                </div>
+
+                                <!-- ✅ 내 정보 카드 - 액션 버튼 (오른쪽 하단) -->
+                                <div class="d-flex justify-content-end gap-2 mt-3">
+                                    <button class="btn btn-outline-secondary btn-sm" id="btn-user-edit">내 정보 수정</button>
+                                    <button class="btn btn-warning btn-sm" id="btn-user-password">비밀번호 변경</button>
                                 </div>
                             </div>
                         </div>
@@ -144,12 +146,20 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- ✅ 회사 정보 카드 - 액션 버튼 (오른쪽 하단) -->
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button class="btn btn-primary btn-sm" id="btn-edit-business" data-bs-toggle="modal"
+                                        data-bs-target="#bizEditModal">
+                                        사업자 정보 수정
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- ▼▼▼ 내 정보 수정 모달 추가 ▼▼▼ -->
-                    <!-- <div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel"
+                    <div class="modal fade" id="userEditModal" tabindex="-1" aria-labelledby="userEditModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
@@ -185,16 +195,17 @@
                                         role="alert"></div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-                                    <button class="btn btn-primary" id="btn-user-save">저장</button>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-primary" id="btn-user-save">저장</button>
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- ▲▲▲ 내 정보 수정 모달 끝 ▲▲▲ -->
 
                     <!-- ▼▼▼ (업데이트된) 사업자 정보 수정 모달 추가 ▼▼▼ -->
-                    <!-- <div class="modal fade" id="bizEditModal" tabindex="-1" aria-labelledby="bizEditModalLabel"
+                    <div class="modal fade" id="bizEditModal" tabindex="-1" aria-labelledby="bizEditModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
@@ -203,9 +214,9 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="닫기"></button>
                                 </div>
-                                <div class="modal-body"> -->
+                                <div class="modal-body">
                                     <!-- BS-04 명세에 맞춘 필드(수정 가능: 담당자명/번호, 이미지, 업태, 종목) -->
-                                    <!-- <form id="bizEditForm" class="row g-3" enctype="multipart/form-data">
+                                    <form id="bizEditForm" class="row g-3" enctype="multipart/form-data">
                                         <div class="col-md-6">
                                             <label class="form-label">사업자번호</label>
                                             <input type="text" class="form-control" id="bizEditBnNo" readonly />
@@ -235,7 +246,7 @@
                                                 placeholder="종목" />
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label">사업자등록증 이미지 (선택)</label>
+                                            <label class="form-label">사업자등록증 이미지(선택)</label>
                                             <input type="file" class="form-control" id="bizEditDocuFile"
                                                 accept="image/*" />
                                             <div class="form-text">기존 이미지는 유지됩니다. 새 파일을 선택하면 교체됩니다.</div>
@@ -245,15 +256,76 @@
                                         role="alert"></div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-                                    <button class="btn btn-primary" id="btn-biz-save">저장</button>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-primary" id="btn-biz-save">저장</button>
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- ▲▲▲ 사업자 정보 수정 모달 끝 ▲▲▲ -->
-                     
 
+
+                    <!-- ▼▼▼ 비밀번호 변경 모달 추가 ▼▼▼ -->
+                    <div class="modal fade" id="userPwdModal" tabindex="-1" aria-labelledby="userPwdModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-md modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="userPwdModalLabel">비밀번호 변경</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="닫기"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="userPwdForm" class="row g-3">
+                                        <div class="col-12">
+                                            <label for="pwdCurrent" class="form-label">현재 비밀번호</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="pwdCurrent"
+                                                    placeholder="현재 비밀번호" />
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    data-toggle-eye="#pwdCurrent">표시</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label for="pwdNew" class="form-label">새 비밀번호</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="pwdNew"
+                                                    placeholder="영문/숫자 포함 8~20자" />
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    data-toggle-eye="#pwdNew">표시</button>
+                                            </div>
+                                            <div class="form-text">영문/숫자 조합 8~20자 권장</div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label for="pwdNew2" class="form-label">새 비밀번호 확인</label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="pwdNew2"
+                                                    placeholder="새 비밀번호 재입력" />
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    data-toggle-eye="#pwdNew2">표시</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <!-- 에러/안내 -->
+                                    <div id="userPwdError" class="alert alert-danger py-2 px-3 d-none mt-2"
+                                        role="alert"></div>
+                                    <div id="userPwdOk" class="alert alert-success py-2 px-3 d-none mt-2" role="alert">
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        data-bs-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-primary" id="btn-pwd-save">변경</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ▲▲▲ 비밀번호 변경 모달 끝 ▲▲▲ -->
                 </div>
             </div>
         </div>
@@ -268,6 +340,7 @@
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
     <script src="/js/user/info.js"></script>
+
 
 </body>
 

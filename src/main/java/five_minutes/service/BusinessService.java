@@ -30,7 +30,7 @@ public class BusinessService { // class start
         // 가져온 dto 값들 유효성 검사용 , null 이면 null 값 주기 아니라면 공백제거해서 가져오기
         String managerName = businessDto.getManagerName() == null ? null : businessDto.getManagerName().trim();
         String managerPhone = businessDto.getManagerPhone() == null ? null : businessDto.getManagerPhone().trim();
-        MultipartFile uploadBnImg = businessDto.getBnDocuImg() == null ? null : businessDto.getUploadBnImg();
+        MultipartFile uploadBnImg = businessDto.getUploadBnImg() == null ? null : businessDto.getUploadBnImg();
         String bnType = businessDto.getBnType() == null? null : businessDto.getBnType().trim();
         String bnItem = businessDto.getBnItem() == null? null : businessDto.getBnItem().trim();
 
@@ -77,9 +77,8 @@ public class BusinessService { // class start
             fileService.fileDelete(1, bnDocuImg);
             return 0;
         } else {
-            // 바꼈으면 oldImg 삭제, 단 oldImg가 존재해야 한다는 조건이 있음  => 만약 삭제 안됐으면 -4 반환 , 성공했으면 1 반환.
-            if( oldImg != null && !oldImg.isBlank() && !fileService.fileDelete(1 , oldImg)) return -4;
-            else return 1;
+            // 성공했으면 1 반환.
+            return 1;
         }   // if end
     }   // func end
 

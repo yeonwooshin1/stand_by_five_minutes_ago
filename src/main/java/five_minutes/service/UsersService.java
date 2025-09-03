@@ -98,11 +98,6 @@ public class UsersService { // class start
         String newPassword = changePasswordDto.getNewPassword() == null? null : changePasswordDto.getNewPassword().trim();
         String confirmPassword = changePasswordDto.getConfirmPassword() == null? null : changePasswordDto.getConfirmPassword().trim();
 
-
-        System.out.println(confirmPassword);
-        System.out.println(newPassword);
-        System.out.println(confirmPassword);
-
         // 얘네들 값이 null 이거나 비어있으면 실패 반환
         if(newPassword == null || newPassword.isBlank() || confirmPassword == null || confirmPassword.isBlank()) {
             return 0;
@@ -113,7 +108,6 @@ public class UsersService { // class start
             // 일치 안하면 -1 => 두 개 일치 하지 않는다 반환
             return -1;
         }   // if end
-
 
         // 확인용 비밀번호 형식 유효성 검사
         // isBlank() : 문자열이 비어 있거나, 빈 공백으로만 이루어져 있으면 0 반환
