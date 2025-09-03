@@ -13,7 +13,7 @@ public class PasswordValidatorUtil {    // class start
         // 길이 체크
         if (password.length() < 8) {
             return false;
-        }
+        }   // if end
 
         // 대문자, 소문자 포함 여부 플래그
         boolean hasUpper = false;
