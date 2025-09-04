@@ -8,7 +8,7 @@ const ctInfo = { ctNo, ctName: "", ctDescription: "" }
 
 // [ 상세 체크리스트 템플릿 생성 모달 내 Summer Note 연동 ]
 $(document).ready(function () {
-    $('#ctiDescription').summernote({
+    $('#ctiHelpText').summernote({
         lang: 'ko-KR', // default: 'en-US'
         // 부가 기능
         minHeight: 300
@@ -30,7 +30,7 @@ const getIndiCT = async () => {
 
     // [1.1] 표시할 영역 가져오기
     // 상단 타이틀 옆에 대분류 명을 표시
-    const ctNameBox = document.querySelector(".titleBox span")
+    const ctNameBox = document.querySelector(".title1 span")
     const ctName01 = document.querySelector(".ctName01");
     const ctDescription01 = document.querySelector(".ctDescription01");
     const ctName02 = document.querySelector(".ctName02");
@@ -65,7 +65,8 @@ const createCTI = async () => {
     console.log("createCTItem func exe")
     // [1.1] 입력할 데이터 가져오기
     const ctiTitle = document.querySelector("#ctiTitleInput").value;
-    const ctiHelpText = document.querySelector("#ctiHelpText").value;
+    // const ctiHelpText = document.querySelector("#ctiHelpText").value;
+    const ctiHelpText = $('#ctiHelpText').summernote('code');
 
     try {
         // [1.2] Fetch
@@ -156,8 +157,6 @@ const getIndiCTItem = async (ctNo, ctiNo) => {
         const updateCtiTitle = document.querySelector("#updateCtiTitle")
         // const updateCtiHelpText = document.querySelector(".ctiContent .note-editable") 썸머노트로 관리
 
-
-
         // [3.3] 화면에 표시
         // 미리보기 모달 데이터 설정
         previewCtName.value = ctInfo.ctName;                     // 대분류 템플릿명 (전역변수 가져오기)
@@ -171,7 +170,7 @@ const getIndiCTItem = async (ctNo, ctiNo) => {
         updateCtiTitle.value = d.ctiTitle;
         // $('#updateCtiHelpText').summernote('code', d.ctiHelpText); // Summernote 내용 설정 (최상단 썸머노트로 관리)
 
-        // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
+        // [3.4] 수정하기 버튼에 ctNo를 매개변수로 삽입해놓기
         const updateBox = document.querySelector(".updateBox")
         const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                         <button type="button" class="btn btn-primary " onclick="updateCTItem(${ctiNo})"

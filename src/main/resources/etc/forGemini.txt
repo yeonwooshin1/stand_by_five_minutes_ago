@@ -1,0 +1,17 @@
+{ 
+"I_want" : "outside_task_manage_program",
+"need" : "common.css",
+"for" : "project_portfolio",
+"main_color" : "#2F4673",
+"businessModel" : "B2B",
+"Responsive1" : "PC" ,
+"Responsive2" : "Ipad" ,
+"Responsive3" : "mobile" ,
+"font-family" : "Noto Sans KR", 
+"create" : "markdown_file",
+"add_div" : "OK",
+"add_class" : "OK",
+"add_id" : "OK",
+"another_edit" : "none",
+
+}
