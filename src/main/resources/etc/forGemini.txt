@@ -1,6 +1,7 @@
 { 
 "I_want" : "outside_task_manage_program",
 "need" : "common.css",
+"design" : "consistency",
 "for" : "project_portfolio",
 "main_color" : "#2F4673",
 "businessModel" : "B2B",
@@ -13,5 +14,7 @@
 "add_class" : "OK",
 "add_id" : "OK",
 "another_edit" : "none",
-
+"have_library1" : "bootstrap",
+"have_library2" : "jquery",
+"have_library1" : "summernote"
 }
