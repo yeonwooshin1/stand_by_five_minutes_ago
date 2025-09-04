@@ -20,10 +20,9 @@ public class UsersController {  // class start
     // service
     private final UsersService usersService;
 
-    // @Valid : DTO에서 어노테이션으로 유효성 검사 추가한 내용을 스프링에서 확인할 수 있도록 하는 어노테이션
     // 로그인
     @PostMapping("/login")
-    public int login(@Valid @RequestBody UsersDto usersDto, HttpSession httpSession) {
+    public int login(@RequestBody UsersDto usersDto, HttpSession httpSession) {
         // 서비스 호출하여 유효한 로그인인지 검사
         Map<String, Object> loginResult = usersService.login(usersDto);
 
@@ -45,7 +44,8 @@ public class UsersController {  // class start
         System.out.println(httpSession.getAttribute("loginBnNo"));
 
         // [*] 로그인 시 토큰 발행
-        usersService.createLoginToken(loginUserNo);
+        String token = usersService.createLoginToken(loginUserNo);
+        httpSession.setAttribute("loginToken", token);
 
         // 성공 시 userNo 반환
         return loginUserNo;

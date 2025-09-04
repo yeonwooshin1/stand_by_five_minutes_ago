@@ -174,10 +174,13 @@ public class UsersService { // class start
     public String createLoginToken(int loginUserNo) {
         // UUID를 jti로 사용
         String jti = UUID.randomUUID().toString();
+        // 컨트롤러에서 받은 토큰 확인
+        String token = jwtUtil.createToken(String.valueOf(loginUserNo), jti);
         // 토큰 값 확인
-        System.out.println(jwtUtil.createToken(String.valueOf(loginUserNo), jti));
-        // JwtUtil로 토큰 생성
-        return jwtUtil.createToken(String.valueOf(loginUserNo), jti);
+        System.out.println("발급된 토큰 : " + token);
+        // 토큰 반환
+        return token;
     } // func end
+
 
 }   // class end
