@@ -1,45 +1,44 @@
-* {
-    margin: 0px 0px;
-    padding: 0px 0px;
-    text-decoration: none;
+
+.pg5-layout {
+   min-height: 60dvh;  /* 동적 뷰포트(모바일/주소창 변화 대응) */
+  display: flex;
+  flex-direction: column;
+}
+.pg5-content {
+  flex: 1 0 auto;              /* 남는 높이 차지 → 푸터를 하단으로 밀어줌 */
 }
 
-.footerBackgroud {
-    background-color: #2F4676;
-    height: 120px;
-    display: flex;
-    justify-content: center;
+/* ② 푸터: 화면 가로 전체 배경 + 내부 1280px 중앙정렬 */
+.footerBackgroud, .footerBackground {   /* 오타 보완 클래스도 함께 허용 */
+  background-color: #2F4676;
+  width: 100%;                   /* 1280px 초과 폭에서도 배경이 양옆으로 계속 보임 */
 }
 
 .footer-area {
-    width: 1280px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  max-width: 1280px;             /* 내부 컨테이너 고정폭 */
+  margin: 0 auto;                 /* 중앙 정렬 */
+  padding: 16px 0;                /* 고정 height 대신 패딩 권장 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
-.footerNotice a {
-    color: white;
-    text-decoration-line: none;
-    font-size: 0.8rem;
-}
-
+/* ③ 푸터 텍스트/링크 스타일(스코프 한정) */
 .footerNotice {
-    display: flex;
-    list-style: none;
+  display: flex;
+  flex-wrap: wrap;                /* 좁을 때 줄바꿈 */
+  list-style: none;
+  gap: 8px 16px;
 }
-
-.footerNotice li,
-.footerNotice span {
-    color: white;
-    margin: 0 0.5rem 0 0.5rem;
-    font-size: 0.8rem;
+.footerNotice a { color: #fff; text-decoration: none; }
+.footerNotice li, .footerNotice span {
+  color: #fff;
+  font-size: 0.9rem;
 }
-
 .copyRight {
-    color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
 }
-

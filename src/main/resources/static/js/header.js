@@ -42,13 +42,13 @@ const mainMenu = async () => {
     if (userNo == 0) {
         html = ''
     } else if (businessNo != null ) { // 기업 담당자
-        html += `<li><a href="#" style="color: #A6A6A6;">인력 관리</a></li>
+        html += `<li style = "display:none;"><a href="#" style="color: #A6A6A6; ">인력 관리</a></li>
                  <li><a href="/template/roleTem.jsp">템플릿 관리</a></li>
-                 <li><a href="#">프로젝트 관리</a></li>`
+                 <li><a href="/project/list.jsp">프로젝트 관리</a></li>`
     } else if (userNo > 1 ) { // 일반회원
-        html += `<li><a href="#">메뉴1</a></li>
-                 <li><a href="#">메뉴2</a></li>
-                 <li><a href="#">메뉴3</a></li>`
+        html += `<li><a href="/project/list.jsp">프로젝트 관리</a></li>
+                 <li style = "display:none;"><a href="#">메뉴2</a></li>
+                 <li style = "display:none;"><a href="#">메뉴3</a></li>`
     }
     mainMenu.innerHTML = html;
 }
@@ -59,8 +59,9 @@ const subMenu = async () => {
     const subMenu = document.querySelector(".sub-menu")
     let html = ''
     if (userNo == 0) {
-        html = `<ul class='main-menu' ><li><a href="/user/login.jsp" style="color:black">로그인</a></li>
-                    <li><a href="#" style="color:black">회원가입(추후 구현)</a></li></ul>`
+        html = `<ul class='main-menu' >
+                    <li><a href="/user/login.jsp" style="color:black">로그인</a></li>
+                    <li style = "display:none;" ><a href="#" style="color:black">회원가입(추후 구현)</a></li></ul>`
 
     } else if (businessNo != null ) { // 기업 담당자
         html += `<div class="headText">${managerNameHeader}님 환영합니다. <br />(기업 담당자)</div>
