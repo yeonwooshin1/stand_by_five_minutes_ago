@@ -5,6 +5,7 @@ import five_minutes.model.dto.ChangePasswordDto;
 import five_minutes.model.dto.EmailRecoverDto;
 import five_minutes.model.dto.UsersDto;
 
+import five_minutes.util.JwtUtil;
 import five_minutes.util.PasswordValidatorUtil;
 import five_minutes.util.PhoneNumberUtil;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service                    // 서비스 어노테이션
 @RequiredArgsConstructor    // 의존성 주입
@@ -164,5 +166,18 @@ public class UsersService { // class start
         return usersDao.updateUserInfo(dto) ? 1 : 0 ;
 
     }   // func end
+
+    // [*] JwtUtil DI
+    private final JwtUtil jwtUtil;
+
+    // [*] 로그인 시 토큰 생성 메소드
+    public String createLoginToken(int loginUserNo) {
+        // UUID를 jti로 사용
+        String jti = UUID.randomUUID().toString();
+        // 토큰 값 확인
+        System.out.println(jwtUtil.createToken(String.valueOf(loginUserNo), jti));
+        // JwtUtil로 토큰 생성
+        return jwtUtil.createToken(String.valueOf(loginUserNo), jti);
+    } // func end
 
 }   // class end

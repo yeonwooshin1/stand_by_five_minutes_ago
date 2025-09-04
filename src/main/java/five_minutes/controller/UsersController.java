@@ -5,16 +5,12 @@ import five_minutes.model.dto.EmailRecoverDto;
 import five_minutes.model.dto.UsersDto;
 import five_minutes.service.UsersService;
 
-import five_minutes.util.JwtUtil;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.UUID;
 
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
@@ -49,24 +45,11 @@ public class UsersController {  // class start
         System.out.println(httpSession.getAttribute("loginBnNo"));
 
         // [*] 로그인 시 토큰 발행
-        createLoginToken(loginUserNo);
+        usersService.createLoginToken(loginUserNo);
 
         // 성공 시 userNo 반환
         return loginUserNo;
     }   // func end
-
-    // [*] JwtUtil DI
-    private final JwtUtil jwtUtil;
-
-    // [*] 로그인 시 토큰 생성 메소드
-    public String createLoginToken(int loginUserNo) {
-        // UUID를 jti로 사용
-        String jti = UUID.randomUUID().toString();
-        // 토큰 값 확인
-        System.out.println(jwtUtil.createToken(String.valueOf(loginUserNo), jti));
-        // JwtUtil로 토큰 생성
-        return jwtUtil.createToken(String.valueOf(loginUserNo), jti);
-    } // func end
 
     // 로그아웃
     @GetMapping("/logout")
