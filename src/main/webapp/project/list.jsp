@@ -28,20 +28,21 @@
 
     <!-- 본문 영역 -->
     <div class="indexContainer">
-            <div class="mainContent">
-                <div class="title1">제목</div>
-                <div class="ContentBox">
-                    본문 작업 영역!!
-                    <br />
-                    1<br />
-                    2<br />
-                    3<br />
-                    4<br />
+        <div class="titleArea">
+            <div class="title1">프로젝트 목록</div>
+            <button type="button" class="btn btn-primary">생성</button>
+        </div>
+        <div class="ContentBox">
+            본문 작업 영역!!
+            <br />
+            1<br />
+            2<br />
+            3<br />
+            4<br />
 
-                </div>
-            </div>
         </div>
     </div>
+
 
 
     <!-- footer 연결 -->
