@@ -36,7 +36,7 @@ public class CTemController {  // class start
     @Operation(summary = "체크리스트 템플릿 생성", description = "체크리스트 템플릿을 생성합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200",
-                    description = "삭제 성공",
+                    description = "생성 성공",
                     content = @Content(schema = @Schema(type = "integer", example = "4000001"))),
             // HTTP 200 응답이 성공하고 생성에 성공하면, ctNo를 반환한다.
             @ApiResponse(
@@ -77,13 +77,13 @@ public class CTemController {  // class start
             @ApiResponse(responseCode = "200",
                     description = "전체조회 성공",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = CTemDto.class)))),
-            // HTTP 200 응답이 성공하면, JSON 형태로 UserDto 구조의 데이터를 반환한다
+            // HTTP 200 응답이 성공하면, JSON 형태로 List 구조의 데이터를 반환한다
             @ApiResponse(
                     responseCode = "200",
                     description = "세션 실패",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = CTemDto.class, nullable = true)))
             ),
-            // HTTP 200 응답이 성공하고 로그인 세션에 실패하면, -1을 반환한다
+            // HTTP 200 응답이 성공하고 로그인 세션에 실패하면, null을 반환한다
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
     })
     @GetMapping("")
@@ -115,17 +115,17 @@ public class CTemController {  // class start
             @ApiResponse(responseCode = "200",
                     description = "개별조회 성공",
                     content = @Content(schema = @Schema(implementation = CTemDto.class))),
-            // HTTP 200 응답이 성공하면, JSON 형태로 UserDto 구조의 데이터를 반환한다
+            // HTTP 200 응답이 성공하면, JSON 형태로 Dto 구조의 데이터를 반환한다
             @ApiResponse(
                     responseCode = "200",
                     description = "개별조회 실패",
                     content = @Content(schema = @Schema(implementation = CTemDto.class, nullable = true))),
-            // HTTP 200 응답이 성공하고 개별 조회에 실패하면, 0을 반환한다
+            // HTTP 200 응답이 성공하고 개별 조회에 실패하면, null을 반환한다
             @ApiResponse(
                     responseCode = "200",
                     description = "세션 실패",
                     content = @Content(schema = @Schema(implementation = CTemDto.class, nullable = true))),
-            // HTTP 200 응답이 성공하고 로그인 세션에 실패하면, -1을 반환한다
+            // HTTP 200 응답이 성공하고 로그인 세션에 실패하면, null을 반환한다
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
     })
     @GetMapping("/indi")
