@@ -6,7 +6,6 @@ import five_minutes.model.dto.UsersDto;
 import five_minutes.service.UsersService;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +19,11 @@ public class UsersController {  // class start
     // service
     private final UsersService usersService;
 
+
     // 로그인
     @PostMapping("/login")
-    public int login(@RequestBody UsersDto usersDto, HttpSession httpSession) {
+    public int login(@RequestBody UsersDto usersDto , HttpSession httpSession ) {
+
         // 서비스 호출하여 유효한 로그인인지 검사
         Map<String, Object> loginResult = usersService.login(usersDto);
 
@@ -53,10 +54,10 @@ public class UsersController {  // class start
 
     // 로그아웃
     @GetMapping("/logout")
-    public int logout(HttpSession httpSession) {
+    public int logout( HttpSession httpSession ){
 
         // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
-        if (httpSession == null || httpSession.getAttribute("loginUserNo") == null) {
+        if( httpSession == null || httpSession.getAttribute("loginUserNo")== null ){
             return 0;
         }   // if end
 
@@ -64,7 +65,7 @@ public class UsersController {  // class start
         httpSession.removeAttribute("loginUserNo");
 
         // 사업자번호도 null이 아니면 같이 제거한다.
-        if (httpSession.getAttribute("loginBnNo") != null) {
+        if( httpSession.getAttribute("loginBnNo") != null ){
             httpSession.removeAttribute("loginBnNo");
         }   // if end
 
@@ -74,7 +75,7 @@ public class UsersController {  // class start
 
     // 이메일찾기 (=id)
     @GetMapping("/recoverEmail")
-    public EmailRecoverDto recoverUserEmail(@Valid UsersDto usersDto) {
+    public EmailRecoverDto recoverUserEmail( UsersDto usersDto ){
 
         // 서비스 호출해서 유효성 검사 후 반환
         return usersService.recoverUserEmail(usersDto);
@@ -83,10 +84,10 @@ public class UsersController {  // class start
 
     // 비밀번호 변경
     @PutMapping("/update/password")
-    public int updatePassword(@Valid @RequestBody ChangePasswordDto changePasswordDto, HttpSession httpSession) {
+    public int updatePassword(@RequestBody ChangePasswordDto changePasswordDto , HttpSession httpSession){
 
         // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
-        if (httpSession == null || httpSession.getAttribute("loginUserNo") == null) {
+        if( httpSession == null || httpSession.getAttribute("loginUserNo")== null ){
             return -2;
         }   // if end
 
@@ -94,16 +95,16 @@ public class UsersController {  // class start
         int userNo = (int) httpSession.getAttribute("loginUserNo");
 
         // 서비스 호출해서 유효성 검사 후 반환
-        return usersService.updatePassword(changePasswordDto, userNo);
+        return usersService.updatePassword( changePasswordDto ,userNo );
 
     }   // func end
 
     // 유저 정보 조회
     @GetMapping("/find/info")
-    public UsersDto getUserInfo(@Valid HttpSession httpSession) {
+    public UsersDto getUserInfo( HttpSession httpSession ){
 
         // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
-        if (httpSession == null || httpSession.getAttribute("loginUserNo") == null) {
+        if( httpSession == null || httpSession.getAttribute("loginUserNo")== null ){
             return null;
         }   // if end
 
@@ -111,14 +112,14 @@ public class UsersController {  // class start
         int userNo = (int) httpSession.getAttribute("loginUserNo");
 
         // 서비스 호출 후 값을 반환한다.
-        return usersService.getUserInfo(userNo);
+        return usersService.getUserInfo( userNo );
 
     }   // func end
 
 
     // 유저 정보 변경
     @PutMapping("/update/info")
-    public int updateUserInfo(@Valid @RequestBody UsersDto usersDto, HttpSession httpSession) {
+    public int updateUserInfo( @RequestBody UsersDto usersDto  ,HttpSession httpSession ){
 
         // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
         if (httpSession == null || httpSession.getAttribute("loginUserNo") == null) {
