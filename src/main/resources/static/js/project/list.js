@@ -14,9 +14,10 @@ const readAllPj = async () => {
         let html = '';
 
         if (d.length != 0) {
+            let i = 1
             d.forEach(pjDto => {
-                html += `<tr>
-                        <td>${pjDto.pjNo}</td>
+            html += `<tr>
+                        <td>${i}</td>
                         <td><a href="/project/info.jsp?pjNo=${pjDto.pjNo}">${pjDto.pjName}</td>
                         <td>${pjDto.clientName}</td>
                         <td>${pjDto.clientRepresent}</td>
@@ -25,6 +26,7 @@ const readAllPj = async () => {
                         <td>${pjDto.pjEndDate}</td>
                         <td>${pjDto.updateDate}</td>
                     </tr>`
+                    i++
             });
         } else {
             html += `<tr>
