@@ -32,30 +32,25 @@
 
             <div class="titleArea">
                 <div class="title1">프로젝트 생성</div>
-                <button type="button" class="btn btn-primary">저장</button>
+                <button type="button" class="btn btn-primary" onclick="creatPJInfo()">저장</button>
             </div>
             <div class="ContentBox">
-                <div class="mb-3 text-end text-muted">
-                    <small>생성일: <span id="createdDate">2024-04-01</span>
-                        | 최근 수정일: <span id="updateDate">2024-04-10</span></small>
-                </div>
-
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">프로젝트 기본 정보</div>
-                    <div class="card-body">
-                        <form>
+                <form id="pjForm">
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">프로젝트 기본 정보</div>
+                        <div class="card-body">
                             <div class="mb-3">
                                 <label for="pjName" class="form-label">프로젝트명</label>
-                                <input type="text" class="form-control" id="pjName">
+                                <input type="text" class="form-control" name="pjName" id="pjName">
                             </div>
                             <div class="mb-3 pjdateArea row">
                                 <div class="col">
                                     <label for="pjstartDate" class="form-label">시작일</label>
-                                    <input type="date" class="form-control" id="pjstartDate">
+                                    <input type="date" class="form-control" name="pjStartDate" id="pjStartDate">
                                 </div>
                                 <div class="col">
                                     <label for="pjendDate" class="form-label">종료일</label>
-                                    <input type="date" class="form-control" id="pjendDate">
+                                    <input type="date" class="form-control" name="pjEndDate" id="pjEndDate">
                                 </div>
                             </div>
                             <div class="mb-3 row">
@@ -63,43 +58,48 @@
                                     <label for="roadAddress " class="form-label"> 도로명 주소</label>
                                     <button class="btn btn-outline-secondary mb-1" type="button"
                                         onclick="Postcode()">도로명주소 검색</button>
-                                    <input type="text" class="form-control" id="roadAddress" disabled>
+                                    <input type="text" class="form-control" id="roadAddress" name="roadAddress" readonly style="background-color: #eeeeee">
+                                    <!-- disable 처리 시 form으로 정보를 가져오지 못함!! 따라서 읽기모드 readOnly로 처리!! -->
                                     <label for="detailAddress" class="form-label">상세 주소</label>
-                                    <input type="text" class="form-control" id="detailAddress">
+                                    <input type="text" class="form-control" id="detailAddress" name="detailAddress">
                                     <label for="projectMemo" class="form-label">메모</label>
-                                    <textarea class="form-control" id="pjMemo" rows="3"></textarea>
+                                    <textarea class="form-control" id="pjMemo" name="pjMemo" rows="3"></textarea>
                                 </div>
                                 <div class="col">
                                     <label class="form-label mb-3">지도</label>
                                     <div class="border mapArea" id="mapArea"> </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <div class="card mb-4">
-                    <div class="card-header bg-secondary text-white">클라이언트 정보</div>
-                    <div class="card-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="clientName" class="form-label">클라이언트명</label>
-                                <input type="text" class="form-control" id="clientName">
+                    <div class="card mb-4">
+                        <div class="card-header bg-secondary text-white">클라이언트 정보</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="clientName" class="form-label">클라이언트명</label>
+                                        <input type="text" class="form-control" id="clientName" name="clientName">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="clientManager" class="form-label">담당자</label>
+                                        <input type="text" class="form-control" id="clientRepresent" name="clientRepresent">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="clientContact" class="form-label">연락처</label>
+                                        <input type="text" class="form-control" id="clientPhone" name="clientPhone">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="clientRequest" class="form-label">요청사항</label>
+                                        <textarea class="form-control" id="clientMemo" name="clientMemo" rows="5"></textarea>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="clientManager" class="form-label">담당자</label>
-                                <input type="text" class="form-control" id="clientManager">
-                            </div>
-                            <div class="mb-3">
-                                <label for="clientContact" class="form-label">연락처</label>
-                                <input type="text" class="form-control" id="clientContact">
-                            </div>
-                            <div class="mb-3">
-                                <label for="clientRequest" class="form-label">요청사항</label>
-                                <textarea class="form-control" id="clientRequest" rows="3"></textarea>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 

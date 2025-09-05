@@ -11,3 +11,8 @@
     font-size: 1rem;
     font-weight: 600;
 }
+
+.mapArea{
+    min-height: 14rem;
+    border-radius: 0.5rem;
+}

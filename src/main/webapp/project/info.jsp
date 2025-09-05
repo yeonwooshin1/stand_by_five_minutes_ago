@@ -36,8 +36,8 @@
             </div>
             <div class="ContentBox">
                 <div class="mb-3 text-end text-muted">
-                    <small>생성일: <span id="createdDate">2024-04-01</span>
-                        | 최근 수정일: <span id="updateDate">2024-04-10</span></small>
+                    <small>생성일 : <span id="createdDate">2024-04-01</span>
+                        | 최근 수정일 : <span id="updateDate">2024-04-10</span></small>
                 </div>
 
                 <div class="card mb-4">
@@ -58,20 +58,21 @@
                                     <input type="date" class="form-control" id="pjendDate">
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="roadAddress " class="form-label"> 도로명 주소</label>
-                                <button class="btn btn-outline-secondary mb-1" type="button">도로명주소 검색</button>
-                                <input type="text" class="form-control" id="roadAddress" disabled>
-                                <label for="detailAddress" class="form-label">상세 주소</label>
-                                <input type="text" class="form-control" id="detailAddress">
-                            </div>
-                            <div class="mb-3">
-                                <label for="projectMemo" class="form-label">메모</label>
-                                <textarea class="form-control" id="projectMemo" rows="3"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">지도</label>
-                                <div class="border p-3 text-center bg-light">[지도 API 영역]</div>
+                            <div class="mb-3 row">
+                                <div class="col">
+                                    <label for="roadAddress " class="form-label"> 도로명 주소</label>
+                                    <button class="btn btn-outline-secondary mb-1" type="button"
+                                        onclick="Postcode()">도로명주소 검색</button>
+                                    <input type="text" class="form-control" id="roadAddress" disabled>
+                                    <label for="detailAddress" class="form-label">상세 주소</label>
+                                    <input type="text" class="form-control" id="detailAddress">
+                                    <label for="projectMemo" class="form-label">메모</label>
+                                    <textarea class="form-control" id="pjMemo" rows="3"></textarea>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label mb-3">지도</label>
+                                    <div class="border mapArea" id="mapArea"> </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -79,22 +80,26 @@
                 <div class="card mb-4">
                     <div class="card-header bg-secondary text-white">클라이언트 정보</div>
                     <div class="card-body">
-                        <form>
-                            <div class="mb-3">
-                                <label for="clientName" class="form-label">클라이언트명</label>
-                                <input type="text" class="form-control" id="clientName">
+                        <form class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="clientName" class="form-label">클라이언트명</label>
+                                    <input type="text" class="form-control" id="clientName">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="clientManager" class="form-label">담당자</label>
+                                    <input type="text" class="form-control" id="clientManager">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="clientContact" class="form-label">연락처</label>
+                                    <input type="text" class="form-control" id="clientContact">
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="clientManager" class="form-label">담당자</label>
-                                <input type="text" class="form-control" id="clientManager">
-                            </div>
-                            <div class="mb-3">
-                                <label for="clientContact" class="form-label">연락처</label>
-                                <input type="text" class="form-control" id="clientContact">
-                            </div>
-                            <div class="mb-3">
-                                <label for="clientRequest" class="form-label">요청사항</label>
-                                <textarea class="form-control" id="clientRequest" rows="3"></textarea>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="clientRequest" class="form-label">요청사항</label>
+                                    <textarea class="form-control" id="clientRequest" rows="3"></textarea>
+                                </div>
                             </div>
                         </form>
                     </div>

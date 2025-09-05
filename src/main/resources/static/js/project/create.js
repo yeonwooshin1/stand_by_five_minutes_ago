@@ -43,3 +43,30 @@ function Postcode() {
         }
     }).open();
 }
+
+// [1] PJ 정보 생성하기
+const creatPJInfo = async () =>{
+    console.log("createPJinfo")
+
+    // [1.1] PJ 정보를 가진 form 가져오기
+    const PJinfoForm = document.querySelector('#pjForm')
+
+    // [1.2] FormData를 multipart form으로 변환
+    const pjFormData = new FormData(PJinfoForm);
+
+    try{
+        const opt = {method : "POST", body : pjFormData };
+        const r = await fetch("/project/info",opt)
+        const d = await r.json()
+        console.log(d)
+
+        if(d> 0 ){
+            alert("프로젝트 등록 성공")
+            location.href="/project/list.jsp"
+        } else {
+            alert("프로젝트 등록 실패")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+} // func end

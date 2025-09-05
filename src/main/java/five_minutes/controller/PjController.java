@@ -27,7 +27,7 @@ public class PjController { // class start
 
     // [PJ-01] 프로젝트 info 생성
     @PostMapping
-    public int createProjectInfo(@RequestBody PjDto pjDto , HttpSession httpSession ) {
+    public int createProjectInfo(@ModelAttribute PjDto pjDto , HttpSession httpSession ) {
         System.out.println("PjController.createProjectInfo");
         System.out.println("pjDto = " + pjDto + ", httpSession = " + httpSession);
 
