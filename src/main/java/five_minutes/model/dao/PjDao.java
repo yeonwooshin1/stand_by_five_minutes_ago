@@ -94,7 +94,7 @@ public class PjDao extends Dao implements CommonRepository<PjDto, Integer, Strin
     public List<PjDto> readAll(String bnNo) {
         List<PjDto> list = new ArrayList<>();
         try{
-            String sql = "select * from ProjectInfo where bnNo = ? and pjStatus = 1";
+            String sql = "select * from ProjectInfo where bnNo = ? and pjStatus = 1 order by pjStartDate desc ";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, bnNo);
             ResultSet rs = ps.executeQuery();

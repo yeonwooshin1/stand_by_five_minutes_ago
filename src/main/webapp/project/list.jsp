@@ -12,7 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
-    <link rel='stylesheet' href='/CSS/index.css'>
+    <link rel='stylesheet' href='/CSS/project/list.css'>
 
     <!-- 글꼴 Noto Sans -->
     <style>
@@ -30,20 +30,33 @@
     <div class="indexContainer">
         <div class="titleArea">
             <div class="title1">프로젝트 목록</div>
-            <button type="button" class="btn btn-primary">생성</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='/project/create.jsp'">생성</button>
         </div>
         <div class="ContentBox">
-            본문 작업 영역!!
-            <br />
-            1<br />
-            2<br />
-            3<br />
-            4<br />
-
+            <table class="table table-striped table-hover pjList">
+                <thead class="pjListHead">
+                    <tr>
+                        <th> 번호 </th>
+                        <th> 프로젝트명 </th>
+                        <th> 클라이언트 </th>
+                        <th> 담당자 </th>
+                        <th> 연락처 </th>
+                        <th> 시작일 </th>
+                        <th> 종료일 </th>
+                        <th> 최근수정일 </th>
+                    </tr>
+                </thead>
+                <tbody class="pjListTbody">
+                    <tr>
+                        <td colspan="8"> ※ 표시할 정보가 없습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
 
+    <script src="/js/project/list.js"></script>
 
     <!-- footer 연결 -->
     <jsp:include page="/footer.jsp"></jsp:include>

@@ -49,7 +49,7 @@ public class PjController { // class start
     @GetMapping
     public List<PjDto> getPJinfo(HttpSession session) {
         System.out.println("PjController.getPJinfo");
-        System.out.println("PjController.getPJinfo");
+        System.out.println("session = " + session);
 
         // [02-1] session에서 로그인정보와 사업자번호 존재 여부 확인
         if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
