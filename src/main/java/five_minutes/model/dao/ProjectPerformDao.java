@@ -39,6 +39,7 @@ public class ProjectPerformDao extends Dao{    // class start
                 dto.setPfEnd( rs.getString( "pfEnd" ) );
                 dto.setNotifyType( rs.getInt( "notifyType" ) );
                 dto.setNotifySetMins( rs.getInt( "notifySetMins" ) );
+                dto.setPfStatus(rs.getInt("pfStatus"));
 
                 list.add(dto);
             }   // while end
