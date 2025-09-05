@@ -550,3 +550,34 @@ $('#btn-pwd-save')?.addEventListener('click', async (e) => {
     err.textContent = '네트워크 오류가 발생했습니다.'; show(err);
   }
 });
+
+// ========================== (추가) 다음 우편번호 - 초간단 팝업 ==========================
+// 도로명/지번 중 하나만 채우고 상세주소로 포커스 이동함
+const userEditRoad = () => {
+  if (!(window.daum && window.daum.Postcode)) {
+    alert('주소 검색이 로드되지 않았습니다. 잠시 후 다시 시도해주세요.');
+    return;
+  }
+  new daum.Postcode({
+    oncomplete: function(d) {
+      // 도로명 > (없으면) 통합주소 > (없으면) 지번
+      const road = d.roadAddress || d.address || d.jibunAddress || '';
+      // 네 모달 인풋 아이디에 그대로 주입
+      const roadEl   = $('#userEditRoad');
+      const detailEl = $('#userEditDetail');
+
+      if (roadEl) roadEl.value = road;
+
+      // 상세주소로 커서 이동
+      detailEl && detailEl.focus();
+    }
+  }).open(); // 팝업 방식: 코드가 가장 짧고 간단
+};
+
+// 버튼 클릭으로 카카오 우편번호 팝업 열기
+document.addEventListener('DOMContentLoaded', () => {
+  $('#btn-find-postcode')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    userEditRoad(); // 앞서 추가한 openPostcode() 호출
+  });
+});
