@@ -225,12 +225,12 @@ CREATE TABLE  pjPerform (
   pfEnd   	TIME NULL,                               	  		-- 종료 시각
   
   -- 알림 발송하는 칼럼
-  notifyType TINYINT NOT NULL DEFAULT 1 , 							-- 1 : 시작전 2: 시작 후 3: 종료전 4: 종료후
-  notifySetMins INT NULL DEFAULT 0,									-- 몇 분인지 정해주는 것. 
+  notifyType TINYINT NOT NULL DEFAULT 0 , 							-- 0: 알람 발송 안함 1 : 시작전 2: 시작 후 3: 종료전 4: 종료후
+  notifySetMins INT NOT NULL DEFAULT 0,									-- 알람 발송 분
   
   -- 진행 상태/결과
-  pfStatus TINYINT NOT NULL DEFAULT 1,								-- 1: 시작전 2: 진행중 3: 완료됨 4: 취소됨 5: 보류
-  note       VARCHAR(600) NULL,                               				-- 지시/비고
+  pfStatus 				TINYINT NOT NULL DEFAULT 1,								-- 1: 시작전 2: 진행중 3: 완료됨 4: 취소됨 5: 보류
+  note       			VARCHAR(600) NULL,                               				-- 지시/비고
   createDate  			DATETIME NOT NULL DEFAULT NOW(),					-- 생성 날짜
   updateDate 			DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),	-- 변경 날짜 -> 변경시점이랑 템플릿에서 변경된 거랑 업데이트 하려고
   
