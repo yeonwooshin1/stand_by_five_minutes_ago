@@ -86,7 +86,7 @@ public class RtController {  // class start
         Object loginBnNo = session.getAttribute("loginBnNo");
         String bnNo = (String) loginBnNo;
 
-        // [03-3] rtService 의 read 매소드 실행
+        // [03-3] rtService 의 read 메소드 실행
         return rtService.read(rtNo, bnNo);
     }// [ RT-03 ]  func end
 

@@ -11,3 +11,11 @@ insert into RoleTemplateItem(rtNo, rtiName, rtiDescription) values (2000001,"무
 select * from RoleTemplateItem where rtiNo=3000001 and rtiStatus = 1;
 update RoleTemplateItem set rtiName = "testtest", rtiDescription = "testtesttesttest" where rtiNo=3000047;
 update RoleTemplateItem set rtiStatus = 1 where rtiNo = 3000047;
+
+select * from ProjectInfo where bnNo = "100-00-00001" and pjStatus = 1;
+select * from ProjectInfo where pjNo = 6000001 and bnNo = "100-00-00001" ;
+
+update ProjectInfo set pjName="test", pjMemo="test", pjStartDate=null, pjEndDate=null, roadAddress="test", detailAddress="test", clientName="test", clientPhone="test", clientMemo=null, clientRepresent="test" where pjNo = 6000011;
+select * from projectinfo where pjno=6000011;
+
+update ProjectInfo set pjStatus = "1" where pjNo = 6000011 and bnno = "100-00-00001";
