@@ -62,7 +62,22 @@ public class PjController { // class start
         return pjService.readAll(bnNo);
     } // func end
 
-    // [PJ-03]
+    // [PJ-03] 프로젝트 개별 조회
+    @GetMapping("info/indi")
+    public PjDto getIndiPjInfo(@RequestParam int pjNo, HttpSession session){
+        PjDto pjDto = new PjDto();
+        // [03-1] session에서 로그인정보와 사업자번호 존재 여부 확인
+        if( session.getAttribute("loginUserNo") == null ||
+                session.getAttribute("loginBnNo") == null || pjNo == 0){
+            pjDto.setPjNo(0); // 로그인 정보 없음
+            return pjDto;
+        }
+        // [03-2] session에서 사업자번호 추추러
+        String bnNo =  (String)session.getAttribute("loginBnNo");
+        
+        // [03-2] pjService read 메소드 실행
+        return pjService.read(pjNo, bnNo);
+    } // func end
 
     // [PJ-04]
 

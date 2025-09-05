@@ -55,13 +55,38 @@ public class PjDao extends Dao implements CommonRepository<PjDto, Integer, Strin
 
     // 개별조회
     @Override
-    public PjDto read(Integer integer, String s) {
+    public PjDto read(Integer pjNo, String bnNo) {
+        PjDto pjDto = new PjDto();
         try{
-            String sql = "select * from ProjectInfo where bnNo = ?";
+            String sql = "select * from ProjectInfo where pjNo = ? and bnNo = ?;";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1,pjNo);
+            ps.setString(2,bnNo);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                pjDto.setPjNo(rs.getInt("pjNo"));                           // 프로젝트번호
+                pjDto.setPjName(rs.getString("pjName"));                    // 프로젝트명
+                pjDto.setPjMemo(rs.getString("pjMemo"));                    // 당사 메모
+                pjDto.setPjStartDate(rs.getString("pjStartDate"));          // 시작날짜
+                pjDto.setPjEndDate(rs.getString("pjEndDate"));              // 종료날짜
+                pjDto.setRoadAddress(rs.getString("roadAddress"));          // 도로명 주소
+                pjDto.setDetailAddress(rs.getString("detailAddress"));      // 상세주소
+                pjDto.setClientName(rs.getString("clientName"));            // 클라이언트명
+                pjDto.setClientRepresent(rs.getString("clientRepresent"));  // 클라이언트 담당자
+                pjDto.setClientPhone(rs.getString("clientPhone"));          // 클라이언트연락처
+                pjDto.setClientMemo(rs.getString("clientMemo"));            // 업무요청사항
+                pjDto.setPjStatus(rs.getString("pjStatus"));                // 상태
+                pjDto.setCreateDate(rs.getString("createDate"));            // 생성일
+                pjDto.setUpdateDate(rs.getString("updateDate"));            // 수정일
+                pjDto.setBnNo(rs.getString("bnNo"));                        // 사업자 번호
+            }
+            return pjDto;
         } catch (Exception e) {
             System.out.println("PjDao.read " + e);
         }
-        return null;
+        // 조회값 없음
+        pjDto.setPjNo(-1);
+        return pjDto;
     }
 
     // 전체 조회
