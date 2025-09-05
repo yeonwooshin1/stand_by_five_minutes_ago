@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 ///
 /// project dashboard Dto
 ///
-/// 프로젝트 체크리스트 업무를 상세하게 정의하고 미리 만들어둔 체크리스트 템플릿을 사용한다
+/// 프로젝트별 업무를 상세히 확인할 수 있는 대시보드를 구현합니다.
 ///
-/// Google sheet > 21.테이블 > 3-4
+/// Google sheet > 21.테이블 > 1-1, 3 , 4
 ///
 /// @author dongjin
 
@@ -18,6 +18,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class DashboardDto {
-    private String zz;
+    // 멤버변수(없음)
+    // 1-1 사용자
+    private UsersDto usersDto;
+    // 3-1 프로젝트 정보
+    private PjDto pjDto;
+    // 3-2 프로젝트 인력
+    // 완성되면 넣기
+    // 3-3 프로젝트 체크리스트
+    private PjCheckDto pjCheckDto;
+    // 4-1 프로젝트 실행
+    private ProjectPerformDto pjPerDto;
+    // 4-2 프로젝트 파일
+    private ProjectPerformFileDto pjFileDto;
 
 } // class end
