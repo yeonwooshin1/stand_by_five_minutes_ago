@@ -39,6 +39,7 @@ a {
 .titleArea {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 /* 테이블 내 요소 중앙정렬 */

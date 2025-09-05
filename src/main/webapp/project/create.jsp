@@ -5,18 +5,21 @@
     <head>
         <meta charset='utf-8'>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>프로젝트 정보</title>
+        <title>프로젝트 생성</title>
         <!--부트스트랩 CDN CSS-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
         <link rel='stylesheet' href='/CSS/index.css'>
         <link rel='stylesheet' href='/CSS/project/info.css'>
+        <link rel='stylesheet' href='/CSS/project/create.css'>
 
         <!-- 글꼴 Noto Sans -->
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
         </style>
+
+        </script>
     </head>
 
     <body>
@@ -24,14 +27,11 @@
         <!-- header 연결 -->
         <jsp:include page="/header.jsp"></jsp:include>
 
-        <jsp:include page="/project/navigation.jsp"></jsp:include>
-
         <!-- 본문 영역 -->
         <div class="indexContainer">
 
-
             <div class="titleArea">
-                <div class="title1">프로젝트 정보</div>
+                <div class="title1">프로젝트 생성</div>
                 <button type="button" class="btn btn-primary">저장</button>
             </div>
             <div class="ContentBox">
@@ -58,20 +58,21 @@
                                     <input type="date" class="form-control" id="pjendDate">
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="roadAddress " class="form-label"> 도로명 주소</label>
-                                <button class="btn btn-outline-secondary mb-1" type="button">도로명주소 검색</button>
-                                <input type="text" class="form-control" id="roadAddress" disabled>
-                                <label for="detailAddress" class="form-label">상세 주소</label>
-                                <input type="text" class="form-control" id="detailAddress">
-                            </div>
-                            <div class="mb-3">
-                                <label for="projectMemo" class="form-label">메모</label>
-                                <textarea class="form-control" id="projectMemo" rows="3"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">지도</label>
-                                <div class="border p-3 text-center bg-light">[지도 API 영역]</div>
+                            <div class="mb-3 row">
+                                <div class="col">
+                                    <label for="roadAddress " class="form-label"> 도로명 주소</label>
+                                    <button class="btn btn-outline-secondary mb-1" type="button"
+                                        onclick="Postcode()">도로명주소 검색</button>
+                                    <input type="text" class="form-control" id="roadAddress" disabled>
+                                    <label for="detailAddress" class="form-label">상세 주소</label>
+                                    <input type="text" class="form-control" id="detailAddress">
+                                    <label for="projectMemo" class="form-label">메모</label>
+                                    <textarea class="form-control" id="pjMemo" rows="3"></textarea>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label mb-3">지도</label>
+                                    <div class="border mapArea" id="mapArea"> </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -103,8 +104,12 @@
         </div>
 
 
+        <!-- 카카오 우편번호/지도API -->
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1ac4a57d8a5927d34020a891fcdbbcbd&libraries=services"></script>
 
-        <script src="/js/project/info.js"></script>
+        <script src="/js/project/create.js"></script>
         <!-- footer 연결 -->
         <jsp:include page="/footer.jsp"></jsp:include>
 

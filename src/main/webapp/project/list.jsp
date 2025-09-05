@@ -6,7 +6,7 @@
 <head>
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>사이드메뉴</title>
+    <title>프로젝트 목록</title>
     <!--부트스트랩 CDN CSS-->
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
