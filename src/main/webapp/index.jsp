@@ -28,25 +28,9 @@
 
     <!-- 본문 영역 -->
     <div class="indexContainer">
-        <div class="row">
-            <!-- 사이드 메뉴바 영역 -->
-            <div class="side col-2">
-                <jsp:include page="/sideMenu.jsp"></jsp:include>
-            </div>
-            <!-- 본문 작업 영역 -->
-            <div class="mainContent col-10">
-                <div class="title1">제목</div>
-                <div class="ContentBox">
-                    본문 작업 영역!!
-                    <br />
-                    1<br />
-                    2<br />
-                    3<br />
-                    4<br />
+        
+        홈페이지
 
-                </div>
-            </div>
-        </div>
     </div>
 
 
