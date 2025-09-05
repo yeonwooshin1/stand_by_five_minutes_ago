@@ -16,6 +16,7 @@
         crossorigin="anonymous"></script>
 
     <!-- roleTem Css -->
+         <link rel='stylesheet' href='/CSS/index.css'>
     <link rel='stylesheet' href='/CSS/template/roleTemItem.css'>
 
     <!-- jquery 최신버전 -->
@@ -50,7 +51,7 @@
             <!-- 본문 작업 영역 -->
             <div class="mainContent col-10">
                 <div class="contentHeader">
-                    <div class="titleBox">상세 역할 템플릿 관리
+                    <div class="title1 titleBox">상세 역할 템플릿 관리
                         <span></span>
                     </div>
                     <div class="titleBtnBox">

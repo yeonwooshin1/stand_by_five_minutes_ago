@@ -82,7 +82,7 @@ public class PjController { // class start
 
     // [PJ-04] 프로젝트 정보 수정
     @PutMapping
-    public int updatePJInfo(@RequestBody PjDto pjDto, HttpSession session){
+    public int updatePJInfo(@ModelAttribute PjDto pjDto, HttpSession session){
         System.out.println("PjController.updatePJInfo");
         System.out.println("pjDto = " + pjDto);
 

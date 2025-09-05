@@ -56,8 +56,8 @@
                             <div class="mb-3 row">
                                 <div class="col">
                                     <label for="roadAddress " class="form-label"> 도로명 주소</label>
-                                    <button class="btn btn-outline-secondary mb-1" type="button"
-                                        onclick="Postcode()">도로명주소 검색</button>
+                                    <button class="btn btn-outline-secondary btn-sm mb-1" type="button"
+                                        onclick="Postcode()">검색</button>
                                     <input type="text" class="form-control" id="roadAddress" name="roadAddress" readonly style="background-color: #eeeeee">
                                     <!-- disable 처리 시 form으로 정보를 가져오지 못함!! 따라서 읽기모드 readOnly로 처리!! -->
                                     <label for="detailAddress" class="form-label">상세 주소</label>
