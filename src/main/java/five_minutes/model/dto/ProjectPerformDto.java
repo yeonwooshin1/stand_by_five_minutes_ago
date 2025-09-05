@@ -18,4 +18,5 @@ public class ProjectPerformDto {    // class start
     private String pfEnd;       // 종료시간 "HH:mm"
     private int notifyType; // 알림 타입 (1=시작전, 2=시작후 ...)
     private int notifySetMins; // 알림 분 수 (예: 5분 전)
+    private int pfStatus;       // 진행 상태
 }   // class end
