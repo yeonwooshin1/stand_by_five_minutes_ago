@@ -1,6 +1,6 @@
 
 .pg5-layout {
-   min-height: 60dvh;  /* 동적 뷰포트(모바일/주소창 변화 대응) */
+   min-height: 70dvh;  /* 동적 뷰포트(모바일/주소창 변화 대응) */
   display: flex;
   flex-direction: column;
 }

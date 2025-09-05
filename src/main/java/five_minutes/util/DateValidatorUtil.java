@@ -36,7 +36,6 @@ public class DateValidatorUtil {    // class end
         }   // try end
     }   // func end
 
-
     /**
      * 날짜가 현재 이후인지 검사
      * @param date 검사할 날짜 (yyyy-MM-dd)
