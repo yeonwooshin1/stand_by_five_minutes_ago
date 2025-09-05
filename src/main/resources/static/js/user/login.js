@@ -1,6 +1,18 @@
 // 로그인 js 콘솔
 console.log( 'login.js open!');
 
+window.onHeaderReady = () => {
+    loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+};
+
+// [0] 로그인 상태면 project로 이동
+const loginCheck = async () => {
+    if ( userNo != 0) {
+        alert("[경고] 로그인 상태입니다. 프로젝트 관리로 이동합니다.")
+        location.href = "/project/list.jsp"
+    }
+}
+
 // [1] 로그인 , login 
 const login = async() =>{
     

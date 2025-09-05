@@ -1,5 +1,21 @@
 console.log('checkTem XXOK');
 
+window.onHeaderReady = () => {
+    loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+};
+
+// [0] 로그인 체크
+const loginCheck = async () => {
+    console.log("loginCheck func exe")
+    if (userNo == null || userNo === 0) {
+        alert("[경고] 로그인 후 이용가능합니다.")
+        location.href = "/index.jsp"
+    } else if (businessNo == null || businessNo === 0) {
+        alert("[경고] 일반회원은 사용불가능한 메뉴입니다.")
+        location.href = "/index.jsp"
+    }
+}
+
 // [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
 $(document).ready(function () {
     $('#createctDescription').summernote({
@@ -63,9 +79,9 @@ const getCT = async () => {
         const d = await r.json()
         console.log(d)
 
-        if(d.length != 1 || d[0].ctNo !=0 ){ 
-        d.forEach((dto) => {
-            html += `<tr>
+        if (d.length != 1 || d[0].ctNo != 0) {
+            d.forEach((dto) => {
+                html += `<tr>
                     <td>${dto.ctNo}</td>
                     <td><a href="/template/checkTemItem.jsp?ctNo=${dto.ctNo}">${dto.ctName}</a></td>
                     <td>
@@ -80,9 +96,9 @@ const getCT = async () => {
                     <td>${dto.updateDate}</td>
                     <td><button type="button" class="btn btn-danger" onclick="deleteCT(${dto.ctNo})">삭제</button></td>
                 </tr>`
-        });
+            });
         } else {
-             html +=`                            <tr>
+            html += `                            <tr>
                                 <!-- 선택 체크박스는 뺍니다 -->
                                 <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
                             </tr>`

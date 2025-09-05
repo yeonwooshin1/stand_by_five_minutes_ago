@@ -1,5 +1,22 @@
 console.log("list js exe")
 
+
+window.onHeaderReady = () => {
+    loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+};
+
+// [0] 로그인 체크
+const loginCheck = async () => {
+    console.log("loginCheck func exe")
+    console.log(userNo)
+    console.log(businessNo)
+    if (userNo == null || userNo === 0) {
+        alert("[경고] 로그인 후 이용가능합니다.")
+        location.href = "/index.jsp"
+    }
+}
+
+
 // [1] pjList 전체 조회
 const readAllPj = async () => {
     // [1.1] html 표시 영역
@@ -16,7 +33,7 @@ const readAllPj = async () => {
         if (d.length != 0) {
             let i = 1
             d.forEach(pjDto => {
-            html += `<tr>
+                html += `<tr>
                         <td>${i}</td>
                         <td><a href="/project/info.jsp?pjNo=${pjDto.pjNo}">${pjDto.pjName}</td>
                         <td>${pjDto.clientName}</td>
@@ -26,7 +43,7 @@ const readAllPj = async () => {
                         <td>${pjDto.pjEndDate}</td>
                         <td>${pjDto.updateDate}</td>
                     </tr>`
-                    i++
+                i++
             });
         } else {
             html += `<tr>
@@ -39,3 +56,4 @@ const readAllPj = async () => {
     }
 } // func end
 readAllPj()
+

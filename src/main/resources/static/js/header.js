@@ -105,3 +105,10 @@ const initHeader = async () => {
 };
 
 initHeader();
+
+initHeader().then( () => {
+    // header 초기화 후 실행할 함수 등록
+    if (typeof onHeaderReady === "function") {
+        onHeaderReady();
+    }
+});
