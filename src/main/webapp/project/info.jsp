@@ -36,8 +36,8 @@
             </div>
             <div class="ContentBox">
                 <div class="mb-3 text-end text-muted">
-                    <small>생성일 : <span id="createdDate">2024-04-01</span>
-                        | 최근 수정일 : <span id="updateDate">2024-04-10</span></small>
+                    <small>생성일 : <span id="createDate"></span>
+                        | 최근 수정일 : <span id="updateDate"></span></small>
                 </div>
 
                 <div class="card mb-4">
@@ -63,7 +63,8 @@
                                     <label for="roadAddress " class="form-label"> 도로명 주소</label>
                                     <button class="btn btn-outline-secondary mb-1" type="button"
                                         onclick="Postcode()">도로명주소 검색</button>
-                                    <input type="text" class="form-control" id="roadAddress" disabled>
+                                    <input type="text" class="form-control" id="roadAddress" readonly
+                                        style="background-color: #eeeeee;">
                                     <label for="detailAddress" class="form-label">상세 주소</label>
                                     <input type="text" class="form-control" id="detailAddress">
                                     <label for="projectMemo" class="form-label">메모</label>
@@ -87,18 +88,18 @@
                                     <input type="text" class="form-control" id="clientName">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="clientManager" class="form-label">담당자</label>
-                                    <input type="text" class="form-control" id="clientManager">
+                                    <label for="clientRepresent" class="form-label">담당자</label>
+                                    <input type="text" class="form-control" id="clientRepresent">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="clientContact" class="form-label">연락처</label>
-                                    <input type="text" class="form-control" id="clientContact">
+                                    <label for="clientPhone" class="form-label">연락처</label>
+                                    <input type="text" class="form-control" id="clientPhone">
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="mb-3">
-                                    <label for="clientRequest" class="form-label">요청사항</label>
-                                    <textarea class="form-control" id="clientRequest" rows="3"></textarea>
+                                    <label for="clientMemo" class="form-label">요청사항</label>
+                                    <textarea class="form-control" id="clientMemo" rows="3"></textarea>
                                 </div>
                             </div>
                         </form>
@@ -108,8 +109,13 @@
         </div>
 
 
+        <!-- 카카오 우편번호/지도API -->
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1ac4a57d8a5927d34020a891fcdbbcbd&libraries=services"></script>
 
         <script src="/js/project/info.js"></script>
+
         <!-- footer 연결 -->
         <jsp:include page="/footer.jsp"></jsp:include>
 
