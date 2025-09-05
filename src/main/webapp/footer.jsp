@@ -20,7 +20,7 @@
   </div>
 
   <!-- 푸터 -->
-  <footer class="footerBackgroud"> <!-- 기존 클래스 사용 -->
+  <footer class="footerBackgroud sticky-bottom"> <!-- 기존 클래스 사용 -->
     <div class="footer-area">
       <ul class="footerNotice">
         <li><a href="#">서비스 이용약관</a></li><span>|</span>
