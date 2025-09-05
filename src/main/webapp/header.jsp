@@ -19,7 +19,9 @@
 
     <div class="headerContainer">
         <div class="header-inner row">
-            <img class="logoImg col-2" src="/img/logo.png">
+            <a href="/project/list.jsp" class="col imgBox">
+                <img class="logoImg" src="/img/logo.png">
+            </a>
             <div class="menu-area col-6">
                 <ul class="main-menu">
                     <!-- 관리자 메뉴 -->

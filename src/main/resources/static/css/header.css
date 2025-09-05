@@ -20,9 +20,8 @@
     align-items: center;
 }
 
-.logo {
-    min-height: 100px;
-    max-height: 110px;
+.logoImg {
+    max-height: 50px;
     object-fit: cover;
     font-weight: bold;
 }

@@ -50,7 +50,7 @@
             <!-- 본문 작업 영역 -->
             <div class="mainContent col-10">
                 <div class="contentHeader">
-                    <div class="title1">상세 체크리스트 템플릿 관리
+                    <div class="title1 titleBox">상세 체크리스트 템플릿 관리
                         <span></span>
                     </div>
                     <div class="titleBtnBox">

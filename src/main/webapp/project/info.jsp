@@ -66,7 +66,7 @@
                             <div class="mb-3 row">
                                 <div class="col">
                                     <label for="roadAddress " class="form-label"> 도로명 주소</label>
-                                    <button class="btn btn-outline-secondary mb-1" type="button"
+                                    <button class="btn btn-outline-secondary mb-1 btn-sm" type="button"
                                         onclick="Postcode()">도로명주소 검색</button>
                                     <input type="text" class="form-control" id="roadAddress" readonly
                                         style="background-color: #eeeeee;">
