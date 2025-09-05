@@ -5,10 +5,16 @@ import five_minutes.service.PjService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+///  **info** ================
+///
+/// 프로젝트 정보를 처리하는 컨트를러
+///
+/// @author yeonwooshin1
+/// @author OngTk
 
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
@@ -18,9 +24,11 @@ public class PjController { // class start
     // PjService 의존성 주입
     private final PjService pjService;
 
-    // 프로젝트 info 생성
+    // [PJ-01] 프로젝트 info 생성
     @PostMapping("/info")
     public int createProjectInfo(@RequestBody PjDto pjDto , HttpSession httpSession ) {
+        System.out.println("PjController.createProjectInfo");
+        System.out.println("pjDto = " + pjDto + ", httpSession = " + httpSession);
 
         // 세션 확인해서 null 이면 애초에 비로그인이니까 세션 없음 반환
         if( httpSession == null || httpSession.getAttribute("loginBnNo")== null ){
@@ -29,9 +37,37 @@ public class PjController { // class start
 
         // bnNo 를 가져온다.
         String bnNo = (String) httpSession.getAttribute("loginBnNo");
+        pjDto.setBnNo(bnNo);
 
         // 서비스 호출 후 값을 보낸다.
         return pjService.createProjectInfo( pjDto , bnNo );
 
     }   // func end
+
+    // [PJ-02] 프로젝트 정보 전체 조회
+    @GetMapping("/info")
+    public List<PjDto> getPJinfo(HttpSession session) {
+        System.out.println("PjController.getPJinfo");
+        System.out.println("PjController.getPJinfo");
+
+        // [02-1] session에서 로그인정보와 사업자번호 존재 여부 확인
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
+            return null;
+        }
+        // [02-2] session에서 사업자번호를 추출
+        Object loginBnNo = session.getAttribute("loginBnNo");
+        String bnNo = (String) loginBnNo;
+
+        // [02-4] pjService 의 readAll 매소드 실행
+        return pjService.readAll(bnNo);
+    } // func end
+
+    // [PJ-03]
+
+    // [PJ-04]
+
+    // [PJ-05]
+
+
+
 }   // class end
