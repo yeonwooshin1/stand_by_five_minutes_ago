@@ -18,5 +18,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class DashboardDto {
+    private String zz;
 
 } // class end
