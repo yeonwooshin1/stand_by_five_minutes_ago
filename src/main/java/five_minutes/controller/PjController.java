@@ -19,14 +19,14 @@ import java.util.List;
 
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
-@RequestMapping("/project")
+@RequestMapping("/project/info")
 public class PjController { // class start
 
     // PjService 의존성 주입
     private final PjService pjService;
 
     // [PJ-01] 프로젝트 info 생성
-    @PostMapping("/info")
+    @PostMapping
     public int createProjectInfo(@RequestBody PjDto pjDto , HttpSession httpSession ) {
         System.out.println("PjController.createProjectInfo");
         System.out.println("pjDto = " + pjDto + ", httpSession = " + httpSession);
@@ -46,7 +46,7 @@ public class PjController { // class start
     }   // func end
 
     // [PJ-02] 프로젝트 정보 전체 조회
-    @GetMapping("/info")
+    @GetMapping
     public List<PjDto> getPJinfo(HttpSession session) {
         System.out.println("PjController.getPJinfo");
         System.out.println("PjController.getPJinfo");
@@ -64,7 +64,7 @@ public class PjController { // class start
     } // func end
 
     // [PJ-03] 프로젝트 개별 조회
-    @GetMapping("/info/indi")
+    @GetMapping("/indi")
     public PjDto getIndiPjInfo(@RequestParam int pjNo, HttpSession session){
         PjDto pjDto = new PjDto();
         // [03-1] session에서 로그인정보와 사업자번호 존재 여부 확인
@@ -81,7 +81,7 @@ public class PjController { // class start
     } // func end
 
     // [PJ-04] 프로젝트 정보 수정
-    @PutMapping("/info")
+    @PutMapping
     public int updatePJInfo(@RequestBody PjDto pjDto, HttpSession session){
         System.out.println("PjController.updatePJInfo");
         System.out.println("pjDto = " + pjDto);
@@ -100,7 +100,21 @@ public class PjController { // class start
     } // func end
 
     // [PJ-05]
+    @DeleteMapping
+    public int deletePJInfo(@RequestParam int pjNo, HttpSession session){
+        System.out.println("PjController.deletePJInfo");
+        System.out.println("pjNo = " + pjNo + ", session = " + session);
+        // [05-1] session 에서 로그인 정보 조회
+        if( session.getAttribute("loginUserNo") == null ||
+                session.getAttribute("loginBnNo") == null ){
+            return 0;
+        }
+        // [05-2] session에서 사업자번호 추출
+        String bnNo =  (String)session.getAttribute("loginBnNo");
 
+        // [05-3] service 로 전달
+        return pjService.delete(pjNo, bnNo);
 
+    } // func end
 
 }   // class end

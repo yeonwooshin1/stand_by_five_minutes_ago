@@ -147,12 +147,17 @@ public class PjDao extends Dao implements CommonRepository<PjDto, Integer, Strin
 
     // 삭제(비활성화)
     @Override
-    public int delete(Integer integer, String s) {
+    public int delete(Integer pjNo, String bnNo) {
         try{
-            String sql = "";
+            String sql = "update ProjectInfo set pjStatus = 0 where pjNo=? and bnno=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, pjNo);
+            ps.setString(2, bnNo);
+            int count = ps.executeUpdate();
+            if(count == 1 ) return pjNo;
         } catch (Exception e) {
             System.out.println("PjDao.delete " + e);
         }
-        return 0;
+        return -1; // 조회정보 없음
     }
 }   // class end
