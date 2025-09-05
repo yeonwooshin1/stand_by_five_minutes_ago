@@ -25,8 +25,8 @@ const readPJinfo = async () => {
     const pjName = document.querySelector("#pjName");
     const createDate = document.querySelector("#createDate");
     const updateDate = document.querySelector("#updateDate");
-    const pjstartDate = document.querySelector("#pjstartDate");
-    const pjendDate = document.querySelector("#pjendDate");
+    const pjStartDate = document.querySelector("#pjStartDate");
+    const pjEndDate = document.querySelector("#pjEndDate");
     const roadAddress = document.querySelector("#roadAddress");
     const detailAddress = document.querySelector("#detailAddress");
     const pjMemo = document.querySelector("#pjMemo");
@@ -45,8 +45,8 @@ const readPJinfo = async () => {
         pjName.value = d.pjName
         createDate.innerHTML = d.createDate
         updateDate.innerHTML = d.updateDate
-        pjstartDate.value = d.pjStartDate
-        pjendDate.value = d.pjEndDate
+        pjStartDate.value = d.pjStartDate
+        pjEndDate.value = d.pjEndDate
         roadAddress.value = d.roadAddress
         detailAddress.value = d.detailAddress
         pjMemo.value = d.pjMemo
@@ -57,9 +57,6 @@ const readPJinfo = async () => {
 
         // [2.4] 카카오맵 마커표시 
         geocoder.addressSearch(d.roadAddress, function (results, status) {
-            console.log(d.roadAddress)
-            console.log(results)
-            console.log(status)
             if (status === daum.maps.services.Status.OK) {
                 const result = results[0];
                 const coords = new daum.maps.LatLng(result.y, result.x);
@@ -101,8 +98,59 @@ function Postcode() {
             });
         }
     }).open();
-}
+} // func end
 
 // [4] 저장 - 수정
+const updatePJInfo = async () => {
+    console.log("updatePJInfo func exe")
+
+    // [4.1] PJ 정보를 가진 form 가져오기
+    const PJinfoForm = document.querySelector('#pjForm')
+    const createDate = document.querySelector("#createDate").innerHTML
+
+    // [4.2] FormData를 multipart form으로 변환
+    const pjFormData = new FormData(PJinfoForm);
+    pjFormData.append("pjNo", pjNo)
+    pjFormData.append("createDate", createDate)
+    pjFormData.append("pjStatus", 1)
+
+    try {
+        const opt = { method: "PUT", body: pjFormData };
+        const r = await fetch(`/project/info`, opt)
+        const d = await r.json()
+        console.log(d)
+
+        if (d > 0) {
+            alert("프로젝트 수정 성공")
+            readPJinfo()
+        } else {
+            alert("프로젝트 수정 실패")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+} // func end
 
 // [5] 삭제 - 비활성화
+const deletePJInfo = async () => {
+    // [5.1] 사용자 확인
+
+    let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. \n정말로 삭제하시겠습니까?`)
+    if (result == false) { return }
+
+    try {
+        // [5.2] fetch
+        const opt = { mehtod: "DELETE" }
+        const r = await fetch(`/project/info?pjNo=${pjNo}`, opt)
+        const d = r.json()
+        console.log(d)
+        if (d > 0) {
+            alert("프로젝트 삭제 성공")
+            location.href = "/project/list.jsp"
+        } else {
+            alert("프로젝트 삭제 실패")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+} // func end
