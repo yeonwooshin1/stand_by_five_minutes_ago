@@ -24,7 +24,7 @@ public class PjService extends AbstractService<PjDto, Integer, String> {    // c
     private final PjDao pjDao;
 
     // 프로젝트 info 서비스
-    public int createProjectInfo(PjDto pjDto , String bnNo ) {
+    public int createProjectInfo(PjDto pjDto) {
 
         // 유효성 검사해야 할 날짜만 getter
         String pjStartDate = pjDto.getPjStartDate();
@@ -37,6 +37,20 @@ public class PjService extends AbstractService<PjDto, Integer, String> {    // c
         // pjDao 생성 메소드 실행 및 결과 반환
         return pjDao.create(pjDto);
     }   // func end
+
+    // [4] 프로젝트 update 서비스
+    public int updatePJInfo(PjDto pjDto){
+        // 유효성 검사해야 할 날짜만 getter
+        String pjStartDate = pjDto.getPjStartDate();
+        String pjEndDate = pjDto.getPjEndDate();
+
+        // 시작날짜가 종료날짜보다 늦을 시 -2 반환.
+        // DateValidatorUtil 클래스 사용 (util 패키지)
+        if( !DateValidatorUtil.isValidRange( pjStartDate , pjEndDate) ) return -2;
+
+        // pjDao 생성 메소드 실행 및 결과 반환
+        return pjDao.update(pjDto);
+    }// func end
 
     // 기본 CRUD를 위해 추상메소드 override
     @Override

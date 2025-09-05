@@ -127,14 +127,23 @@ public class PjDao extends Dao implements CommonRepository<PjDto, Integer, Strin
 
     // 수정
     @Override
-    public int update(PjDto dto) {
+    public int update(PjDto pjDto) {
         try{
-            String sql = "";
+            String sql = "update ProjectInfo set pjName=?,pjMemo=?,pjStartDate=?,pjEndDate=?,roadAddress=?,detailAddress=?,clientName=?,clientPhone=?,clientMemo=?,clientRepresent=? where pjNo=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString( 1 , pjDto.getPjName() );     ps.setString( 2 , pjDto.getPjMemo() );
+            ps.setString( 3 , pjDto.getPjStartDate() );   ps.setString( 4, pjDto.getPjEndDate() );
+            ps.setString( 5 , pjDto.getRoadAddress() );   ps.setString( 6, pjDto.getDetailAddress() );
+            ps.setString( 7 , pjDto.getClientName() );   ps.setString( 8, pjDto.getClientPhone() );
+            ps.setString( 9 , pjDto.getClientMemo() );   ps.setString(10 , pjDto.getClientRepresent());
+            ps.setInt(11,pjDto.getPjNo());
+            int count = ps.executeUpdate();
+            if(count == 1) return pjDto.getPjNo();
         } catch (Exception e) {
             System.out.println("PjDao.update " + e);
         }
-        return 0;
-    }
+        return -1; // 조회정보 없음
+    } // func end
 
     // 삭제(비활성화)
     @Override

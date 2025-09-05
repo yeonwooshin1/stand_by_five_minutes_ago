@@ -13,4 +13,6 @@ update RoleTemplateItem set rtiName = "testtest", rtiDescription = "testtesttest
 update RoleTemplateItem set rtiStatus = 1 where rtiNo = 3000047;
 
 select * from ProjectInfo where bnNo = "100-00-00001" and pjStatus = 1;
-select * from ProjectInfo where
+select * from ProjectInfo where pjNo = 6000001 and bnNo = "100-00-00001" ;
+
+update ProjectInfo set pjName="test", pjMemo="test", pjStartDate=null, pjEndDate=null, roadAddress=null, detailAddres=null, clientName=null, clientPhone=null, clientMemo=null clientRepresent where pjNo = 6000011;

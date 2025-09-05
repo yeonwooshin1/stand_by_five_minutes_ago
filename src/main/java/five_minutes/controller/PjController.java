@@ -5,6 +5,7 @@ import five_minutes.service.PjService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class PjController { // class start
         pjDto.setBnNo(bnNo);
 
         // 서비스 호출 후 값을 보낸다.
-        return pjService.createProjectInfo( pjDto , bnNo );
+        return pjService.createProjectInfo( pjDto );
 
     }   // func end
 
@@ -63,7 +64,7 @@ public class PjController { // class start
     } // func end
 
     // [PJ-03] 프로젝트 개별 조회
-    @GetMapping("info/indi")
+    @GetMapping("/info/indi")
     public PjDto getIndiPjInfo(@RequestParam int pjNo, HttpSession session){
         PjDto pjDto = new PjDto();
         // [03-1] session에서 로그인정보와 사업자번호 존재 여부 확인
@@ -72,14 +73,31 @@ public class PjController { // class start
             pjDto.setPjNo(0); // 로그인 정보 없음
             return pjDto;
         }
-        // [03-2] session에서 사업자번호 추추러
+        // [03-2] session에서 사업자번호 추출
         String bnNo =  (String)session.getAttribute("loginBnNo");
         
-        // [03-2] pjService read 메소드 실행
+        // [03-3] pjService read 메소드 실행
         return pjService.read(pjNo, bnNo);
     } // func end
 
-    // [PJ-04]
+    // [PJ-04] 프로젝트 정보 수정
+    @PutMapping("/info")
+    public int updatePJInfo(@RequestBody PjDto pjDto, HttpSession session){
+        System.out.println("PjController.updatePJInfo");
+        System.out.println("pjDto = " + pjDto);
+
+        // [04-1] session 에서 로그인 정보 조회
+        if( session.getAttribute("loginUserNo") == null ||
+                session.getAttribute("loginBnNo") == null ){
+            return 0;
+        }
+        // [04-2] session에서 사업자번호 추출
+        String bnNo =  (String)session.getAttribute("loginBnNo");
+        pjDto.setBnNo(bnNo);
+
+        // [04-3] pjService update 메소드 실행
+        return pjService.updatePJInfo(pjDto);
+    } // func end
 
     // [PJ-05]
 
