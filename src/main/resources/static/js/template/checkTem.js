@@ -63,6 +63,7 @@ const getCT = async () => {
         const d = await r.json()
         console.log(d)
 
+        if(d.length != 1 || d[0].ctNo !=0 ){ 
         d.forEach((dto) => {
             html += `<tr>
                     <td>${dto.ctNo}</td>
@@ -80,6 +81,12 @@ const getCT = async () => {
                     <td><button type="button" class="btn btn-danger" onclick="deleteCT(${dto.ctNo})">삭제</button></td>
                 </tr>`
         });
+        } else {
+             html +=`                            <tr>
+                                <!-- 선택 체크박스는 뺍니다 -->
+                                <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
+                            </tr>`
+        }
 
         // [2.3] 화면 표시
         checkTemplateTbody.innerHTML = html;
