@@ -14,9 +14,31 @@
 
     <link rel='stylesheet' href='/CSS/index.css'>
 
-    <!-- 글꼴 Noto Sans -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+        /* 모달(1050)보다 한단계 높은 z-index */
+        .postcode-layer {
+            position: fixed;
+            z-index: 1060;
+            top: 50%;
+            left: 50%;
+            width: 360px;
+            height: 420px;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: .5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
+            overflow: hidden;
+            display: none;
+        }
+
+        /* 글꼴 Noto Sans */
+        @media (min-width: 576px) {
+            .postcode-layer {
+                width: 480px;
+                height: 520px;
+            }
+        }
     </style>
 </head>
 
@@ -180,15 +202,21 @@
                                             <input type="text" class="form-control" id="userEditPhone"
                                                 placeholder="010-0000-0000" />
                                         </div>
+                                        <!-- [교체] 도로명 주소 입력 + 검색버튼 -->
                                         <div class="col-12">
                                             <label class="form-label">도로명 주소</label>
-                                            <input type="text" class="form-control" id="userEditRoad"
-                                                placeholder="도로명 주소" />
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="userEditRoad"
+                                                    placeholder="도로명 주소" readonly>
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    id="btn-find-postcode">주소검색</button>
+                                            </div>
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label">상세 주소</label>
                                             <input type="text" class="form-control" id="userEditDetail"
                                                 placeholder="상세 주소" />
+                                            <div id="postcodeLayer" class="postcode-layer"></div>
                                         </div>
                                     </form>
                                     <div id="userEditError" class="alert alert-danger py-2 px-3 d-none mt-2"
@@ -336,6 +364,7 @@
     <jsp:include page="/footer.jsp"></jsp:include>
 
     <!--부트스트랩 CDN JS-->
+    <script defer src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
