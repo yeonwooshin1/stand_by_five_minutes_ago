@@ -125,7 +125,7 @@ public class PjCheckController {
         4. 두 데이터를 조합해 PjCheckDto에 추가한다.
         * CTemDto_CTItemDto 스네이크 형식으로 데이터를 묶어 저장한다.
      */
-    @PostMapping("")
+    @PostMapping("/tem")
     public int loadPJCheckTem(CTemDto cTemDto , CTItemDto ctItemDto){
         return pjCheckService.loadPJCheckTem(cTemDto, ctItemDto);
     }
