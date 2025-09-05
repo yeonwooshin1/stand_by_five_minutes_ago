@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html ; charset=utf-8" pageEncoding="UTF-8" %>
+
     <!DOCTYPE html>
     <html>
 
@@ -32,7 +33,11 @@
 
             <div class="titleArea">
                 <div class="title1">프로젝트 정보</div>
-                <button type="button" class="btn btn-primary">저장</button>
+                <div>
+                    <button type="button" class="btn btn-primary">저장</button>
+                    <button type="button" class="btn btn-primary">다음</button>
+                    <button type="button" class="btn btn-danger">삭제</button>
+                </div>
             </div>
             <div class="ContentBox">
                 <div class="mb-3 text-end text-muted">

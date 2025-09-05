@@ -48,3 +48,11 @@ a {
   color: #6c757d;            /* 회색 텍스트 */
   opacity: .9;
 }
+
+/* 상단 제목과 버튼을 양쪽 끝으로 배치 */
+.titleArea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0;
+}
