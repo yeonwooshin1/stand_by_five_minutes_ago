@@ -1,6 +1,7 @@
 package five_minutes.model.dao;
 
 import five_minutes.model.dto.CTItemDto;
+import five_minutes.model.dto.CTemDto;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;

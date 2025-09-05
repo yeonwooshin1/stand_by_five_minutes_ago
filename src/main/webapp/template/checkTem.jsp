@@ -61,7 +61,8 @@
 
                 <div class="ContentBox">
                     <!-- 체크리스트 템플릿 대분류를 표시 / checkTemplate table-->
-                    <table class="table table-striped table-hover checkTemplateThead"> <!-- table class="checkTemplateThead"으로 변경 -->
+                    <table class="table table-striped table-hover checkTemplateThead">
+                        <!-- table class="checkTemplateThead"으로 변경 -->
                         <thead>
                             <tr> <!-- 선택 체크박스는 뺍니다 -->
                                 <th> 번호 </th>
@@ -75,16 +76,7 @@
                         <tbody class="checkTemplateTbody"> <!-- class="checkTemplateTbody" 으로 변경 -->
                             <tr>
                                 <!-- 선택 체크박스는 뺍니다 -->
-                                <td>1</td>
-                                <td>출근확인</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#reviewCheckTem">미리보기</button> <!-- 개별항목 미리보기 #reviewCheckTem으로 변경 -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#updateCheckTem">수정하기</button> <!-- 수정 #updateCheckTem으로 변경 -->
-                                </td>
-                                <td>2025-06-07 08:38:54</td>
-                                <td>2025-06-07 08:38:54</td>
+                                <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -108,12 +100,13 @@
                     </div>
                     <div>
                         <label for="recipient-name" class="col-form-label modalMiddleTitle">체크리스트 템플릿 설명</label>
-                        <textarea class="ctDescription" id="createctDescription" name="editordata"></textarea> <!-- class="ctDescription" id="createctDescription" -->
+                        <textarea class="ctDescription" id="createctDescription" name="editordata"></textarea>
+                        <!-- class="ctDescription" id="createctDescription" -->
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" onclick="createCT()" 
+                    <button type="button" class="btn btn-primary" onclick="createCT()"
                         data-bs-dismiss="modal">저장</button> <!-- onclick="createCT()" 으로 변경 -->
                 </div>
             </div>
@@ -145,7 +138,7 @@
         </div>
     </div>
 
-    <!-- Name / content 수정하기 모달 -->  <!-- id="updateCheckTem" -->
+    <!-- Name / content 수정하기 모달 --> <!-- id="updateCheckTem" -->
     <div class="modal fade" id="updateCheckTem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
