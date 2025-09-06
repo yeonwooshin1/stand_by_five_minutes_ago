@@ -22,7 +22,7 @@ public class PjCheckDto {
     private int pjChkItemNo;
     private int pjNo;
     private String pjChklTitle;
-    private String pjhelpText;
+    private String pjHelpText;
     private int pjChkIStatus;
     private String createDate;
     private String updateDate;

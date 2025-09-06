@@ -5,6 +5,11 @@ import five_minutes.model.dto.CTemDto;
 import five_minutes.model.dto.PjCheckDto;
 import org.springframework.stereotype.Repository;
 
+import javax.xml.transform.Result;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +27,20 @@ import java.util.List;
 public class PjCheckDao extends Dao {
 
     // [*] pjNo(프로젝트PK)이 로그인한 사용자의 bnNo(세션)인지 확인
+    // 프로젝트 체크리스트 테이블로 확인할 경우 중복 생길 수 있으니, 프로젝트인포에서 세션 확인
     public boolean checkPjNo(int pjNo , String bnNo){
-
+        try{
+            String sql = "SELECT COUNT(*) FROM ProjectInfo WHERE pjNo = ? AND bnNo = ? ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, pjNo);
+            ps.setString(2, bnNo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                return rs.getInt(1)> 0; // 프로젝트 체크리스트 테이블에 레코드를 등록하려면 pjNo가 1개 이상 있어야함
+            } rs.close();           // 데이터 누수 방지
+        } catch (SQLException e){ // SQL문 예외처리
+            e.printStackTrace(); // 예외처리 출력
+        }
         return false;
     }
 
@@ -35,9 +52,22 @@ public class PjCheckDao extends Dao {
         3. 세션에서 bnNo를 확인 한다.
         4. 프로젝트 체크리스트 DB에 저장한다.
      */
-
     public int createPJCheck(PjCheckDto pjCheckDto) {
-
+        try{
+            String sql = "insert into PjChecklistItem ( pjNo , pjChklTitle , pjHelpText ) values ( ? , ? , ? ) ";
+            PreparedStatement ps = conn.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, pjCheckDto.getPjNo());
+            ps.setString(2, pjCheckDto.getPjChklTitle());
+            ps.setString(3, pjCheckDto.getPjhelpText());
+            if( ps.executeUpdate() == 1 ) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1); // pjChkItemNo 반환
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } // catch end
         return 0;
     }
 
@@ -51,6 +81,24 @@ public class PjCheckDao extends Dao {
 
     public List<PjCheckDto> getPJCheck(int pjNo){
         List<PjCheckDto> list = new ArrayList<>();
+        try{
+            String sql = "select * from PjChecklistItem where pjChkIStatus != 0 and pjNo = ? ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, pjNo);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                PjCheckDto pjCheckDto = new PjCheckDto();
+                pjCheckDto.setPjChkItemNo(rs.getInt("pjChkItemNo"));
+                pjCheckDto.setPjNo(rs.getInt("pjNo"));
+                pjCheckDto.setPjChklTitle(rs.getString("pjChklTitle"));
+                pjCheckDto.setPjHelpText(rs.getString("pjHelpText"));
+                pjCheckDto.setPjChkIStatus(rs.getInt("pjChkIStatus"));
+            }
+
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
         return list;
     }
 
