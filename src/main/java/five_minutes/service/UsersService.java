@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -182,5 +183,13 @@ public class UsersService { // class start
         return token;
     } // func end
 
+    // [US-07] 사용자 정보 조회(검색)
+    // @author OngTK
+    // pjWorker 단에서 인력정보 검색을 위하여 생성
+    // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
+    // todo OngTK 사용자 정보 조회(검색)
+    public List<UsersDto> readUserInfo() {
+        return null;
+    } // func end
 
 }   // class end

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
 @Repository     // Dao 어노테이션
 public class UsersDao extends Dao { // class start
@@ -144,5 +145,19 @@ public class UsersDao extends Dao { // class start
         // 없다면 0 반환
         return 0;
     }   // func end
+
+    // [US-07] 사용자 정보 조회(검색)
+    // @author OngTK
+    // pjWorker 단에서 인력정보 검색을 위하여 생성
+    // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
+    // todo OngTK 사용자 정보 조회(검색)
+    public List<UsersDto> readUserInfo() {
+        try{
+
+        }catch (Exception e ){
+            System.out.println("UsersDao.readUserInfo " +e);
+        }
+        return null;
+    } // func end
 
 }   // class end
