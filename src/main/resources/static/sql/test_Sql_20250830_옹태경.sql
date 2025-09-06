@@ -22,4 +22,4 @@ update ProjectInfo set pjStatus = "1" where pjNo = 6000011 and bnno = "100-00-00
 
 select * from projectInfo;
 select * from pjworker;
-select projectInfo.*, pjworker.userNo from ProjectInfo inner join pjworker on ProjectInfo.pjno = pjworker.pjno;
+select p.*, w.userNo from ProjectInfo p inner join pjworker w on p.pjno = w.pjno where userNo = 1000008;
