@@ -156,9 +156,8 @@ const deletePJInfo = async () => {
 
     try {
         // [5.2] fetch
-        const opt = { mehtod: "DELETE" }
-        const r = await fetch(`/project/info?pjNo=${pjNo}`, opt)
-        const d = r.json()
+        const r = await fetch(`/project/info?pjNo=${pjNo}`,{ method: "DELETE" })
+        const d = await r.json()
         console.log(d)
         if (d > 0) {
             alert("프로젝트 삭제 성공")
