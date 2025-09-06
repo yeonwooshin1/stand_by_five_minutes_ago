@@ -183,7 +183,7 @@ INSERT INTO pjWorker ( pjRoleName, pjRoleLv, pjRoleDescription, pjRoleStatus, cr
 ('풍선삐에로', 3, '풍선삐에로 역할을 수행하며 삐에로 관련 업무를 담당합니다.', 1, '2025-06-01 12:00:00', '2025-06-01 12:00:00', 1000008, 6000010),
 ('좌석안내', 3, '좌석안내 역할을 수행하며 안내 관련 업무를 담당합니다.', 1, '2025-06-01 12:00:00', '2025-06-01 12:00:00', 1000001, 6000010);
 
-INSERT INTO PjChecklistItem (pjChkItemNo, pjNo, pjChklTitle, pjhelpText, pjChkIStatus, createDate, updateDate) VALUES
+INSERT INTO PjChecklistItem (pjChkItemNo, pjNo, pjChklTitle, pjHelpText, pjChkIStatus, createDate, updateDate) VALUES
 (8000001, 6000001, '출근확인 세부업무 1', '출근확인 수행을 위한 세부 작업 1', 3, '2025-06-01 14:00:00', '2025-06-06 10:00:00'),
 (8000002, 6000001, '출근확인 세부업무 2', '출근확인 수행을 위한 세부 작업 2', 3, '2025-06-01 14:00:00', '2025-06-06 10:00:00'),
 (8000003, 6000001, '출근확인 세부업무 3', '출근확인 수행을 위한 세부 작업 3', 3, '2025-06-01 14:00:00', '2025-06-06 10:00:00'),
@@ -270,3 +270,14 @@ select * from pjWorker;
 select * from PjChecklistItem;
 select * from pjPerform;
 select * from pjPerformFile;
+
+select pi.bnNo from PjChecklistItem pc inner join ProjectInfo pi on pc.pjNo = pi.pjNo;
+SELECT COUNT(*) 
+FROM ProjectInfo
+WHERE pjNo = ? AND bnNo = ?;
+SELECT COUNT(*) 
+FROM PjChecklistItem pc
+INNER JOIN ProjectInfo pi ON pc.pjNo = pi.pjNo;
+
+insert into PjChecklistItem ( pjNo, pjChklTitle , pjHelpText ) values ( 6000001, "ㅎㅎ" , "ㅋㅋ" );
+select * from PjChecklistItem where pjChkIStatus != 0 and pjNo = 6000001;

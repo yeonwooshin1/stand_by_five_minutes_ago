@@ -197,7 +197,7 @@ CREATE TABLE PjChecklistItem (
   pjChkItemNo    	 	INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,     	 		-- 체크리스트 아이템 번호 PK
   pjNo	 				INT UNSIGNED NOT NULL,                					-- 프로젝트명
   pjchklTitle 			VARCHAR(200) NOT NULL,                           		-- 체크리스트 제목
-  pjhelpText			longtext,												-- 체크리스트 설명					
+  pjHelpText			longtext,												-- 체크리스트 설명
   pjChkIStatus			TINYINT NOT NULL DEFAULT 1,								-- 상태 		
   createDate  			DATETIME NOT NULL DEFAULT NOW(),						-- 생성 날짜
   updateDate 			DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),		-- 변경 날짜 -> 변경시점이랑 템플릿에서 변경된 거랑 업데이트 하려고
