@@ -1,5 +1,4 @@
 
-
 /*카드 헤더*/
 .card-header{
     font-size: 1rem;
@@ -7,6 +6,6 @@
 }
 
 .mapArea{
-    min-height: 14rem;
+    min-height: 16.12rem;
     border-radius: 0.5rem;
 }

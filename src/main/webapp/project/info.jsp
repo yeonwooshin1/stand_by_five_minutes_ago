@@ -62,20 +62,26 @@
                                     <input type="date" class="form-control" id="pjEndDate" name="pjEndDate">
                                 </div>
                             </div>
-                            <div class="mb-3 row">
+                            <div class="row">
                                 <div class="col">
-                                    <label for="roadAddress " class="form-label"> 도로명 주소</label>
-                                    <button class="btn btn-outline-secondary mb-1 btn-sm" type="button" 
-                                        onclick="Postcode()">검색</button>
-                                    <input type="text" class="form-control" id="roadAddress"  name="roadAddress" readonly
-                                        style="background-color: #eeeeee;">
-                                    <label for="detailAddress" class="form-label">상세 주소</label>
-                                    <input type="text" class="form-control" id="detailAddress" name="detailAddress">
-                                    <label for="projectMemo" class="form-label">메모</label>
-                                    <textarea class="form-control" id="pjMemo" rows="3" name="pjMemo"></textarea>
+                                    <div class="mb-3">
+                                        <label for="roadAddress " class="form-label"> 도로명 주소</label>
+                                        <button class="btn btn-outline-secondary mb-1 btn-sm" type="button"
+                                            onclick="Postcode()">검색</button>
+                                        <input type="text" class="form-control" id="roadAddress" name="roadAddress"
+                                            readonly style="background-color: #eeeeee;">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="detailAddress" class="form-label">상세 주소</label>
+                                        <input type="text" class="form-control" id="detailAddress" name="detailAddress">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="projectMemo" class="form-label">메모</label>
+                                        <textarea class="form-control" id="pjMemo" rows="3" name="pjMemo"></textarea>
+                                    </div>
                                 </div>
                                 <div class="col">
-                                    <label class="form-label mb-3">지도</label>
+                                    <label class="form-label mb-2">지도</label>
                                     <div class="border mapArea" id="mapArea"> </div>
                                 </div>
                             </div>
