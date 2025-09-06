@@ -5,8 +5,11 @@ import five_minutes.model.dao.PjDao;
 import five_minutes.model.dto.PjDto;
 
 import five_minutes.util.DateValidatorUtil;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 ///  **info** ================
 ///
@@ -57,5 +60,10 @@ public class PjService extends AbstractService<PjDto, Integer, String> {    // c
     protected CommonRepository<PjDto, Integer, String> getDao() {
         return pjDao;
     }
+
+    // [PJ-06] 프로젝트 전체 조회 - 일반사용자
+    public List<PjDto> getUserPJinfo(int userNo) {
+        return pjDao.getUserPJinfo(userNo);
+    } //func end
 
 }   // class end
