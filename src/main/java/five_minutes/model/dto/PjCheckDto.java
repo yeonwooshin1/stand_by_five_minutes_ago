@@ -38,5 +38,7 @@ public class PjCheckDto {
     private int ctiNo;
     private String ctiTitle;
     private String ctiHelpText;
+    // [3] 두 테이블의 이름_제목 합친 멤버변수
+    private String pjCheckTitle;
 
 } // class end

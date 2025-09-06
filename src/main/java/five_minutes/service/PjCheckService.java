@@ -88,8 +88,8 @@ public class PjCheckService {
         2. 세션에서 bnNo(고용자번호/작성자번호)를 확인한다.
         3. pjChkIStatus(상태)를 0으로 변경한다.
      */
-    public int deletePJCheck(int pjNo , int pjChkItemNo){
-        return pjCheckDao.deletePJCheck(pjNo, pjChkItemNo);
+    public int deletePJCheck(int pjChkItemNo){
+        return pjCheckDao.deletePJCheck(pjChkItemNo);
     }
 
     // [6] 프로젝트 체크리스트 템플릿 전체조회 - 대분류
@@ -124,8 +124,9 @@ public class PjCheckService {
         4. 두 데이터를 조합해 PjCheckDto에 추가한다.
         * CTemDto_CTItemDto 스네이크 형식으로 데이터를 묶어 저장한다.
      */
-    public int loadPJCheckTem(CTemDto cTemDto , CTItemDto ctItemDto){
-        return pjCheckDao.loadPJCheckTem(cTemDto, ctItemDto);
+    public int loadPJCheckTem(PjCheckDto pjCheckDto){
+
+        return pjCheckDao.loadPJCheckTem(pjCheckDto);
     }
 
 }

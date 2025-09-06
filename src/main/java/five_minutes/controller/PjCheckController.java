@@ -87,8 +87,8 @@ public class PjCheckController {
         3. pjChkIStatus(상태)를 0으로 변경한다.
      */
     @DeleteMapping("")
-    public int deletePJCheck(int pjNo , int pjChkItemNo){
-        return pjCheckService.deletePJCheck(pjNo, pjChkItemNo);
+    public int deletePJCheck(int pjChkItemNo){
+        return pjCheckService.deletePJCheck(pjChkItemNo);
     }
 
     // [6] 프로젝트 체크리스트 템플릿 전체조회 - 대분류
@@ -126,8 +126,8 @@ public class PjCheckController {
         * CTemDto_CTItemDto 스네이크 형식으로 데이터를 묶어 저장한다.
      */
     @PostMapping("/tem")
-    public int loadPJCheckTem(CTemDto cTemDto , CTItemDto ctItemDto){
-        return pjCheckService.loadPJCheckTem(cTemDto, ctItemDto);
+    public int loadPJCheckTem(PjCheckDto pjCheckDto){
+        return pjCheckService.loadPJCheckTem(pjCheckDto);
     }
 
 

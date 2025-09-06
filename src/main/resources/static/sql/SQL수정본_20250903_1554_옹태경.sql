@@ -196,7 +196,7 @@ CREATE TABLE  pjWorker  (
 CREATE TABLE PjChecklistItem (
   pjChkItemNo    	 	INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,     	 		-- 체크리스트 아이템 번호 PK
   pjNo	 				INT UNSIGNED NOT NULL,                					-- 프로젝트명
-  pjchklTitle 			VARCHAR(200) NOT NULL,                           		-- 체크리스트 제목
+  pjChklTitle 			VARCHAR(200) NOT NULL,                           		-- 체크리스트 제목
   pjHelpText			longtext,												-- 체크리스트 설명
   pjChkIStatus			TINYINT NOT NULL DEFAULT 1,								-- 상태 		
   createDate  			DATETIME NOT NULL DEFAULT NOW(),						-- 생성 날짜
