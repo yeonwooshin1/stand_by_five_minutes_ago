@@ -58,7 +58,7 @@
                             <th>근무자 배정</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="pjworkerTbody">
                         <!-- Rows will be added dynamically -->
                     </tbody>
                 </table>

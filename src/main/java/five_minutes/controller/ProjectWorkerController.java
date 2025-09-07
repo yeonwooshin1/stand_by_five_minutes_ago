@@ -33,9 +33,7 @@ public class ProjectWorkerController {
         return null;
     } // func end
 
-    // [PJW-02] 프로젝트 인력 개별 조회
-
-    // [PJW-03] 프로젝트 인력 전체 조회
+    // [PJW-02] 프로젝트 인력 전체 조회
     @GetMapping
     public List<ProjectWorkerDto> getAllPJWorker(@RequestParam int pjNo, HttpSession session) {
         System.out.println("ProjectWorkerController.getAllPJWorker");
@@ -46,6 +44,9 @@ public class ProjectWorkerController {
             return null;
         }
         return projectWorkerService.getAllPJWorker(pjNo);
+
     } // func end
+
+    // [PJW-03] 프로젝트 인력 개별 조회
 
 } // class end
