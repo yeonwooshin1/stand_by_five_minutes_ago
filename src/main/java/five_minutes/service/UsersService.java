@@ -186,18 +186,20 @@ public class UsersService { // class start
     // pjWorker 단에서 인력정보 검색을 위하여 생성
     // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
     // todo OngTK 사용자 정보 조회(검색)
-    public List<UsersDto> readUserInfo(String keyword) {
-        System.out.println("UsersService.readUserInfo");
-        System.out.println("keyword = " + keyword);
-
+    public List<UsersDto> readAllUserInfo(String keyword) {
         List<UsersDto> list = new ArrayList<>();
 
         if(keyword != null && !keyword.isEmpty()){
-            list = usersDao.readUserInfo(keyword);
+            list = usersDao.readAllUserInfo(keyword);
         } else{
-            list = usersDao.readUserInfo("");
+            list = usersDao.readAllUserInfo("");
         }
         return list;
+    } // func end
+
+    // [US-08] 일반 사용자 정보 개별조회
+    public UsersDto readUserInfo(int userNo){
+        return usersDao.readUserInfo(userNo);
     } // func end
 
 }   // class end
