@@ -170,6 +170,7 @@ const deletePJInfo = async () => {
     }
 } // func end
 
+// [6] 다음 버튼
 const nextStage = async () => {
     let result = confirm(`[경고] 저장을 하지 않고 다음 페이지로 이동하시면, 변경된 내용은 삭제되며 복구할 수 없습니다. \n계속 진행하시겠습니까?`)
     if (result == false) { return }

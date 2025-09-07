@@ -12,7 +12,9 @@
 10. 숙련도 수정 시, 임시배열 저장
 11. 인력 조회
 12. 인력 검색
-
+13. 인력 선택 버튼-모달 선택 시 정보 삽입 및 TemporarySaveWorker 업데이트
+14. 삭제 버튼
+15. 저장 버튼
 */
 
 console.log("Pjworker func exe")
@@ -76,7 +78,7 @@ const readAllpjworker = async () => {
                     <option value="4" ${dto.pjRoleLv == 4 ? 'selected' : ''}>초급</option>
                     <option value="5" ${dto.pjRoleLv == 5 ? 'selected' : ''}>입문자</option>
                     </select></td>
-                <td><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workerModal">배정하기</button></td>
+                <td><button class="btn btn-sm btn-outline-primary choiceWorkerBtn" data-bs-toggle="modal" data-bs-target="#workerModal">배정하기</button></td>
                 <td>${dto.updateDate}</td>
                 <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
                 </tr>`
@@ -137,7 +139,7 @@ document.addEventListener("click", function (e) {
                     <option value="5" selected>입문자</option>
                 </select>
             </td>
-            <td><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workerModal">배정하기</button></td>
+            <td><button class="btn btn-sm btn-outline-primary choiceWorkerBtn" data-bs-toggle="modal" data-bs-target="#workerModal">배정하기</button></td>
             <td></td>
             <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>`;
 
@@ -182,7 +184,7 @@ const addClearRow = async () => {
             </select>
         </td>
         <td>
-        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workerModal">배정하기</button>
+        <button class="btn btn-sm btn-outline-primary choiceWorkerBtn" data-bs-toggle="modal" data-bs-target="#workerModal">배정하기</button>
         </td>
         <td></td>
         <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
@@ -296,11 +298,7 @@ const saveFullTemplate = async (pjRoleNo) => {
     TemporarySaveWorker.forEach((value) => {
         if (value.pjRoleNo == pjRoleNo) {
             value.pjRoleDescription = fullDescription;
-            if (pjRoleNo > 7000000) {
-                value.changeStatus = 3
-            } else {
-                value.changeStatus = 1
-            }
+            value.changeStatus = pjRoleNo > 7000000 ? 3 : 1;
         }
     })
 } // func end
@@ -313,14 +311,10 @@ document.querySelector("#pjworkerTbody").addEventListener("input", function (e) 
         const newRoleName = e.target.textContent.trim(); // 변경된 역할명
 
         TemporarySaveWorker.forEach((value) => {
-            if (value.pjRoleNo === pjRoleNo) {
+            if (value.pjRoleNo == pjRoleNo) {
                 value.pjRoleName = newRoleName;
 
-                if (pjRoleNo > 7000000) {
-                    value.changeStatus = 3;
-                } else {
-                    value.changeStatus = 1;
-                }
+                value.changeStatus = pjRoleNo > 7000000 ? 3 : 1;
             }
         });
     }
@@ -336,11 +330,7 @@ document.querySelector("#pjworkerTbody").addEventListener("change", function (e)
         TemporarySaveWorker.forEach((value) => {
             if (value.pjRoleNo === pjRoleNo) {
                 value.pjRoleLv = selectedValue;
-                if (pjRoleNo > 7000000) {
-                    value.changeStatus = 3;
-                } else {
-                    value.changeStatus = 1;
-                }
+                value.changeStatus = pjRoleNo > 7000000 ? 3 : 1;
             }
         });
     }
@@ -365,11 +355,11 @@ const readAllUser = async () => {
                 <td>${dto.userPhone}</td>
                 <td>${dto.roadAddress}</td>
                 <td>
-                    <button class="btn btn-sm btn-success selectTemplateBtn"
+                    <button class="btn btn-sm btn-success selectWorkerBtn"
                         data-userno="${dto.userNo}"
                         data-name="${dto.userName}"
                         data-phone="${dto.userPhone}"
-                        data-address="${dto.roadAddress}" onclick="choiceWorker(${dto.userNo})">선택</button>
+                        data-address="${dto.roadAddress}" data-bs-dismiss="modal" >선택</button>
                 </td>
             </tr>`;
             i++
@@ -381,65 +371,105 @@ const readAllUser = async () => {
 };
 readAllUser()
 
-// [12] 인력 검색 ================================================================
-const searchUser = async () => {
+// [12-1] 인력 검색 ================================================================
+const searchUser = async (event) => {
     const keyword = document.querySelector("#workerSearchInput").value
-    const r = await fetch(`/user/find/search?keyword=${keyword}`);
-    const d = await r.json();
+ 
+        try {
+        const r = await fetch(`/user/find/search?keyword=${keyword}`);
+        const d = await r.json();
 
-    const tbody = document.querySelector("#workerTable tbody");
-    let html = '';
-    let i = 0;
-    d.forEach((dto) => {
-        html += `
+        const tbody = document.querySelector("#workerTable tbody");
+        let html = '';
+        let i = 0;
+        d.forEach((dto) => {
+            html += `
             <tr>
                 <td>${i + 1}</td>
                 <td>${dto.userName}</td>
                 <td>${dto.userPhone}</td>
                 <td>${dto.roadAddress}</td>
                 <td>
-                    <button class="btn btn-sm btn-success selectTemplateBtn"
+                    <button class="btn btn-sm btn-success selectWorkerBtn"
                         data-userno="${dto.userNo}"
                         data-name="${dto.userName}"
                         data-phone="${dto.userPhone}"
-                        data-address="${dto.roadAddress}">선택</button>
+                        data-address="${dto.roadAddress}" data-bs-dismiss="modal" >선택</button>
                 </td>
             </tr>`;
-        i++
-    });
-    tbody.innerHTML = html;
+            i++
+        });
+        tbody.innerHTML = html;
+    } catch (error) { console.log(error) }
 }
 
-// [13] 인력 선택 버튼 ====================================================================
-
+// [12-2] 엔터키 검색
 document.querySelector("#workerSearchInput").addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
         searchUser(); // 원하는 함수 실행
     }
 });
 
-
-// 선택 버튼 클릭 시 메인 테이블에 인력 정보 삽입
-document.addEventListener("click", function (e) {
-    if (e.target.classList.contains("selectWorkerBtn")) {
-        const name = e.target.dataset.name;
-        const phone = e.target.dataset.phone;
-        const address = e.target.dataset.address;
-        const userNo = e.target.dataset.userno;
-
-        const targetRow = document.querySelector(".assignTarget");
-        if (targetRow) {
-            targetRow.querySelector("td:nth-child(3)").textContent = name;
-            targetRow.querySelector("td:nth-child(3)").dataset.userno = userNo;
-            targetRow.querySelector("td:nth-child(4)").textContent = phone;
-            targetRow.querySelector("td:nth-child(5)").textContent = address;
-            targetRow.classList.remove("assignTarget");
-        }
-        bootstrap.Modal.getInstance(document.getElementById("workerModal")).hide();
+// [13] 인력 선택 버튼 ====================================================================
+// [13-1] 배정하기 클릭시, 배정하기 버튼이 포함된 tr에 target 설정하기
+document.querySelector("#pjworkerTbody").addEventListener("click", function (e) {
+    if (e.target.classList.contains("choiceWorkerBtn")) {
+        const tr = e.target.closest("tr");
+        tr.classList.add("selectedTarget");
     }
 });
 
-// [] 저장 메소드 =========================
+// [13-2] 모달 선택 시 정보 삽입 및 TemporarySaveWorker 업데이트
+document.addEventListener("click", function (e) {
+
+    if (e.target.classList.contains("selectWorkerBtn")) {
+        const userNo = parseInt(e.target.dataset.userno);
+        const userName = e.target.dataset.name;
+        const userPhone = e.target.dataset.phone;
+        const roadAddress = e.target.dataset.address;
+
+        const targetRow = document.querySelector(".selectedTarget");
+        if (targetRow) {
+            targetRow.querySelector("td:nth-child(3)").textContent = userName;
+            targetRow.querySelector("td:nth-child(3)").dataset.userno = userNo;
+            targetRow.querySelector("td:nth-child(4)").textContent = userPhone;
+            targetRow.querySelector("td:nth-child(5)").textContent = roadAddress;
+
+            const pjRoleNo = parseInt(targetRow.dataset.pjroleno);
+            TemporarySaveWorker.forEach((value) => {
+                if (value.pjRoleNo === pjRoleNo) {
+                    value.userNo = userNo;
+                    value.changeStatus = pjRoleNo > 7000000 ? 3 : 1;
+                }
+            });
+
+            targetRow.classList.remove("selectedTarget");
+        }
+    }
+})
+
+// [14] 삭제 버튼 ==================================
+document.querySelector("#pjworkerTbody").addEventListener("click", (e) => {
+    if (!e.target.classList.contains("deleteBtn")) return;
+
+    const tr = e.target.closest("tr");
+    const pjRoleNo = parseInt(tr.dataset.pjroleno);
+
+    const confirmDelete = confirm("한 번 삭제한 데이터는 복구할 수 없습니다. \n정말로 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+
+    // 화면에서 해당 열 제거
+    tr.remove();
+
+    // TemporarySaveWorker 업데이트
+    TemporarySaveWorker.forEach((value) => {
+        if (value.pjRoleNo === pjRoleNo) {
+            value.changeStatus = pjRoleNo > 7000000 ? 4 : 2;
+        }
+    });
+});
+
+// [15] 저장 버튼 =========================
 const savePJworker = async () => {
     const r = await fetch("/project/worker", {
         method: "POST",
@@ -447,7 +477,30 @@ const savePJworker = async () => {
         body: JSON.stringify(TemporarySaveWorker)
     });
     const d = await r.json();
-    alert(`성공 ${d.success}건 / 실패 ${d.failure}건`);
-    await readAllpjworker(); // 전체 조회 다시 실행
+    
+    let success = 0;
+    let fail = 0;
+    
+    d.forEach((value) => {
+        if (value.pjRoleNo > 7000000 && value.Result === value.pjRoleNo) {
+            success++;
+        } else if (value.pjRoleNo > 7000000 && value.Result < 100) {
+            fail++;
+        } else if (value.pjRoleNo < 7000000 && value.Result > 7000000) {
+            success++;
+        } else if (value.pjRoleNo < 7000000 && value.Result < 100) {
+            fail++;
+        }
+    });
 
+    alert(`성공 ${success}건 / 실패 ${fail}건`);
+    await readAllpjworker(); // 전체 조회 다시 실행
 }
+
+// [16] 다음 버튼
+const nextStage = async () => {
+    let result = confirm(`[경고] 저장을 하지 않고 다음 페이지로 이동하시면, 변경된 내용은 삭제되며 복구할 수 없습니다. \n계속 진행하시겠습니까?`)
+    if (result == false) { return }
+
+    location.href = `/project/checklist.jsp?pjNo=${pjNo}`;
+} // func end

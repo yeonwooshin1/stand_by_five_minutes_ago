@@ -48,7 +48,7 @@
                 <div class="title1">프로젝트 인력 관리</div>
                 <div>
                     <button type="button" class="btn btn-primary" onclick="savePJworker()">저장</button>
-                    <button type="button" class="btn btn-primary">다음</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStage()">다음</button>
                 </div>
             </div>
             <div class="ContentBox">
