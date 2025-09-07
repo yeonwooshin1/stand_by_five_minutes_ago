@@ -15,11 +15,11 @@
         <link rel='stylesheet' href='/css/project/worker.css'>
 
         <!-- 썸머노트 0.9.1 최신버전 css/js , https://cdnjs.com/ -->
-        <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.css" rel="stylesheet">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.js"></script> -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.js"></script>
 
         <!-- 썸머노트 한글 js-->
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/lang/summernote-ko-KR.min.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/lang/summernote-ko-KR.min.js"></script>
 
         <!-- 글꼴 Noto Sans -->
         <style>
@@ -39,14 +39,14 @@
             <div class="titleArea mb-3">
                 <div class="title1">프로젝트 인력 관리</div>
                 <div>
-                    <button type="button" class="btn btn-primary">저장</button>
+                    <button type="button" class="btn btn-primary" onclick="savePJworker()">저장</button>
                     <button type="button" class="btn btn-primary">다음</button>
                 </div>
             </div>
             <div class="ContentBox">
                 <div class="rowBox mb-2">
                     <button id="templateSearchBtn" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#roleTemplateModal">역할 템플릿 검색</button>
+                        data-bs-target="#roleTemplateModal">역할 템플릿 검색</button>
                     <button id="addRowBtn" class="btn btn-secondary">행 추가</button>
                 </div>
                 <table id="mainTable" class="table table-striped table-hover">
@@ -114,7 +114,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="text" id="workerSearchInput" placeholder="이름 검색" class="form-control mb-2">
+                        <div class="mb-3">
+                            <input type="text" id="workerSearchInput" placeholder="이름 검색" class="form-control ">
+                            <button type="button" class="btn btn-primary" onclick="">검색</button>
+                        </div>
                         <table id="workerTable" class="table">
                             <thead>
                                 <tr>
