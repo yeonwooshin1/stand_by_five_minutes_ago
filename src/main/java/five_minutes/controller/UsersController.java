@@ -144,11 +144,13 @@ public class UsersController {  // class start
     // todo OngTK 사용자 정보 조회(검색)
     @GetMapping("/find/search")
     public List<UsersDto> readUserInfo(@RequestParam(required = false) String keyword, HttpSession session) {
+        System.out.println("UsersController.readUserInfo");
+        System.out.println("keyword = " + keyword + ", session = " + session);
+
         // 로그인 확인
         if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
             return null;
         }
-
         return usersService.readUserInfo(keyword);
     } // func end
 

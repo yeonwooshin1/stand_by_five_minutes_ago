@@ -10,13 +10,11 @@ import five_minutes.util.PasswordValidatorUtil;
 import five_minutes.util.PhoneNumberUtil;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service                    // 서비스 어노테이션
 @RequiredArgsConstructor    // 의존성 주입
@@ -189,7 +187,17 @@ public class UsersService { // class start
     // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
     // todo OngTK 사용자 정보 조회(검색)
     public List<UsersDto> readUserInfo(String keyword) {
-        return usersDao.readUserInfo(keyword);
+        System.out.println("UsersService.readUserInfo");
+        System.out.println("keyword = " + keyword);
+
+        List<UsersDto> list = new ArrayList<>();
+
+        if(keyword != null && !keyword.isEmpty()){
+            list = usersDao.readUserInfo(keyword);
+        } else{
+            list = usersDao.readUserInfo("");
+        }
+        return list;
     } // func end
 
 }   // class end

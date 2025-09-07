@@ -153,6 +153,9 @@ public class UsersDao extends Dao { // class start
     // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
     // todo OngTK 사용자 정보 조회(검색)
     public List<UsersDto> readUserInfo(String keyword) {
+        System.out.println("UsersDao.readUserInfo");
+        System.out.println("keyword = " + keyword);
+
         List<UsersDto> list = new ArrayList<>();
         try{
             String sql = "select * from users u where u.userNo not in (select b.userNo from businessUser b) and u.userName like '%"+keyword+"%' and userStatus=1 order by u.userName";
@@ -169,7 +172,7 @@ public class UsersDao extends Dao { // class start
                 usersDto.setDetailAddress( rs.getString( "detailAddress" ) );
                 usersDto.setCreateDate( rs.getString( "createDate" ) );
                 usersDto.setUpdateDate( rs.getString( "updateDate" ) );
-
+                System.out.println(usersDto.toString());
                 list.add(usersDto);
             }
             return list;
