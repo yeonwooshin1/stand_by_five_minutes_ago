@@ -122,9 +122,13 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <input type="text" id="workerSearchInput" placeholder="이름 검색" class="form-control ">
-                            <button type="button" class="btn btn-primary" onclick="">검색</button>
+                        <div class="mb-3" style="display: flex;">
+                            <div class="col-auto">
+                                <input type="text" id="workerSearchInput" placeholder="이름 검색" class="form-control">
+                              </div>
+                              <div class="col-auto">
+                                <button type="button" class="btn btn-primary userSearchBtn" onclick="searchUser()">검색</button>
+                              </div>
                         </div>
                         <table id="workerTable" class="table">
                             <thead>
@@ -136,7 +140,7 @@
                                     <th>선택</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="workerTbody">
                                 <tr>
                                     <td>1</td>
                                     <td>김xx</td>

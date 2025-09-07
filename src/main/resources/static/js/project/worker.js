@@ -10,7 +10,8 @@
 08. 설명 저장 (Description 모달 내용 저장)
 09. 역할명 직접 수정 시, 임시배열 저장 
 10. 숙련도 수정 시, 임시배열 저장
-11. 배정하기 버튼 클릭 시 인력 검색 모달 활성화
+11. 인력 조회
+12. 인력 검색
 
 */
 
@@ -144,7 +145,7 @@ document.addEventListener("click", function (e) {
 
         TemporarySaveWorker.push({
             pjRoleNo: tempRoleNo,
-            pjNo: pjNo*1 ,
+            pjNo: pjNo * 1,
             pjRoleName: fullRoleName,
             pjRoleDescription: fullDescription,
             userNo: null,
@@ -180,7 +181,9 @@ const addClearRow = async () => {
                 <option value="5" selected>입문자</option>
             </select>
         </td>
-        <td><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workerModal>배정하기</button></td>
+        <td>
+        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workerModal">배정하기</button>
+        </td>
         <td></td>
         <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
     `;
@@ -188,7 +191,7 @@ const addClearRow = async () => {
 
     TemporarySaveWorker.push({
         pjRoleNo: tempRoleNo,
-        pjNo: pjNo*1 ,
+        pjNo: pjNo * 1,
         pjRoleName: "",
         pjRoleDescription: "",
         userNo: 0,
@@ -295,7 +298,7 @@ const saveFullTemplate = async (pjRoleNo) => {
             value.pjRoleDescription = fullDescription;
             if (pjRoleNo > 7000000) {
                 value.changeStatus = 3
-            }else{
+            } else {
                 value.changeStatus = 1
             }
         }
@@ -343,18 +346,44 @@ document.querySelector("#pjworkerTbody").addEventListener("change", function (e)
     }
 });
 
-// [11] 배정하기 버튼 클릭 시 인력 검색 모달 활성화 =================================
-document.addEventListener("click", function (e) {
-    if (e.target.classList.contains("assignBtn")) {
-        const targetRow = e.target.closest("tr");
-        targetRow.classList.add("assignTarget");
-        bootstrap.Modal.getOrCreateInstance(document.getElementById("workerModal")).show();
-    }
-});
+// [11] 인력 조회 ===================================================================
+const readAllUser = async () => {
+    console.log("readAllUser func exe")
+    const workerTbody = document.querySelector("#workerTbody")
 
-// 인력 검색 input 이벤트
-document.getElementById("workerSearchInput").addEventListener("input", async function () {
-    const keyword = this.value;
+    try {
+        const r = await fetch(`/user/find/search`, { method: "GET" })
+        const d = await r.json()
+        console.log(d)
+
+        let html = ''
+        let i = 0;
+        d.forEach((dto) => {
+            html += `            <tr>
+                <td>${i + 1}</td>
+                <td>${dto.userName}</td>
+                <td>${dto.userPhone}</td>
+                <td>${dto.roadAddress}</td>
+                <td>
+                    <button class="btn btn-sm btn-success selectTemplateBtn"
+                        data-userno="${dto.userNo}"
+                        data-name="${dto.userName}"
+                        data-phone="${dto.userPhone}"
+                        data-address="${dto.roadAddress}" onclick="choiceWorker(${dto.userNo})">선택</button>
+                </td>
+            </tr>`;
+            i++
+        })
+        workerTbody.innerHTML = html;
+    } catch (error) {
+        console.log(error)
+    }
+};
+readAllUser()
+
+// [12] 인력 검색 ================================================================
+const searchUser = async () => {
+    const keyword = document.querySelector("#workerSearchInput").value
     const r = await fetch(`/user/find/search?keyword=${keyword}`);
     const d = await r.json();
 
@@ -369,7 +398,7 @@ document.getElementById("workerSearchInput").addEventListener("input", async fun
                 <td>${dto.userPhone}</td>
                 <td>${dto.roadAddress}</td>
                 <td>
-                    <button class="btn btn-sm btn-info selectWorkerBtn"
+                    <button class="btn btn-sm btn-success selectTemplateBtn"
                         data-userno="${dto.userNo}"
                         data-name="${dto.userName}"
                         data-phone="${dto.userPhone}"
@@ -379,7 +408,16 @@ document.getElementById("workerSearchInput").addEventListener("input", async fun
         i++
     });
     tbody.innerHTML = html;
+}
+
+// [13] 인력 선택 버튼 ====================================================================
+
+document.querySelector("#workerSearchInput").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+        searchUser(); // 원하는 함수 실행
+    }
 });
+
 
 // 선택 버튼 클릭 시 메인 테이블에 인력 정보 삽입
 document.addEventListener("click", function (e) {
