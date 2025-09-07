@@ -148,7 +148,7 @@ public class UsersController {  // class start
         System.out.println("keyword = " + keyword + ", session = " + session);
 
         // 로그인 확인
-        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
+        if( session.getAttribute("loginUserNo") == null){
             return null;
         }
         return usersService.readUserInfo(keyword);
