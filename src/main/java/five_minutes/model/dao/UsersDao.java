@@ -173,7 +173,7 @@ public class UsersDao extends Dao { // class start
             }
             return list;
         }catch (Exception e ){
-            System.out.println("UsersDao.readUserInfo " +e);
+            System.out.println("UsersDao.readAllUserInfo " +e);
         }
         return null;
     } // func end

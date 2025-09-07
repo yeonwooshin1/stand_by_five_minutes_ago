@@ -66,6 +66,9 @@ public class PjController { // class start
     // [PJ-03] 프로젝트 개별 조회
     @GetMapping("/indi")
     public PjDto getIndiPjInfo(@RequestParam int pjNo, HttpSession session){
+        System.out.println("PjController.getIndiPjInfo");
+        System.out.println("pjNo = " + pjNo + ", session = " + session);
+
         PjDto pjDto = new PjDto();
         // [03-1] session에서 로그인정보와 사업자번호 존재 여부 확인
         if( session.getAttribute("loginUserNo") == null ||

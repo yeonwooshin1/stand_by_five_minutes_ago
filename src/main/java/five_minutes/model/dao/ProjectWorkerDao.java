@@ -51,17 +51,20 @@ public class ProjectWorkerDao extends Dao implements CommonRepository<ProjectWor
             ps.setString(1,s);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                ProjectWorkerDto dto = new ProjectWorkerDto();
-                dto.setPjNo(rs.getInt("pjNo"));
-                dto.setPjRoleNo(rs.getInt("pjRoleNo"));
-                dto.setUserNo(rs.getInt("userNo"));
-                dto.setPjRoleName(rs.getString("pjRoleName"));
-                dto.setPjRoleDescription(rs.getString("pjRoleDescription"));
-                dto.setPjRoleLv(rs.getInt("pjRoleLv"));
-                dto.setCreateDate(rs.getString("createDate"));
-                dto.setUpdateDate(rs.getString("updateDate"));
+                ProjectWorkerDto projectWorkerDto = new ProjectWorkerDto();
+                projectWorkerDto.setPjNo(rs.getInt("pjNo"));
+                projectWorkerDto.setPjRoleNo(rs.getInt("pjRoleNo"));
+                projectWorkerDto.setUserNo(rs.getInt("userNo"));
+                projectWorkerDto.setPjRoleName(rs.getString("pjRoleName"));
+                projectWorkerDto.setPjRoleDescription(rs.getString("pjRoleDescription"));
+                projectWorkerDto.setPjRoleLv(rs.getInt("pjRoleLv"));
+                projectWorkerDto.setCreateDate(rs.getString("createDate"));
+                projectWorkerDto.setUpdateDate(rs.getString("updateDate"));
+                projectWorkerDto.setUserName(rs.getString("userName"));
+                projectWorkerDto.setUserPhone(rs.getString("userPhone"));
+                projectWorkerDto.setRoadAddress(rs.getString("roadAddress"));
 
-                list.add(dto);
+                list.add(projectWorkerDto);
             }
             return list;
         }catch (Exception e ){

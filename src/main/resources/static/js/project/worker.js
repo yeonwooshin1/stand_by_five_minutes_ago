@@ -2,6 +2,7 @@ console.log("Pjworker func exe")
 
 window.onHeaderReady = async () => {
     await loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+    await readAllpjworker();
 };
 
 // [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
@@ -27,23 +28,25 @@ const loginCheck = async () => {
 
 // [1] pjworker 전체 조회
 const readAllpjworker = async () => {
+    console.log("readAllpjworker func exe")
     // [1.1] 표시 영역
     const pjworkerTbody = document.querySelector("#pjworkerTbody")
 
     // [1.2] fetch
     const r = await fetch(`/project/worker?pjNo=${pjNo}`,{method:"GET"})
     const d = await r.json()
+    console.log(d)
     let html = '';
     try{
         if(d.length!=0){
             d.forEach( (dto) => {
                 html += `<tr>
                 <td>${dto.pjRoleName}</td>
-                <td>${dto.pjRoleDescription}</td>
-                <td>${dto.userNo}</td>
-                <td>연락처</td>
-                <td>주소</td>
-                <td>${dto.pjRoleLv}</td>
+                <td>버튼 ${dto.pjRoleDescription}</td>
+                <td data-userNo="${dto.userNo}">${dto.userName}</td>
+                <td>${dto.userPhone}</td>
+                <td>${dto.roadAddress}</td>
+                <td>select${dto.pjRoleLv}</td>
                 <td>버튼</td>
                 <td>${dto.updateDate}</td>
                 <td>삭제버튼</td>
@@ -56,7 +59,6 @@ const readAllpjworker = async () => {
         console.log(error)
     }
 } // func end
-readAllpjworker()
 
 // 역할 템플릿 모달 내 대분류-소분류 불러오기
 const chooseRoleTemp = async () => {
@@ -104,7 +106,6 @@ const chooseRoleTemItem = async (rtNo) => {
         console.log(error)
     }
 } // func end
-
 chooseRoleTemp();
 
 // 대분류 명을 선택하면 소분류명 table이 업데이트 될 수 있도록 함.

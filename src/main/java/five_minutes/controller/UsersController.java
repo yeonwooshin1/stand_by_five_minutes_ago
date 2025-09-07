@@ -144,7 +144,7 @@ public class UsersController {  // class start
     // 250907_추후 채팅기능을 만들 경우, 일반회원끼리 검색이 가능해야하므로 비즈니스session 검색은 삭제
     @GetMapping("/find/search")
     public List<UsersDto> readAllUserInfo(@RequestParam(required = false) String keyword, HttpSession session) {
-        System.out.println("UsersController.readUserInfo");
+        System.out.println("UsersController.readAllUserInfo");
         System.out.println("keyword = " + keyword + ", session = " + session);
 
         // 로그인 확인
@@ -158,6 +158,8 @@ public class UsersController {  // class start
     // @author OngTK
     @GetMapping("/find/search/indi")
     public UsersDto readUserInfo(@RequestParam int userNo, HttpSession session){
+        System.out.println("UsersController.readUserInfo");
+        System.out.println("userNo = " + userNo + ", session = " + session);
 
         // 로그인 확인
         if( session.getAttribute("loginUserNo") == null){

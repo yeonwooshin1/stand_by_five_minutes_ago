@@ -14,6 +14,13 @@
         <link rel='stylesheet' href='/CSS/index.css'>
         <link rel='stylesheet' href='/css/project/worker.css'>
 
+        <!-- 썸머노트 0.9.1 최신버전 css/js , https://cdnjs.com/ -->
+        <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.js"></script> -->
+
+        <!-- 썸머노트 한글 js-->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/lang/summernote-ko-KR.min.js"></script> -->
+
         <!-- 글꼴 Noto Sans -->
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
@@ -38,7 +45,8 @@
             </div>
             <div class="ContentBox">
                 <div class="rowBox mb-2">
-                    <button id="templateSearchBtn" class="btn btn-primary">역할 템플릿 검색</button>
+                    <button id="templateSearchBtn" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#roleTemplateModal">역할 템플릿 검색</button>
                     <button id="addRowBtn" class="btn btn-secondary">행 추가</button>
                 </div>
                 <table id="mainTable" class="table table-striped table-hover">
@@ -59,7 +67,7 @@
                         </tr>
                     </thead>
                     <tbody id="pjworkerTbody">
-                        <!-- Rows will be added dynamically -->
+
                     </tbody>
                 </table>
             </div>
@@ -86,7 +94,7 @@
                                 <th>선택</th>
                             </tr>
                         </thead>
-                        <tbody id = "modalRoleTemTbdoy">
+                        <tbody id="modalRoleTemTbdoy">
                             <tr>
                                 <td colspan="3">대분류를 선택하세요.</td>
                             </tr>
@@ -143,7 +151,7 @@
                     <div class="modal-body">
                         <textarea class="rtDescription" id="descriptionArea" name="editordata"></textarea>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
