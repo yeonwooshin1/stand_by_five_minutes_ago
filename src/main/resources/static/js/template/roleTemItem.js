@@ -125,10 +125,11 @@ const getRTItem = async () => {
 
         // [2.3] 결과 처리
         let html = '';
+        let i = 1;
         if (d.length != 0) {
             d.forEach(value => {
-                html += `<tr>
-                        <td>${value.rtiNo}</td>
+                html += `<tr data-rtiNo="${value.rtiNo}">
+                        <td>${i}</td>
                         <td>${value.rtiName}</td>
                         <td>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -140,6 +141,7 @@ const getRTItem = async () => {
                         <td>${value.updateDate}</td>
                         <td><button type="button" class="btn btn-danger" onclick="deleteRTItem(${value.rtiNo})">삭제</button></td>
                     </tr>`
+                    i++
             });
         } else {
             html += `<tr>

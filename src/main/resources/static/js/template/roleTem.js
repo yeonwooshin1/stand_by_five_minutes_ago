@@ -79,10 +79,11 @@ const getRT = async () => {
         console.log(d)
 
         let html = '';
+        let i = 1;
         if (d.length != 0) {
             d.forEach((dto) => {
                 html += `<tr>
-                    <td>${dto.rtNo}</td>
+                    <td data-rtNo ="${dto.rtNo}" >${i}</td>
                     <td><a href="/template/roleTemItem.jsp?rtNo=${dto.rtNo}">${dto.rtName}</a></td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -96,6 +97,7 @@ const getRT = async () => {
                     <td>${dto.updateDate}</td>
                     <td><button type="button" class="btn btn-danger" onclick="deleteRT(${dto.rtNo})">삭제</button></td>
                 </tr>`
+                i++
             });
         } else {
             html += `<tr>
