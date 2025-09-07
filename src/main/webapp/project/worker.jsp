@@ -143,6 +143,7 @@
                     <div class="modal-body">
                         <textarea class="rtDescription" id="descriptionArea" name="editordata"></textarea>
                     </div>
+                    
                 </div>
             </div>
         </div>
