@@ -1,204 +1,168 @@
-console.log("roleTem js exe")
+
+console.log("Pjworker func exe");
 
 window.onHeaderReady = () => {
     loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
 };
 
-// [0] 로그인 체크
+// Summernote 초기화
+$(document).ready(function () {
+    $('#descriptionArea').summernote({
+        lang: 'ko-KR',
+        minHeight: 300
+    });
+});
+
+// 로그인 체크
 const loginCheck = async () => {
-    console.log("loginCheck func exe")
+    console.log("loginCheck func exe");
     if (userNo == null || userNo === 0) {
-        alert("[경고] 로그인 후 이용가능합니다.")
-        location.href = "/index.jsp"
+        alert("[경고] 로그인 후 이용가능합니다.");
+        location.href = "/index.jsp";
     } else if (businessNo == null || businessNo === 0) {
-        alert("[경고] 일반회원은 사용불가능한 메뉴입니다.")
-        location.href = "/index.jsp"
+        alert("[경고] 일반회원은 사용불가능한 메뉴입니다.");
+        location.href = "/index.jsp";
     }
-}
+};
 
-// [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
-$(document).ready(function () {
-    $('#creatertDescription').summernote({
-        lang: 'ko-KR', // default: 'en-US'
-        // 부가 기능
-        minHeight: 300
-    });
+// 역할 템플릿 모달 열기
+document.getElementById("templateSearchBtn").addEventListener("click", () => {
+    const roleTemplateModalInstance = new bootstrap.Modal(document.getElementById("roleTemplateModal"));
+    roleTemplateModalInstance.show();
 });
 
-// [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
-$(document).ready(function () {
-    $('#rtDescriptionUpdate').summernote({
-        lang: 'ko-KR', // default: 'en-US'
-        // 부가 기능
-        minHeight: 300
-    });
-});
-
-// [RT-01] 역할템플릿 생성
-const createRT = async () => {
-    console.log("createRT func exe")
-
-    // [1.1] HTML 에서 입력받은 정보 불러오기
-    const rtName = document.querySelector("#rtNameInput").value;
-    const rtDescription = document.querySelector("#creatertDescription").value
-
-    // [1.2] Fetch
+// 역할 템플릿 대분류 불러오기
+const chooseRoleTemp = async () => {
+    const modalRoleTemplate = document.querySelector(".modalRoleTemplate");
     try {
-        const obj = { rtName, rtDescription }
-        const opt = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(obj)
-        }
-        const r = await fetch("/roleTem", opt)
-        const d = await r.json()
-
-        if (d > 0) {
-            alert("템플릿 저장 성공")
-        } else {
-            alert("템플릿 저장 실패")
-        }
-    } catch (error) {
-        console.log(error)
-    }
-    // [1.3] 저장 후 리스트 조뢰
-    getRT()
-} // func end
-
-// [RT-02] 역할템플릿 전체조회
-const getRT = async () => {
-    console.log("getRT func exe")
-    // [2.1] HTML에 표시할 영역 정보
-    const roleTemplateTbody = document.querySelector(".roleTemplateTbody")
-    let html = '';
-
-    // [2.2] Fetch
-    try {
-        const r = await fetch("/roleTem")
-        const d = await r.json()
-        console.log(d)
-
+        const r = await fetch("/roleTem");
+        const d = await r.json();
         let html = '';
         if (d.length != 0) {
             d.forEach((dto) => {
-                html += `<tr>
-                    <td>${dto.rtNo}</td>
-                    <td><a href="/template/roleTemItem.jsp?rtNo=${dto.rtNo}">${dto.rtName}</a></td>
-                    <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#reviewRoleTem"
-                            onclick="getIndiRT(${dto.rtNo})">미리보기</button>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#updateRoleTem" 
-                            onclick="getIndiRT(${dto.rtNo})">수정하기</button>
-                    </td>
-                    <td>${dto.createDate}</td>
-                    <td>${dto.updateDate}</td>
-                    <td><button type="button" class="btn btn-danger" onclick="deleteRT(${dto.rtNo})">삭제</button></td>
-                </tr>`
+                html += `<option value="${dto.rtNo}">${dto.rtName}</option>`;
             });
-        } else {
-            html += `<tr>
-                     <td colspan="6"> ※ 표시할 정보가 없습니다.</td>
-                     </tr>`
         }
-        // [2.3] 화면 표시
-        roleTemplateTbody.innerHTML = html;
+        modalRoleTemplate.innerHTML += html;
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
+};
 
-} // func end
-getRT()
-
-// [RT-03] 역할템플릿 개별 조회
-// [미리보기]/[수정하기] 버튼 클릭 시, 발생하는 모달 내에 템플릿명과 템플릿 설명을 기재
-const getIndiRT = async (rtNo) => {
-    console.log("getIndiRT func exe")
-
-    // [3.1] 모달 내 표시할 영역 가져오기
-    // 미리보기 모달 구역
-    const rtNamePreview = document.querySelector("#rtNamePreview")
-    const rtDescriptionPreview = document.querySelector("#rtDescriptionPreview")
-
-    // 수정하기 모달 구역
-    const rtNameUpdate = document.querySelector("#rtNameUpdate")
-    const rtDescriptionUpdate = document.querySelector(".updateRTContent .note-editable")
-
-    // [3.2] Fetch
+// 역할 템플릿 소분류 불러오기
+const chooseRoleTemItem = async (rtNo) => {
+    const modalRoleTemTbdoy = document.querySelector("#modalRoleTemTbdoy");
     try {
-        const r = await fetch(`/roleTem/indi?rtNo=${rtNo}`)
-        const d = await r.json()
-
-        // [3.3] 화면에 표시
-        rtNamePreview.value = d.rtName
-        rtDescriptionPreview.innerHTML = d.rtDescription
-        rtNameUpdate.value = d.rtName
-        rtDescriptionUpdate.innerHTML = d.rtDescription
-
-        // [3.4] 수정하기 버튼에 rtNo를 매개변수로 삽입해놓기
-        const updateBox = document.querySelector(".updateBox")
-        const html = `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                        <button type="button" class="btn btn-primary " onclick="updateRT(${rtNo})"
-                        data-bs-dismiss="modal">수정</button>`;
-        updateBox.innerHTML = html;
-    } catch (error) {
-        console.log(error)
-    }
-} // func end
-
-// [RT-04] 역할템플릿 수정	updateRT()
-const updateRT = async (rtNo) => {
-    // [4.1] 수정할 정보 가져오기
-    const rtName = document.querySelector("#rtNampeUpdate").value
-    const rtDescription = document.querySelector("#rtDescriptionUpdate").value
-
-
-    // [4.2] fetch
-    try {
-        const obj = { rtNo, rtName, rtDescription }
-        const opt = {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(obj)
+        const r = await fetch(`/roleTem/Item?rtNo=${rtNo}`);
+        const d = await r.json();
+        let html = '';
+        let i = 1;
+        if (d.length != 0) {
+            d.forEach((dto) => {
+                html += `<tr>
+                    <td>${i}</td>
+                    <td>${dto.rtiName}</td>
+                    <td>
+                        <button class="btn btn-sm btn-success selectTemplateBtn"
+                            data-rtname="${dto.rtName}"
+                            data-rtiname="${dto.rtiName}"
+                            data-rtdescription="${dto.rtDescription}"
+                            data-rtidescription="${dto.rtiDescription}">
+                            선택
+                        </button>
+                    </td>
+                </tr>`;
+                i++;
+            });
         }
-        const r = await fetch(`/roleTem`, opt)
-        const d = await r.json()
+        modalRoleTemTbdoy.innerHTML = html;
 
-        // [4.3] 결과 표시 + update
-        if (d > 0) {
-            alert("템플릿 수정 성공")
-            getRT()
-        } else {
-            alert("템플릿 수정 실패")
-        }
+        // 선택 버튼 이벤트 등록
+        document.querySelectorAll(".selectTemplateBtn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const rtName = this.dataset.rtname;
+                const rtiName = this.dataset.rtiname;
+                const rtDesc = this.dataset.rtdescription;
+                const rtiDesc = this.dataset.rtidescription;
+
+                const fullRoleName = `${rtName}_${rtiName}`;
+                const fullDescription = `${rtDesc}<br/>${rtiDesc}`;
+
+                const newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                    <td>${fullRoleName}</td>
+                    <td><button class="btn btn-sm btn-outline-secondary viewDescBtn">설명보기</button></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <select class="form-select">
+                            <option value="1">전문가</option>
+                            <option value="2">상급</option>
+                            <option value="3">중급</option>
+                            <option value="4">초급</option>
+                            <option value="5">입문자</option>
+                        </select>
+                    </td>
+                    <td><button class="btn btn-sm btn-outline-primary assignBtn">배정하기</button></td>
+                    <td></td>
+                    <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
+                `;
+                newRow.dataset.description = fullDescription;
+                document.querySelector("#mainTable tbody").appendChild(newRow);
+                const roleTemplateModalInstance = bootstrap.Modal.getInstance(document.getElementById("roleTemplateModal"));
+                roleTemplateModalInstance.hide();
+            });
+        });
+
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-} // func end
+};
 
-// [RT-05]  역할템플릿 삭제(비활성화)	
-const deleteRT = async (rtNo) => {
-    console.log("deleteRT func exe")
-    console.log(rtNo)
-
-    try {
-        // [5.1] 삭제 여부 확인
-        let result = confirm(`[경고] 삭제한 템플릿은 복구할 수 없습니다. \n정말로 삭제하시겠습니까?`)
-        if (result == false) { return }
-
-        // [5.2] Fetch
-        const opt = { method: "DELETE" }
-        const r = await fetch(`/roleTem?rtNo=${rtNo}`, opt)
-        const d = await r.json()
-
-        if (d > 0) {
-            alert("템플릿 삭제 성공")
-            getRT()
-        } else {
-            alert("템플릿 삭제 실패")
-        }
-    } catch (error) {
-        console.log(error)
+// 대분류 선택 시 소분류 불러오기
+document.querySelector(".modalRoleTemplate").addEventListener("change", function () {
+    const rtNo = this.value;
+    if (rtNo != 0) {
+        chooseRoleTemItem(rtNo);
     }
-} // func end
+});
+
+// 설명보기 버튼 클릭 시 모달에 설명 표시
+document.querySelector("#mainTable tbody").addEventListener("click", function (e) {
+    if (e.target.classList.contains("viewDescBtn")) {
+        const row = e.target.closest("tr");
+        const desc = row.dataset.description || "";
+        $('#descriptionArea').summernote('code', desc);
+        const viewModalInstance = new bootstrap.Modal(document.getElementById("viewModal"));
+        viewModalInstance.show();
+    }
+});
+
+// 행 추가 버튼 클릭 시 자유 입력 행 생성
+document.getElementById("addRowBtn").addEventListener("click", () => {
+    const newRow = document.createElement("tr");
+    newRow.innerHTML = `
+        <td contenteditable="true">직접입력</td>
+        <td><button class="btn btn-sm btn-outline-secondary viewDescBtn">설명보기</button></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+            <select class="form-select">
+                <option value="1">전문가</option>
+                <option value="2">상급</option>
+                <option value="3">중급</option>
+                <option value="4">초급</option>
+                <option value="5">입문자</option>
+            </select>
+        </td>
+        <td><button class="btn btn-sm btn-outline-primary assignBtn">배정하기</button></td>
+        <td></td>
+        <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
+    `;
+    newRow.dataset.description = "";
+    document.querySelector("#mainTable tbody").appendChild(newRow);
+});
+
+chooseRoleTemp();

@@ -27,6 +27,9 @@ public class ProjectWorkerDto {
     private String updateDate;          // 수정일
 
     // 추가
-    private int changeStatus; // JS에서 변경 여부 정보를 받아올 변수
+    private int changeStatus;           // JS에서 변경 여부 정보를 받아올 변수
+    private String userName;            // 근무자명
+    private String userPhone;           // 근무자 연락처
+    private String roadAddress;         // 근무자 주소
 
 } // class end

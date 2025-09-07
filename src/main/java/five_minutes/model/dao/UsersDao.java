@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository     // Dao 어노테이션
@@ -151,9 +152,27 @@ public class UsersDao extends Dao { // class start
     // pjWorker 단에서 인력정보 검색을 위하여 생성
     // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
     // todo OngTK 사용자 정보 조회(검색)
-    public List<UsersDto> readUserInfo() {
+    public List<UsersDto> readUserInfo(String keyword) {
+        List<UsersDto> list = new ArrayList<>();
         try{
+            String sql = "select * from users u where u.userNo not in (select b.userNo from businessUser b) and u.userName like '%"+keyword+"%' and userStatus=1 order by u.userName";
+            // businessUser을 제외하고 조회 + keyword 검색 기능 + status 1로 활성화된 유저만 + userName 으로 내림차순(ㄱ>ㅎ)
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                UsersDto usersDto = new UsersDto();
+                usersDto.setUserNo(rs.getInt("userNo"));
+                usersDto.setEmail( rs.getString( "email" ) );
+                usersDto.setUserName( rs.getString( "userName" ) );
+                usersDto.setUserPhone( rs.getString( "userPhone" ) );
+                usersDto.setRoadAddress( rs.getString( "roadAddress" ) );
+                usersDto.setDetailAddress( rs.getString( "detailAddress" ) );
+                usersDto.setCreateDate( rs.getString( "createDate" ) );
+                usersDto.setUpdateDate( rs.getString( "updateDate" ) );
 
+                list.add(usersDto);
+            }
+            return list;
         }catch (Exception e ){
             System.out.println("UsersDao.readUserInfo " +e);
         }

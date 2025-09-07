@@ -137,13 +137,21 @@ public class UsersController {  // class start
 
     }   // func end
 
-    // [US-07] 사용자 정보 조회(검색)
+    // [US-07] 사용자 정보 전체 조회(검색)
     // @author OngTK
     // pjWorker 단에서 인력정보 검색을 위하여 생성
     // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
     // todo OngTK 사용자 정보 조회(검색)
-    public List<UsersDto> readUserInfo() {
-        return null;
+    @GetMapping("/find/search")
+    public List<UsersDto> readUserInfo(@RequestParam(required = false) String keyword, HttpSession session) {
+        // 로그인 확인
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
+            return null;
+        }
+
+        return usersService.readUserInfo(keyword);
     } // func end
+
+    //
 
 }   // class end

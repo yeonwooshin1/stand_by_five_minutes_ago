@@ -97,21 +97,6 @@
         </div>
         </div>
 
-        <!-- 역할 설명 보기 모달 -->
-        <div class="modal fade" id="viewModal" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">역할 설명 보기 및 수정</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="summernote"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- 인력 검색 모달 -->
         <div class="modal fade" id="workerModal" tabindex="-1">
             <div class="modal-dialog modal-lg">
@@ -142,6 +127,21 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 역할 설명 보기 모달 -->
+        <div class="modal fade" id="viewModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">역할 설명 보기 및 수정</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="rtDescription" id="descriptionArea" name="editordata"></textarea>
                     </div>
                 </div>
             </div>
