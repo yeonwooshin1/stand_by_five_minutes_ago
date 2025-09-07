@@ -1,9 +1,33 @@
+/*
+00. 로그인 체크
+01. 저장하기 이전 pkworkerDto를 저장하기위한 임시 배열 TemporarySaveWorker + 전역변수
+02. pjworker 전체 조회
+03. 역할템플릿 모달 내에서 선택 클릭시 행 추가 이벤트
+04. 행 추가 버튼 클릭 시 자유 입력 행 생성
+05. 역할 템플릿 모달 내 대분류-소분류 불러오기
+06. 역할템플릿검색 모달 내에서 대분류 선택시 소분류 table이 업데이트
+07. 설명보기 버튼 클릭 시 모달에 설명 표시
+08.
+09.
+10.
+
+*/
+
 console.log("Pjworker func exe")
 
 window.onHeaderReady = async () => {
     await loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
     await readAllpjworker();
 };
+
+// [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
+$(document).ready(function () {
+    $('#descriptionArea').summernote({
+        lang: 'ko-KR',
+        // 부가 기능
+        minHeight: 600
+    });
+});
 
 // [0] 로그인 체크
 const loginCheck = async () => {
@@ -17,10 +41,12 @@ const loginCheck = async () => {
     }
 }
 
-// [0] 저장하기 이전 pjWorkDto를 저장 관리하기 위한 배열
+// [1] 저장하기 이전 pjWorkDto를 저장 관리하기 위한 배열
 const TemporarySaveWorker = [];
+let currentRtName = "";
+let currentRtDescription = "";
 
-// [1] pjworker 전체 조회
+// [2] pjworker 전체 조회
 const readAllpjworker = async () => {
     console.log("readAllpjworker func exe")
     // [1.1] 표시 영역
@@ -34,9 +60,10 @@ const readAllpjworker = async () => {
     try {
         if (d.length != 0) {
             d.forEach((dto) => {
-                html += `<tr data-description="${dto.rtDescription}<br/>${dto.rtiDescription}">
+                html += `<tr data-pjRoleNo="${dto.pjRoleNo}">
                 <td>${dto.pjRoleName}</td>
-                <td><button class="btn btn-sm btn-outline-secondary viewDescBtn">설명보기</button></td>
+                <td><button class="btn btn-sm btn-outline-secondary viewDescBtn" onclick = "veiwDescription(${dto.pjRoleNo})" data-bs-toggle="modal"
+                        data-bs-target="#viewModal" >설명보기</button></td>
                 <td data-userNo="${dto.userNo}">${dto.userName}</td>
                 <td>${dto.userPhone}</td>
                 <td>${dto.roadAddress}</td>
@@ -72,11 +99,95 @@ const readAllpjworker = async () => {
     }
 } // func end
 
-// 선택한 대분류명과 설명을 담기위한 변수
-let currentRtName = "";
-let currentRtDescription = "";
+// [03-1] 행 추가 시, 임시 PK 삽입
+let tempRoleNoCounter = 100000;
+function generateTempRoleNo() {
+    return tempRoleNoCounter--;
+}
 
-// 역할 템플릿 모달 내 대분류-소분류 불러오기===========================================
+// [03] 역할템플릿 모달 내에서 선택 클릭시 행 추가 이벤트 ============================================
+document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("selectTemplateBtn")) {
+        const rtiName = e.target.dataset.rtiname;
+        const rtiDesc = e.target.dataset.rtidescription;
+
+        const fullRoleName = `${currentRtName}_${rtiName}`;
+        const fullDescription = `${currentRtDescription}<br/>${rtiDesc}`;
+
+        const tempRoleNo = generateTempRoleNo();
+
+        const newRow = document.createElement("tr");
+        newRow.setAttribute("data-pjRoleNo", tempRoleNo)
+
+        newRow.innerHTML = `
+            <td>${fullRoleName}</td>
+            <td><button class="btn btn-sm btn-outline-secondary viewDescBtn" onclick = "veiwDescription(${tempRoleNo})" 
+            data-bs-toggle="modal" data-bs-target="#viewModal" >설명보기</button></td>
+            <td data-userNo=""></td>
+            <td></td>
+            <td></td>
+            <td>
+                <select class="form-select">
+                    <option value="1">전문가</option>
+                    <option value="2">상급</option>
+                    <option value="3">중급</option>
+                    <option value="4">초급</option>
+                    <option value="5">입문자</option>
+                </select>
+            </td>
+            <td><button class="btn btn-sm btn-outline-primary assignBtn">배정하기</button></td>
+            <td></td>
+            <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>`;
+
+        newRow.dataset.description = fullDescription;
+        document.querySelector("#pjworkerTbody").appendChild(newRow);
+
+        TemporarySaveWorker.push({
+            pjRoleNo: tempRoleNo,
+            pjNo: pjNo,
+            pjRoleName: fullRoleName,
+            pjRoleDescription: fullDescription,
+            userNo: null,
+            pjRoleLv: 5,
+            createDate: null,
+            changeStatus: 1
+        });
+    }
+});
+
+// [04] 행 추가 버튼 클릭 시 자유 입력 행 생성 =========================================
+document.getElementById("addRowBtn").addEventListener("click", () => {
+    const newRow = document.createElement("tr");
+
+    // 임시 PK 생성
+    const tempRoleNo = generateTempRoleNo();
+    newRow.setAttribute("data-pjRoleNo", tempRoleNo)
+
+    newRow.innerHTML = `
+        <td contenteditable="true">직접입력</td>
+        <td><button class="btn btn-sm btn-outline-secondary viewDescBtn" onclick = "veiwDescription(${tempRoleNo})" 
+            data-bs-toggle="modal" data-bs-target="#viewModal">설명보기</button></td>
+        <td data-userNo=""></td>
+        <td></td>
+        <td></td>
+        <td>
+            <select class="form-select">
+                <option value="1">전문가</option>
+                <option value="2">상급</option>
+                <option value="3">중급</option>
+                <option value="4">초급</option>
+                <option value="5" selected>입문자</option>
+            </select>
+        </td>
+        <td><button class="btn btn-sm btn-outline-primary assignBtn">배정하기</button></td>
+        <td></td>
+        <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
+    `;
+    newRow.dataset.description = "";
+    document.querySelector("#modalRoleTemTbdoy").appendChild(newRow);
+});
+
+// [05] 역할 템플릿 모달 내 대분류-소분류 불러오기===========================================
 const chooseRoleTemp = async () => {
     console.log("chooseRoleTemp func exe")
     // select 표시 영역
@@ -102,7 +213,7 @@ const chooseRoleTemp = async () => {
 } // func end
 chooseRoleTemp();
 
-// 역할템플릿검색 모달 내에서 대분류 선택시 상세분류 표시====================================
+// [06] 역할템플릿검색 모달 내에서 대분류 선택시 상세분류 표시====================================
 const chooseRoleTemItem = async (rtNo) => {
     const modalRoleTemTbdoy = document.querySelector("#modalRoleTemTbdoy")
     try {
@@ -120,7 +231,8 @@ const chooseRoleTemItem = async (rtNo) => {
                             <td>
                             <button class="btn btn-sm btn-success selectTemplateBtn"
                             data-rtiname="${dto.rtiName}"
-                            data-rtidescription="${dto.rtiDescription}">선택</button>
+                            data-rtidescription="${dto.rtiDescription}" data-bs-dismiss="modal"
+                            >선택</button>
                             </td>
                         </tr>`
                 i++
@@ -132,7 +244,7 @@ const chooseRoleTemItem = async (rtNo) => {
     }
 } // func end
 
-// 역할템플릿 모달 내에서 대분류 명을 선택하면 소분류 table이 업데이트 될 수 있도록 함 =====================
+// [06-1] 역할템플릿 모달 내에서 대분류 명을 선택하면 소분류 table이 업데이트 될 수 있도록 함 =====================
 document.querySelector(".modalRoleTemplate").addEventListener("change", function () {
     const rtNo = this.value;
     // select 된 option을 변수에 저장
@@ -144,108 +256,25 @@ document.querySelector(".modalRoleTemplate").addEventListener("change", function
     }
 });
 
-
-// 행 추가 시, 임시 PK 삽입
-let tempRoleNoCounter = 100;
-function generateTempRoleNo() {
-    return tempRoleNoCounter--;
+// [07] 설명보기 버튼 클릭 시 모달에 설명 표시 ===============================
+const veiwDescription = async (pjRoleNo) => {
+    const fullDescriptEditer = document.querySelector("#fullDescriptBody .note-editable")
+    let html = '';
+    TemporarySaveWorker.forEach( (value) => {
+        if(value.pjRoleNo == pjRoleNo){
+            html += value.pjRoleDescription
+        }
+    })
+    fullDescriptEditer.innerHTML = html;
 }
 
-
-// 역할템플릿 모달 내에서 선택 클릭시 행 추가 이벤트 ============================================
-document.addEventListener("click", function (e) {
-    if (e.target.classList.contains("selectTemplateBtn")) {
-        const rtiName = e.target.dataset.rtiname;
-        const rtiDesc = e.target.dataset.rtidescription;
-
-        const fullRoleName = `${currentRtName}_${rtiName}`;
-        const fullDescription = `${currentRtDescription}<br/>${rtiDesc}`;
-
-        const newRow = document.createElement("tr");
-        newRow.innerHTML = `
-            <td>${fullRoleName}</td>
-            <td><button class="btn btn-sm btn-outline-secondary viewDescBtn">설명보기</button></td>
-            <td></td><td></td><td></td>
-            <td>
-                <select class="form-select">
-                    <option value="1">전문가</option>
-                    <option value="2">상급</option>
-                    <option value="3">중급</option>
-                    <option value="4">초급</option>
-                    <option value="5">입문자</option>
-                </select>
-            </td>
-            <td><button class="btn btn-sm btn-outline-primary assignBtn">배정하기</button></td>
-            <td></td>
-            <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
-        `;
-
-        TemporarySaveWorker.push({
-            pjRoleNo: generateTempRoleNo(),
-            pjNo: pjNo,
-            pjRoleName: fullRoleName,
-            pjRoleDescription: fullDescription,
-            userNo: null,
-            pjRoleLv: 5,
-            createDate: null,
-            changeStatus: 1
-        });
-
-        newRow.dataset.description = fullDescription;
-        document.querySelector("#pjworkerTbody").appendChild(newRow);
-
-        const modalEl = document.getElementById("roleTemplateModal");
-        const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
-        modalInstance.hide();
-
-        // 추가로 backdrop 제거가 안될 경우 강제로 제거
-        document.body.classList.remove("modal-open");
-        document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
-    }
-});
-
-
-// 행 추가 버튼 클릭 시 자유 입력 행 생성
-document.getElementById("addRowBtn").addEventListener("click", () => {
-    const newRow = document.createElement("tr");
-    newRow.innerHTML = `
-        <td contenteditable="true">직접입력</td>
-        <td><button class="btn btn-sm btn-outline-secondary viewDescBtn">설명보기</button></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
-            <select class="form-select">
-                <option value="1">전문가</option>
-                <option value="2">상급</option>
-                <option value="3">중급</option>
-                <option value="4">초급</option>
-                <option value="5" selected>입문자</option>
-            </select>
-        </td>
-        <td><button class="btn btn-sm btn-outline-primary assignBtn">배정하기</button></td>
-        <td></td>
-        <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
-    `;
-    newRow.dataset.description = "";
-    document.querySelector("#modalRoleTemTbdoy").appendChild(newRow);
-});
-
-
-// 설명보기 버튼 클릭 시 모달에 설명 표시
+//
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("viewDescBtn")) {
         const desc = e.target.closest("tr").dataset.description || "";
         bootstrap.Modal.getOrCreateInstance(document.getElementById("viewModal")).show();
     }
-    // [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
-    // $(document).ready(function () {
-    //     $('#descriptionArea').summernote({
-    //         lang: 'ko-KR',
-    //         // 부가 기능
-    //         minHeight: 300
-    //     });
-    // });
+
 });
 
 // 배정하기 버튼 클릭 시 인력 검색 모달 활성화

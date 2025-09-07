@@ -10,9 +10,17 @@
         <!--부트스트랩 CDN CSS-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+        <!--부트스트랩 CDN JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+
 
         <link rel='stylesheet' href='/CSS/index.css'>
         <link rel='stylesheet' href='/css/project/worker.css'>
+
+        <!-- jquery 최신버전 -->
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
         <!-- 썸머노트 0.9.1 최신버전 css/js , https://cdnjs.com/ -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.9.1/summernote-bs5.min.css" rel="stylesheet">
@@ -149,10 +157,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">역할 설명 보기 및 수정</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="saveFullTem()">저장</button>
                     </div>
-                    <div class="modal-body">
-                        <textarea class="rtDescription" id="descriptionArea" name="editordata"></textarea>
+                    <div class="modal-body" id="fullDescriptBody">
+                        <textarea class="descriptionArea" id="descriptionArea" name="editordata"></textarea>
                     </div>
 
                 </div>
@@ -164,10 +172,6 @@
 
         <script src="/js/project/worker.js"></script>
 
-        <!--부트스트랩 CDN JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-            crossorigin="anonymous"></script>
     </body>
 
     </html>
