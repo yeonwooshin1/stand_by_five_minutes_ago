@@ -35,7 +35,7 @@
                 <div class="title1">프로젝트 정보</div>
                 <div>
                     <button type="button" class="btn btn-primary" onclick="updatePJInfo()">저장</button>
-                    <button type="button" class="btn btn-primary">다음</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStage()">다음</button>
                     <button type="button" class="btn btn-danger" onclick="deletePJInfo()">삭제</button>
                 </div>
             </div>
