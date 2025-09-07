@@ -2,6 +2,7 @@ package five_minutes.model.dao;
 
 import five_minutes.model.Repository.CommonRepository;
 import five_minutes.model.dto.ProjectWorkerDto;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 /// @author OngTK
 ///
 
+@Repository
 public class ProjectWorkerDao implements CommonRepository<ProjectWorkerDto, Integer, String> {
 
     // 저장 - 생성
