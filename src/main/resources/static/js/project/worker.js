@@ -7,9 +7,10 @@
 05. 역할 템플릿 모달 내 대분류-소분류 불러오기
 06. 역할템플릿검색 모달 내에서 대분류 선택시 소분류 table이 업데이트
 07. 설명보기 버튼 클릭 시 모달에 설명 표시
-08.
-09.
-10.
+08. 설명 저장 (Description 모달 내용 저장)
+09. 역할명 직접 수정 시, 임시배열 저장 
+10. 숙련도 수정 시, 임시배열 저장
+11. 배정하기 버튼 클릭 시 인력 검색 모달 활성화
 
 */
 
@@ -74,7 +75,7 @@ const readAllpjworker = async () => {
                     <option value="4" ${dto.pjRoleLv == 4 ? 'selected' : ''}>초급</option>
                     <option value="5" ${dto.pjRoleLv == 5 ? 'selected' : ''}>입문자</option>
                     </select></td>
-                <td><button class="btn btn-sm btn-outline-primary assignBtn">배정하기</button></td>
+                <td><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workerModal">배정하기</button></td>
                 <td>${dto.updateDate}</td>
                 <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
                 </tr>`
@@ -132,19 +133,18 @@ document.addEventListener("click", function (e) {
                     <option value="2">상급</option>
                     <option value="3">중급</option>
                     <option value="4">초급</option>
-                    <option value="5">입문자</option>
+                    <option value="5" selected>입문자</option>
                 </select>
             </td>
-            <td><button class="btn btn-sm btn-outline-primary assignBtn">배정하기</button></td>
+            <td><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workerModal">배정하기</button></td>
             <td></td>
             <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>`;
 
-        newRow.dataset.description = fullDescription;
         document.querySelector("#pjworkerTbody").appendChild(newRow);
 
         TemporarySaveWorker.push({
             pjRoleNo: tempRoleNo,
-            pjNo: pjNo,
+            pjNo: pjNo*1 ,
             pjRoleName: fullRoleName,
             pjRoleDescription: fullDescription,
             userNo: null,
@@ -156,7 +156,8 @@ document.addEventListener("click", function (e) {
 });
 
 // [04] 행 추가 버튼 클릭 시 자유 입력 행 생성 =========================================
-document.getElementById("addRowBtn").addEventListener("click", () => {
+const addClearRow = async () => {
+    console.log("addClearRow func exe")
     const newRow = document.createElement("tr");
 
     // 임시 PK 생성
@@ -179,13 +180,24 @@ document.getElementById("addRowBtn").addEventListener("click", () => {
                 <option value="5" selected>입문자</option>
             </select>
         </td>
-        <td><button class="btn btn-sm btn-outline-primary assignBtn">배정하기</button></td>
+        <td><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#workerModal>배정하기</button></td>
         <td></td>
         <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
     `;
-    newRow.dataset.description = "";
-    document.querySelector("#modalRoleTemTbdoy").appendChild(newRow);
-});
+    document.querySelector("#pjworkerTbody").appendChild(newRow);
+
+    TemporarySaveWorker.push({
+        pjRoleNo: tempRoleNo,
+        pjNo: pjNo*1 ,
+        pjRoleName: "",
+        pjRoleDescription: "",
+        userNo: 0,
+        pjRoleLv: 5,
+        createDate: "",
+        changeStatus: 1
+    });
+}
+
 
 // [05] 역할 템플릿 모달 내 대분류-소분류 불러오기===========================================
 const chooseRoleTemp = async () => {
@@ -258,26 +270,80 @@ document.querySelector(".modalRoleTemplate").addEventListener("change", function
 
 // [07] 설명보기 버튼 클릭 시 모달에 설명 표시 ===============================
 const veiwDescription = async (pjRoleNo) => {
+    // 저장버튼 구역 생성
+    let html1 = `<button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="saveFullTemplate(${pjRoleNo})">저장</button>`
+    document.querySelector("#fullDescriptBtnBox").innerHTML = html1
+
+    // 내용 붙이기
     const fullDescriptEditer = document.querySelector("#fullDescriptBody .note-editable")
     let html = '';
-    TemporarySaveWorker.forEach( (value) => {
-        if(value.pjRoleNo == pjRoleNo){
+    TemporarySaveWorker.forEach((value) => {
+        if (value.pjRoleNo == pjRoleNo) {
             html += value.pjRoleDescription
         }
     })
     fullDescriptEditer.innerHTML = html;
-}
+} // func end
 
-//
-document.addEventListener("click", function (e) {
-    if (e.target.classList.contains("viewDescBtn")) {
-        const desc = e.target.closest("tr").dataset.description || "";
-        bootstrap.Modal.getOrCreateInstance(document.getElementById("viewModal")).show();
+// [08] 설명 저장 ==========================================================
+const saveFullTemplate = async (pjRoleNo) => {
+    // 저장할 구역 가져오기
+    const fullDescription = document.querySelector("#descriptionArea").value
+    // 임시배열에 저장
+    TemporarySaveWorker.forEach((value) => {
+        if (value.pjRoleNo == pjRoleNo) {
+            value.pjRoleDescription = fullDescription;
+            if (pjRoleNo > 7000000) {
+                value.changeStatus = 3
+            }else{
+                value.changeStatus = 1
+            }
+        }
+    })
+} // func end
+
+// [09] 역할명 직접 수정 시, 임시배열 저장 ====================================
+document.querySelector("#pjworkerTbody").addEventListener("input", function (e) {
+    if (e.target.tagName == "TD" && e.target.isContentEditable) {
+        const tr = e.target.closest("tr");
+        const pjRoleNo = parseInt(tr.dataset.pjroleno); // data-pjRoleNo 값 추출
+        const newRoleName = e.target.textContent.trim(); // 변경된 역할명
+
+        TemporarySaveWorker.forEach((value) => {
+            if (value.pjRoleNo === pjRoleNo) {
+                value.pjRoleName = newRoleName;
+
+                if (pjRoleNo > 7000000) {
+                    value.changeStatus = 3;
+                } else {
+                    value.changeStatus = 1;
+                }
+            }
+        });
     }
-
 });
 
-// 배정하기 버튼 클릭 시 인력 검색 모달 활성화
+// [10] 숙련도 수정 시, 임시배열 저장 ==============================================
+document.querySelector("#pjworkerTbody").addEventListener("change", function (e) {
+    if (e.target.tagName == "SELECT") {
+        const selectedValue = parseInt(e.target.value); // 선택된 숙련도 값
+        const tr = e.target.closest("tr");
+        const pjRoleNo = parseInt(tr.dataset.pjroleno); // tr의 data-pjRoleNo 값
+
+        TemporarySaveWorker.forEach((value) => {
+            if (value.pjRoleNo === pjRoleNo) {
+                value.pjRoleLv = selectedValue;
+                if (pjRoleNo > 7000000) {
+                    value.changeStatus = 3;
+                } else {
+                    value.changeStatus = 1;
+                }
+            }
+        });
+    }
+});
+
+// [11] 배정하기 버튼 클릭 시 인력 검색 모달 활성화 =================================
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("assignBtn")) {
         const targetRow = e.target.closest("tr");

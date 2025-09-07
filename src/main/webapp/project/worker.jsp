@@ -55,7 +55,7 @@
                 <div class="rowBox mb-2">
                     <button id="templateSearchBtn" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#roleTemplateModal">역할 템플릿 검색</button>
-                    <button id="addRowBtn" class="btn btn-secondary">행 추가</button>
+                    <button id="addRowBtn" class="btn btn-secondary" onclick="addClearRow()">행 추가</button>
                 </div>
                 <table id="mainTable" class="table table-striped table-hover">
                     <thead>
@@ -157,12 +157,12 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">역할 설명 보기 및 수정</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="saveFullTem()">저장</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body" id="fullDescriptBody">
+                        <div id="fullDescriptBtnBox" style="display: flex; justify-content: flex-end;" class="mb-2"></div>
                         <textarea class="descriptionArea" id="descriptionArea" name="editordata"></textarea>
                     </div>
-
                 </div>
             </div>
         </div>

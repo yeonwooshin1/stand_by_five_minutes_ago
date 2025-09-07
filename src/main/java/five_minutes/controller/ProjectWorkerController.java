@@ -37,7 +37,7 @@ public class ProjectWorkerController {
 
         // 로그인 확인
         if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
-            return null;
+//            return null;
         }
 
         return projectWorkerService.savePJWorker(list);

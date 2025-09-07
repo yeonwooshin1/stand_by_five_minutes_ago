@@ -155,7 +155,6 @@ const updateRT = async (rtNo) => {
     const rtName = document.querySelector("#rtNampeUpdate").value
     const rtDescription = document.querySelector("#rtDescriptionUpdate").value
 
-
     // [4.2] fetch
     try {
         const obj = { rtNo, rtName, rtDescription }
