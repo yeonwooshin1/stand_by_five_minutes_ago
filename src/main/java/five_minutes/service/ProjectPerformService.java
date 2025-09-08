@@ -38,4 +38,11 @@ public class ProjectPerformService {    // class start
     }   // func end
 
 
+    // @Author OngTK
+    // 엑셀출력용 메소드
+    public List<ProjectPerformDto> readAllforExcel(int pjNo){
+        return projectPerformDao.readAllforExcel(pjNo);
+    }
+
+
 }   // class end

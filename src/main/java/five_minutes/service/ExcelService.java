@@ -74,11 +74,10 @@ public class ExcelService {
                 Sheet sheet2 = workbook.getSheetAt(1);
                 writeWorkers(sheet2, workers);
 
-                // Todo OngTk - 연우님 기능 완성 후 연결
-//                // 세 번째 시트 작성
-//                List<ProjectPerformDto> performs = projectPerformService.findByProject(pjNo);
-//                Sheet sheet3 = workbook.getSheetAt(2);
-//                writePerforms(sheet3, performs);
+                // 세 번째 시트 작성
+                List<ProjectPerformDto> performs = projectPerformService.readAllforExcel(pjNo);
+                Sheet sheet3 = workbook.getSheetAt(2);
+                writePerforms(sheet3, performs);
 
                 // 5. 다운로드 응답
                 ServletOutputStream out = response.getOutputStream();
@@ -128,15 +127,25 @@ public class ExcelService {
     } // func end
 
     // [04] 업무관리 시트 작성
-//    private void writePerforms(Sheet sheet, List<ProjectPerformDto> performs) {
-//        int rowIdx = 1;
-//        for (ProjectPerformDto perform : performs) {
-//            Row row = sheet.createRow(rowIdx++);
-//            row.createCell(0).setCellValue(perform.getTask());
-//            row.createCell(1).setCellValue(perform.getStatus());
-//            // ... 필요한 정보 추가
-//        }
-//    }
-
-
+    private void writePerforms(Sheet sheet, List<ProjectPerformDto> performs) {
+        System.out.println("ExcelService.writePerforms");
+        System.out.println("sheet = " + sheet + ", performs = " + performs);
+        int rowIdx = 1;
+        int index = 1;
+        for (ProjectPerformDto dto : performs) {
+            Row row = sheet.getRow(rowIdx++);                           // 2행부터 작성
+            row.getCell(0).setCellValue(index);                         // A열 - No
+            index++;
+            row.getCell(1).setCellValue(dto.getPfStart());              // B열 - 시작시간
+            row.getCell(2).setCellValue(dto.getPfEnd());                // C열 - 종료시간
+            row.getCell(3).setCellValue(dto.getPjRoleName());           // D열 - 역할명
+            row.getCell(4).setCellValue(dto.getUserName());             // E열 - 근무자
+            int status =dto.getPfStatus();
+            String pfStatus = status == 1 ? "시작전" : status == 2 ? "진행중" : status == 3 ? "완료" : status == 4 ? "취소" : "보류";
+            row.getCell(5).setCellValue(pfStatus);                      // F열 - 수행여부
+            row.getCell(6).setCellValue(dto.getNote());                 // G열 - 비고
+            row.getCell(7).setCellValue(dto.getCreateDate());           // H열 - 작성일
+            row.getCell(8).setCellValue(dto.getUpdateDate());           // I열 - 수정일
+        }
+    } // func end
 } // class end
