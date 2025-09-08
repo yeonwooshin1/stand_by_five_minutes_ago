@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /// **Info** =========================
 ///
@@ -170,7 +171,7 @@ public class PjCheckController {
         3. pjChkIStatus(상태)를 0으로 변경한다.
      */
     @DeleteMapping("")
-    public int deletePJCheck(@RequestParam int pjNo , @RequestParam int pjChkItemNo, HttpSession session) {
+    public int deletePJCheck(@RequestParam int pjNo, @RequestParam int pjChkItemNo, HttpSession session) {
         // 1. 세션 확인
         if (session.getAttribute("loginUserNo") == null) {
             PjCheckDto dto = new PjCheckDto();
@@ -198,7 +199,7 @@ public class PjCheckController {
         * 프론트에서는 체크리스트 추가 버튼 -> 대분류 셀렉트로 처리
      */
     @GetMapping("/tem")
-    public CTemDto getPJCheckTem(@RequestParam int ctNo , HttpSession session) {
+    public CTemDto getPJCheckTem(@RequestParam int ctNo, HttpSession session) {
         // 1. 세션 확인
         if (session.getAttribute("loginUserNo") == null) {
             CTemDto dto = new CTemDto();
@@ -220,7 +221,7 @@ public class PjCheckController {
         * ctiNo의 값에서 500000을 빼고 프론트에 송출해서 1, 2, 3번 식으로 출력하기
      */
     @GetMapping("/item")
-    public List<CTItemDto> getPJCheckItem(@RequestParam int ctNo , HttpSession session) {
+    public List<CTItemDto> getPJCheckItem(@RequestParam int ctNo, HttpSession session) {
         List<CTItemDto> list;
         // 1. 세션 확인
         if (session.getAttribute("loginUserNo") == null) {
@@ -238,7 +239,7 @@ public class PjCheckController {
 
     // [8] 프로젝트 체크리스트 템플릿 불러오기
     // URL : http://localhost:8080/project/checklist/tem
-    // BODY : { "ctiNo" = 5000001 , "pjNo" : 6000001 }
+    // BODY : { "ctiNo" : 5000001 , "pjNo" : 6000001 }
     /*
         * 로직 안내
         1. CTItemDto에서 ctiNo를 입력 받는다.
@@ -248,7 +249,9 @@ public class PjCheckController {
         * CTemDto_CTItemDto 스네이크 형식으로 데이터를 묶어 저장한다.
      */
     @PostMapping("/tem")
-    public int loadAndSaveTemplate(@RequestParam int ctiNo, @RequestParam int pjNo , HttpSession session) {
+    public int loadAndSaveTemplate(@RequestBody Map<String, Integer> request, HttpSession session) {
+        int ctiNo = request.get("ctiNo");
+        int pjNo = request.get("pjNo");
         // 1. 세션 확인
         if (session.getAttribute("loginUserNo") == null) {
             CTItemDto dto = new CTItemDto();
@@ -257,10 +260,14 @@ public class PjCheckController {
         }
         // 2. pjNo 맞으면 사업자번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
-        pjCheckService.checkPjNo(pjNo, bnNo);
+        boolean isValidProject = pjCheckService.checkPjNo(pjNo, bnNo);
+        if (!isValidProject) {
+            CTItemDto dto = new CTItemDto();
+            dto.setStatus("NOT_FOUND");
+            return 0; // 프로젝트 접근 권한 없음
+        }
         // 3. 리턴
-        int pjCheckId = pjCheckService.loadAndSaveTemplate(ctiNo, pjNo);
-        return pjCheckId;
+        return pjCheckService.loadAndSaveTemplate(ctiNo, pjNo);
     }
 
 

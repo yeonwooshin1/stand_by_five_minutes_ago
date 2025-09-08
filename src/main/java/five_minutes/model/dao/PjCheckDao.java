@@ -221,7 +221,7 @@ public class PjCheckDao extends Dao {
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, pjCheckDto.getPjNo());
             // getPjCheckTitle로 수정
-            ps.setString(2, pjCheckDto.getPjCheckTitle());
+            ps.setString(2, pjCheckDto.getPjChklTitle());
             ps.setString(3, pjCheckDto.getPjHelpText());
             if (ps.executeUpdate() == 1) {
                 ResultSet rs = ps.getGeneratedKeys();
