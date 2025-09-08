@@ -19,7 +19,7 @@
 
     <div class="headerContainer">
         <div class="header-inner row">
-            <a href="/project/list.jsp" class="col-2 imgBox">
+            <a href="/project/list.jsp" class="col-2 logoImgBox" id="logoImgBox">
                 <img class="logoImg" src="/img/logo.png">
             </a>
             <div class="menu-area col-6">

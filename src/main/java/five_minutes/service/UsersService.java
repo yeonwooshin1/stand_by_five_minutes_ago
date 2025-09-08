@@ -10,12 +10,11 @@ import five_minutes.util.PasswordValidatorUtil;
 import five_minutes.util.PhoneNumberUtil;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service                    // 서비스 어노테이션
 @RequiredArgsConstructor    // 의존성 주입
@@ -182,5 +181,24 @@ public class UsersService { // class start
         return token;
     } // func end
 
+    // [US-07] 사용자 정보 조회(검색)
+    // @author OngTK
+    // pjWorker 단에서 인력정보 검색을 위하여 생성
+    // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
+    public List<UsersDto> readAllUserInfo(String keyword) {
+        List<UsersDto> list = new ArrayList<>();
+
+        if(keyword != null && !keyword.isEmpty()){
+            list = usersDao.readAllUserInfo(keyword);
+        } else{
+            list = usersDao.readAllUserInfo("");
+        }
+        return list;
+    } // func end
+
+    // [US-08] 일반 사용자 정보 개별조회
+    public UsersDto readUserInfo(int userNo){
+        return usersDao.readUserInfo(userNo);
+    } // func end
 
 }   // class end

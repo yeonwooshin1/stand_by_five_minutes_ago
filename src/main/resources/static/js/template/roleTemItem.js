@@ -1,5 +1,21 @@
 console.log("roleTemItem js func")
 
+window.onHeaderReady = () => {
+    loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+};
+
+// [0] 로그인 체크
+const loginCheck = async () => {
+    console.log("loginCheck func exe")
+    if (userNo == null || userNo === 0) {
+        alert("[경고] 로그인 후 이용가능합니다.")
+        location.href = "/index.jsp"
+    } else if (businessNo == null || businessNo === 0) {
+        alert("[경고] 일반회원은 사용불가능한 메뉴입니다.")
+        location.href = "/index.jsp"
+    }
+}
+
 // QueryString
 const params = new URL(location.href).searchParams;
 const rtNo = params.get("rtNo")
@@ -109,10 +125,11 @@ const getRTItem = async () => {
 
         // [2.3] 결과 처리
         let html = '';
+        let i = 1;
         if (d.length != 0) {
             d.forEach(value => {
-                html += `<tr>
-                        <td>${value.rtiNo}</td>
+                html += `<tr data-rtiNo="${value.rtiNo}">
+                        <td>${i}</td>
                         <td>${value.rtiName}</td>
                         <td>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -124,6 +141,7 @@ const getRTItem = async () => {
                         <td>${value.updateDate}</td>
                         <td><button type="button" class="btn btn-danger" onclick="deleteRTItem(${value.rtiNo})">삭제</button></td>
                     </tr>`
+                    i++
             });
         } else {
             html += `<tr>

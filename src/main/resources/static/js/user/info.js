@@ -1,3 +1,17 @@
+window.onHeaderReady = () => {
+  loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+};
+
+// [0] 로그인 체크
+const loginCheck = async () => {
+  console.log("loginCheck func exe")
+  if (userNo == null || userNo === 0) {
+      alert("[경고] 로그인 후 이용가능합니다.")
+      location.href = "/index.jsp"
+  }
+}
+
+
 // ---------- 유틸 ----------
 //  $ = (sel) => document.querySelector(sel); => $(sel) 값 넣으면 그것이 곧 document.querySelector(sel)이랑 똑같은 말
 const $ = (sel) => document.querySelector(sel); // jQuery 아님 주의

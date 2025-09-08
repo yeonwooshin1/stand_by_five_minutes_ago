@@ -66,6 +66,9 @@ public class PjController { // class start
     // [PJ-03] 프로젝트 개별 조회
     @GetMapping("/indi")
     public PjDto getIndiPjInfo(@RequestParam int pjNo, HttpSession session){
+        System.out.println("PjController.getIndiPjInfo");
+        System.out.println("pjNo = " + pjNo + ", session = " + session);
+
         PjDto pjDto = new PjDto();
         // [03-1] session에서 로그인정보와 사업자번호 존재 여부 확인
         if( session.getAttribute("loginUserNo") == null ||
@@ -99,7 +102,7 @@ public class PjController { // class start
         return pjService.updatePJInfo(pjDto);
     } // func end
 
-    // [PJ-05]
+    // [PJ-05] 프로젝트 삭제(비활성화)
     @DeleteMapping
     public int deletePJInfo(@RequestParam int pjNo, HttpSession session){
         System.out.println("PjController.deletePJInfo");
@@ -115,6 +118,22 @@ public class PjController { // class start
         // [05-3] service 로 전달
         return pjService.delete(pjNo, bnNo);
 
+    } // func end
+
+    // [PJ-06] 프로젝트 전체 조회 - 일반사용자
+    @GetMapping("/user")
+    public List<PjDto> getUserPJinfo(HttpSession session) {
+        System.out.println("PjController.getPJinfo");
+        System.out.println("session = " + session);
+
+        // [06-1] session에서 로그인정보와 사업자번호 존재 여부 확인
+        if( session.getAttribute("loginUserNo") == null || session.getAttribute("loginBnNo") != null){
+            return null;
+        }
+        int userNo = (int) session.getAttribute("loginUserNo");
+
+        // [02-4] pjService 의 readAll 매소드 실행
+        return pjService.getUserPJinfo(userNo);
     } // func end
 
 }   // class end

@@ -19,3 +19,7 @@ update ProjectInfo set pjName="test", pjMemo="test", pjStartDate=null, pjEndDate
 select * from projectinfo where pjno=6000011;
 
 update ProjectInfo set pjStatus = "1" where pjNo = 6000011 and bnno = "100-00-00001";
+
+select * from projectInfo;
+select * from pjworker;
+select p.*, w.userNo from ProjectInfo p inner join pjworker w on p.pjno = w.pjno where userNo = 1000008;

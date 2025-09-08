@@ -8,7 +8,9 @@ import five_minutes.service.UsersService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController             // 컨트롤러 컴포넌트
@@ -135,5 +137,36 @@ public class UsersController {  // class start
 
     }   // func end
 
+    // [US-07] 사용자 정보 전체 조회(검색)
+    // @author OngTK
+    // pjWorker 단에서 인력정보 검색을 위하여 생성
+    // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
+    // 250907_추후 채팅기능을 만들 경우, 일반회원끼리 검색이 가능해야하므로 비즈니스session 검색은 삭제
+    @GetMapping("/find/search")
+    public List<UsersDto> readAllUserInfo(@RequestParam(required = false) String keyword, HttpSession session) {
+        System.out.println("UsersController.readAllUserInfo");
+        System.out.println("keyword = " + keyword + ", session = " + session);
+
+        // 로그인 확인
+        if( session.getAttribute("loginUserNo") == null){
+            return null;
+        }
+        return usersService.readAllUserInfo(keyword);
+    } // func end
+
+    // [US-08] 사용자 정보 개별 조회
+    // @author OngTK
+    @GetMapping("/find/search/indi")
+    public UsersDto readUserInfo(@RequestParam int userNo, HttpSession session){
+        System.out.println("UsersController.readUserInfo");
+        System.out.println("userNo = " + userNo + ", session = " + session);
+
+        // 로그인 확인
+        if( session.getAttribute("loginUserNo") == null){
+            return null;
+        }
+
+        return usersService.readUserInfo(userNo);
+    } // func end
 
 }   // class end

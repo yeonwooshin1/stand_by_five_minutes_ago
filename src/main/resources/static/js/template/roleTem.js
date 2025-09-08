@@ -1,5 +1,21 @@
 console.log("roleTem js exe")
 
+window.onHeaderReady = () => {
+    loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+};
+
+// [0] 로그인 체크
+const loginCheck = async () => {
+    console.log("loginCheck func exe")
+    if (userNo == null || userNo === 0) {
+        alert("[경고] 로그인 후 이용가능합니다.")
+        location.href = "/index.jsp"
+    } else if (businessNo == null || businessNo === 0) {
+        alert("[경고] 일반회원은 사용불가능한 메뉴입니다.")
+        location.href = "/index.jsp"
+    }
+}
+
 // [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
 $(document).ready(function () {
     $('#creatertDescription').summernote({
@@ -63,10 +79,11 @@ const getRT = async () => {
         console.log(d)
 
         let html = '';
+        let i = 1;
         if (d.length != 0) {
             d.forEach((dto) => {
                 html += `<tr>
-                    <td>${dto.rtNo}</td>
+                    <td data-rtNo ="${dto.rtNo}" >${i}</td>
                     <td><a href="/template/roleTemItem.jsp?rtNo=${dto.rtNo}">${dto.rtName}</a></td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -80,6 +97,7 @@ const getRT = async () => {
                     <td>${dto.updateDate}</td>
                     <td><button type="button" class="btn btn-danger" onclick="deleteRT(${dto.rtNo})">삭제</button></td>
                 </tr>`
+                i++
             });
         } else {
             html += `<tr>
@@ -136,7 +154,6 @@ const updateRT = async (rtNo) => {
     // [4.1] 수정할 정보 가져오기
     const rtName = document.querySelector("#rtNampeUpdate").value
     const rtDescription = document.querySelector("#rtDescriptionUpdate").value
-
 
     // [4.2] fetch
     try {

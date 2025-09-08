@@ -1,6 +1,18 @@
 // 로그인 js 콘솔
 console.log( 'login.js open!');
 
+window.onHeaderReady = () => {
+    loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+};
+
+// [0] 로그인 상태면 project로 이동
+const loginCheck = async () => {
+    if ( userNo != 0) {
+        alert("[경고] 로그인 상태입니다. 프로젝트 관리로 이동합니다.")
+        location.href = "/project/list.jsp"
+    }
+}
+
 // [1] 로그인 , login 
 const login = async() =>{
     
@@ -24,7 +36,7 @@ const login = async() =>{
         // 5. fetch 응답
         if( data > 0 ){ // 0보다 크면 로그인성공이고 회원번호 반환 
             alert('환영합니다.');
-            location.href="/index.jsp"; // 메인페이지로 이동 
+            location.href="/project/list.jsp"; // 프로젝트 리스트로 이동
         }else{
             alert('이메일 또는 비밀번호가 일치하지 않습니다.');
         }

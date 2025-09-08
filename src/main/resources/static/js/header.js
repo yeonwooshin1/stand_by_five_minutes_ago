@@ -41,14 +41,17 @@ const mainMenu = async () => {
     let html = '';
     if (userNo == 0) {
         html = ''
+        document.getElementById("logoImgBox").href="/index.jsp"
     } else if (businessNo != null ) { // 기업 담당자
         html += `<li style = "display:none;"><a href="#" style="color: #A6A6A6; ">인력 관리</a></li>
                  <li><a href="/template/roleTem.jsp">템플릿 관리</a></li>
                  <li><a href="/project/list.jsp">프로젝트 관리</a></li>`
+                 document.getElementById("logoImgBox").href="/project/list.jsp"
     } else if (userNo > 1 ) { // 일반회원
         html += `<li><a href="/project/list.jsp">프로젝트 관리</a></li>
                  <li style = "display:none;"><a href="#">메뉴2</a></li>
                  <li style = "display:none;"><a href="#">메뉴3</a></li>`
+                 document.getElementById("logoImgBox").href="/project/list.jsp"
     }
     mainMenu.innerHTML = html;
 }
@@ -102,3 +105,10 @@ const initHeader = async () => {
 };
 
 initHeader();
+
+initHeader().then( () => {
+    // header 초기화 후 실행할 함수 등록
+    if (typeof onHeaderReady === "function") {
+        onHeaderReady();
+    }
+});

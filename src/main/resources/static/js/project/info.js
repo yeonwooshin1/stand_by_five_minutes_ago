@@ -1,5 +1,21 @@
 console.log('info js exe')
 
+window.onHeaderReady = () => {
+    loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+};
+
+// [0] 로그인 체크
+const loginCheck = async () => {
+    console.log("loginCheck func exe")
+    if (userNo == null || userNo === 0) {
+        alert("[경고] 로그인 후 이용가능합니다.")
+        location.href = "/index.jsp"
+    } else if (businessNo == null || businessNo === 0) {
+        alert("[경고] 일반회원은 사용불가능한 메뉴입니다.")
+        location.href = "/index.jsp"
+    }
+}
+
 // [1] 카카오 우편번호 검색 / 도로명 주소 검색 
 var mapContainer = document.getElementById('mapArea'), // 지도를 표시할 div
     mapOption = {
@@ -140,9 +156,8 @@ const deletePJInfo = async () => {
 
     try {
         // [5.2] fetch
-        const opt = { mehtod: "DELETE" }
-        const r = await fetch(`/project/info?pjNo=${pjNo}`, opt)
-        const d = r.json()
+        const r = await fetch(`/project/info?pjNo=${pjNo}`,{ method: "DELETE" })
+        const d = await r.json()
         console.log(d)
         if (d > 0) {
             alert("프로젝트 삭제 성공")
@@ -153,4 +168,12 @@ const deletePJInfo = async () => {
     } catch (error) {
         console.log(error)
     }
+} // func end
+
+// [6] 다음 버튼
+const nextStage = async () => {
+    let result = confirm(`[경고] 저장을 하지 않고 다음 페이지로 이동하시면, 변경된 내용은 삭제되며 복구할 수 없습니다. \n계속 진행하시겠습니까?`)
+    if (result == false) { return }
+
+    location.href = `/project/worker.jsp?pjNo=${pjNo}`;
 } // func end

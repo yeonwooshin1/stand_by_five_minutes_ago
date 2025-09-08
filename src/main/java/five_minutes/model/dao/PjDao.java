@@ -2,6 +2,7 @@ package five_minutes.model.dao;
 
 import five_minutes.model.Repository.CommonRepository;
 import five_minutes.model.dto.PjDto;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -23,32 +24,37 @@ public class PjDao extends Dao implements CommonRepository<PjDto, Integer, Strin
 
     @Override
     public int create(PjDto pjDto) {
-        try{
+        try {
             // 프로젝트에 필요한 정보들 insert
             String sql = "insert into ProjectInfo( pjName, pjMemo, pjStartDate, pjEndDate, roadAddress, detailAddress" +
                     ", clientName, clientPhone, clientMemo , bnNo , clientRepresent )values(?,?,?,?,?,?,?,?,?,?,?)";
 
             // SQL 기재한다. + ***auto_increment(자동 PK)값 결과를 반환 설정***
-            PreparedStatement ps = conn.prepareStatement( sql , Statement.RETURN_GENERATED_KEYS );
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            ps.setString( 1 , pjDto.getPjName() );     ps.setString( 2 , pjDto.getPjMemo() );
-            ps.setString( 3 , pjDto.getPjStartDate() );   ps.setString( 4, pjDto.getPjEndDate() );
-            ps.setString( 5 , pjDto.getRoadAddress() );   ps.setString( 6, pjDto.getDetailAddress() );
-            ps.setString( 7 , pjDto.getClientName() );   ps.setString( 8, pjDto.getClientPhone() );
-            ps.setString( 9 , pjDto.getClientMemo() );   ps.setString( 10, pjDto.getBnNo() );
-            ps.setString(11 , pjDto.getClientRepresent());
+            ps.setString(1, pjDto.getPjName());
+            ps.setString(2, pjDto.getPjMemo());
+            ps.setString(3, pjDto.getPjStartDate());
+            ps.setString(4, pjDto.getPjEndDate());
+            ps.setString(5, pjDto.getRoadAddress());
+            ps.setString(6, pjDto.getDetailAddress());
+            ps.setString(7, pjDto.getClientName());
+            ps.setString(8, pjDto.getClientPhone());
+            ps.setString(9, pjDto.getClientMemo());
+            ps.setString(10, pjDto.getBnNo());
+            ps.setString(11, pjDto.getClientRepresent());
 
             // 4. 기재된 sql 실행 한 결과 레코드 저장 개수 반환
             int count = ps.executeUpdate();
-            if( count == 1 ){
+            if (count == 1) {
                 // 5. auto_increment 로 자동 할당된 pk값 반환하여 rs 로 조작하기
                 ResultSet rs = ps.getGeneratedKeys();
-                if( rs.next() ){ // 자동 할당된 pk 값중에 첫번째 pk값 으로 이동
-                    return rs.getInt( 1 ); // pk값 가져오기
+                if (rs.next()) { // 자동 할당된 pk 값중에 첫번째 pk값 으로 이동
+                    return rs.getInt(1); // pk값 가져오기
                 }   // if end
             }   // if end
         } catch (Exception e) {
-            System.out.println("PjDao.create "+e);
+            System.out.println("PjDao.create " + e);
         }
         return 0; // 프로젝트 insert 실패시 0 반환한다.
     } // func end
@@ -57,13 +63,13 @@ public class PjDao extends Dao implements CommonRepository<PjDto, Integer, Strin
     @Override
     public PjDto read(Integer pjNo, String bnNo) {
         PjDto pjDto = new PjDto();
-        try{
+        try {
             String sql = "select * from ProjectInfo where pjNo = ? and bnNo = ?;";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1,pjNo);
-            ps.setString(2,bnNo);
+            ps.setInt(1, pjNo);
+            ps.setString(2, bnNo);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 pjDto.setPjNo(rs.getInt("pjNo"));                           // 프로젝트번호
                 pjDto.setPjName(rs.getString("pjName"));                    // 프로젝트명
                 pjDto.setPjMemo(rs.getString("pjMemo"));                    // 당사 메모
@@ -93,13 +99,13 @@ public class PjDao extends Dao implements CommonRepository<PjDto, Integer, Strin
     @Override
     public List<PjDto> readAll(String bnNo) {
         List<PjDto> list = new ArrayList<>();
-        try{
+        try {
             String sql = "select * from ProjectInfo where bnNo = ? and pjStatus = 1 order by pjStartDate desc ";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, bnNo);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
                 PjDto pjDto = new PjDto();
                 pjDto.setPjNo(rs.getInt("pjNo"));                           // 프로젝트번호
                 pjDto.setPjName(rs.getString("pjName"));                    // 프로젝트명
@@ -128,17 +134,22 @@ public class PjDao extends Dao implements CommonRepository<PjDto, Integer, Strin
     // 수정
     @Override
     public int update(PjDto pjDto) {
-        try{
+        try {
             String sql = "update ProjectInfo set pjName=?,pjMemo=?,pjStartDate=?,pjEndDate=?,roadAddress=?,detailAddress=?,clientName=?,clientPhone=?,clientMemo=?,clientRepresent=? where pjNo=?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString( 1 , pjDto.getPjName() );     ps.setString( 2 , pjDto.getPjMemo() );
-            ps.setString( 3 , pjDto.getPjStartDate() );   ps.setString( 4, pjDto.getPjEndDate() );
-            ps.setString( 5 , pjDto.getRoadAddress() );   ps.setString( 6, pjDto.getDetailAddress() );
-            ps.setString( 7 , pjDto.getClientName() );   ps.setString( 8, pjDto.getClientPhone() );
-            ps.setString( 9 , pjDto.getClientMemo() );   ps.setString(10 , pjDto.getClientRepresent());
-            ps.setInt(11,pjDto.getPjNo());
+            ps.setString(1, pjDto.getPjName());
+            ps.setString(2, pjDto.getPjMemo());
+            ps.setString(3, pjDto.getPjStartDate());
+            ps.setString(4, pjDto.getPjEndDate());
+            ps.setString(5, pjDto.getRoadAddress());
+            ps.setString(6, pjDto.getDetailAddress());
+            ps.setString(7, pjDto.getClientName());
+            ps.setString(8, pjDto.getClientPhone());
+            ps.setString(9, pjDto.getClientMemo());
+            ps.setString(10, pjDto.getClientRepresent());
+            ps.setInt(11, pjDto.getPjNo());
             int count = ps.executeUpdate();
-            if(count == 1) return pjDto.getPjNo();
+            if (count == 1) return pjDto.getPjNo();
         } catch (Exception e) {
             System.out.println("PjDao.update " + e);
         }
@@ -148,16 +159,52 @@ public class PjDao extends Dao implements CommonRepository<PjDto, Integer, Strin
     // 삭제(비활성화)
     @Override
     public int delete(Integer pjNo, String bnNo) {
-        try{
+        try {
             String sql = "update ProjectInfo set pjStatus = 0 where pjNo=? and bnno=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, pjNo);
             ps.setString(2, bnNo);
             int count = ps.executeUpdate();
-            if(count == 1 ) return pjNo;
+            if (count == 1) return pjNo;
         } catch (Exception e) {
             System.out.println("PjDao.delete " + e);
         }
         return -1; // 조회정보 없음
-    }
+    } // func end
+
+    // [PJ-06] 프로젝트 전체 조회 - 일반사용자
+    public List<PjDto> getUserPJinfo(int userNo) {
+        List<PjDto> list = new ArrayList<>();
+        try {
+            String sql = "select p.*, w.userNo from ProjectInfo p inner join pjworker w on p.pjno = w.pjno where userNo = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, userNo);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                PjDto pjDto = new PjDto();
+                pjDto.setPjNo(rs.getInt("pjNo"));                           // 프로젝트번호
+                pjDto.setPjName(rs.getString("pjName"));                    // 프로젝트명
+                pjDto.setPjMemo(rs.getString("pjMemo"));                    // 당사 메모
+                pjDto.setPjStartDate(rs.getString("pjStartDate"));          // 시작날짜
+                pjDto.setPjEndDate(rs.getString("pjEndDate"));              // 종료날짜
+                pjDto.setRoadAddress(rs.getString("roadAddress"));          // 도로명 주소
+                pjDto.setDetailAddress(rs.getString("detailAddress"));      // 상세주소
+                pjDto.setClientName(rs.getString("clientName"));            // 클라이언트명
+                pjDto.setClientRepresent(rs.getString("clientRepresent"));  // 클라이언트 담당자
+                pjDto.setClientPhone(rs.getString("clientPhone"));          // 클라이언트연락처
+                pjDto.setClientMemo(rs.getString("clientMemo"));            // 업무요청사항
+                pjDto.setPjStatus(rs.getString("pjStatus"));                // 상태
+                pjDto.setCreateDate(rs.getString("createDate"));            // 생성일
+                pjDto.setUpdateDate(rs.getString("updateDate"));            // 수정일
+                pjDto.setBnNo(rs.getString("bnNo"));                        // 사업자 번호
+                list.add(pjDto);
+            }
+            return list;
+        } catch (Exception e) {
+            System.out.println("PjDao.getUserPJinfo " + e);
+        }
+        return null;
+    } //func end
+
 }   // class end
