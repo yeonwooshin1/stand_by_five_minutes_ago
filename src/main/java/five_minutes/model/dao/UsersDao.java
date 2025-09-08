@@ -151,7 +151,6 @@ public class UsersDao extends Dao { // class start
     // @author OngTK
     // pjWorker 단에서 인력정보 검색을 위하여 생성
     // businessNo만 일반회원 조회·검색이 가능하며, businessNo 가 존재하는 user은 포함하지 않는다.
-    // todo OngTK 사용자 정보 조회(검색)
     public List<UsersDto> readAllUserInfo(String keyword) {
         List<UsersDto> list = new ArrayList<>();
         try{
