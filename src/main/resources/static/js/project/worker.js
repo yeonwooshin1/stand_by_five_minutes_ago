@@ -15,6 +15,7 @@
 13. 인력 선택 버튼-모달 선택 시 정보 삽입 및 TemporarySaveWorker 업데이트
 14. 삭제 버튼
 15. 저장 버튼
+16. 다음 버튼
 */
 
 console.log("Pjworker func exe")
@@ -374,8 +375,8 @@ readAllUser()
 // [12-1] 인력 검색 ================================================================
 const searchUser = async (event) => {
     const keyword = document.querySelector("#workerSearchInput").value
- 
-        try {
+
+    try {
         const r = await fetch(`/user/find/search?keyword=${keyword}`);
         const d = await r.json();
 
@@ -471,33 +472,44 @@ document.querySelector("#pjworkerTbody").addEventListener("click", (e) => {
 
 // [15] 저장 버튼 =========================
 const savePJworker = async () => {
+    try{
     const r = await fetch("/project/worker", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(TemporarySaveWorker)
     });
     const d = await r.json();
-    
+
     let success = 0;
     let fail = 0;
-    
-    d.forEach((value) => {
-        if (value.pjRoleNo > 7000000 && value.Result === value.pjRoleNo) {
-            success++;
-        } else if (value.pjRoleNo > 7000000 && value.Result < 100) {
-            fail++;
-        } else if (value.pjRoleNo < 7000000 && value.Result > 7000000) {
-            success++;
-        } else if (value.pjRoleNo < 7000000 && value.Result < 100) {
-            fail++;
-        }
-    });
 
+    d.forEach((value) => {
+        TemporarySaveWorker.forEach((worker) => {
+            if (worker.pjRoleNo == value.pjRoleNo && worker.changeStatus == 0) {
+                return;
+            } else if (worker.pjRoleNo == value.pjRoleNo && worker.changeStatus > 0) {
+                if (value.pjRoleNo > 7000000 && value.Result === value.pjRoleNo) {
+                    success++;
+                } else if (value.pjRoleNo > 7000000 && value.Result < 100) {
+                    fail++;
+                } else if (value.pjRoleNo < 7000000 && value.Result > 7000000) {
+                    success++;
+                } else if (value.pjRoleNo < 7000000 && value.Result < 100) {
+                    fail++;
+                }
+            }
+        })
+    });
+    // 저장 작업 완료 후 초기화
+    TemporarySaveWorker.length = 0;
     alert(`성공 ${success}건 / 실패 ${fail}건`);
     await readAllpjworker(); // 전체 조회 다시 실행
+    } catch(error){
+        console.log(error)
+    }
 }
 
-// [16] 다음 버튼
+// [16] 다음 버튼 ============================================================
 const nextStage = async () => {
     let result = confirm(`[경고] 저장을 하지 않고 다음 페이지로 이동하시면, 변경된 내용은 삭제되며 복구할 수 없습니다. \n계속 진행하시겠습니까?`)
     if (result == false) { return }
