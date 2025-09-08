@@ -1,12 +1,11 @@
 package five_minutes.service;
 
 import five_minutes.model.dao.ProjectPerformDao;
-import five_minutes.model.dto.ChkItemLookupDto;
-import five_minutes.model.dto.ProjectPerformDto;
-import five_minutes.model.dto.RoleLookupDto;
+import five_minutes.model.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service                    // 서비스 어노테이션
@@ -37,6 +36,41 @@ public class ProjectPerformService {    // class start
         return projectPerformDao.findChkItemsLookup( pjNo );
     }   // func end
 
+
+    // 값 저장 서비스
+    public List<ProjectPerformDto> saveAll(ReturnProjectPerformDto req, int pjNo) {
+        // 1) 생성
+        // 값 없으면 넘어가라
+        if (req.getCreates() != null) {
+            for (ProjectPerformDto d : req.getCreates()) {
+                // 수정할 값이니까 pfNo 없으면 continue 오류기 때문
+                if (d.getPjRoleNo() <= 0 || d.getPjChkItemNo() <= 0) continue;
+                projectPerformDao.insert(d);
+            }   // for end
+        }   // if end
+
+        // 2) 수정
+        // 값 없으면 넘어가라
+        if (req.getUpdates() != null) {
+            for (ProjectPerformDto d : req.getUpdates()) {
+                // 수정할 값이니까 pfNo 없으면 continue 오류기 때문
+                if (d.getPfNo() <= 0) continue;
+                // 수정할 값이니까 pfNo 없으면 continue 오류기 때문
+                if (d.getPjRoleNo() <= 0 || d.getPjChkItemNo() <= 0) continue;
+                projectPerformDao.update(d);
+            }   // for end
+        }   // if end
+
+        // 3) 삭제
+        // 값 없으면 넘어가라
+        if (req.getDeletes() != null && !req.getDeletes().isEmpty()) {
+            projectPerformDao.deleteByIds(req.getDeletes());
+        }   // if end
+
+        // 4) 최신 목록 리턴 (방법 C)
+        return projectPerformDao.findByProject(pjNo);
+
+    }   // func end
 
     // @Author OngTK
     // 엑셀출력용 메소드
