@@ -25,18 +25,9 @@ window.onHeaderReady = async () => {
     await readAllpjworker();
 };
 
-// [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
-$(document).ready(function () {
-    $('#descriptionArea').summernote({
-        lang: 'ko-KR',
-        // 부가 기능
-        minHeight: 600
-    });
-});
-
 // [0] 로그인 체크
 const loginCheck = async () => {
-    console.log("loginCheck func exe")
+    // console.log("loginCheck func exe")
     if (userNo == null || userNo === 0) {
         alert("[경고] 로그인 후 이용가능합니다.")
         location.href = "/index.jsp"
@@ -46,6 +37,15 @@ const loginCheck = async () => {
     }
 }
 
+// [ 역할템플릿 만들기 모달 내 Summer Note 연동 ]
+$(document).ready(function () {
+    $('#descriptionArea').summernote({
+        lang: 'ko-KR',
+        // 부가 기능
+        minHeight: 600
+    });
+});
+
 // [1] 저장하기 이전 pjWorkDto를 저장 관리하기 위한 배열
 const TemporarySaveWorker = [];
 let currentRtName = "";
@@ -53,14 +53,14 @@ let currentRtDescription = "";
 
 // [2] pjworker 전체 조회
 const readAllpjworker = async () => {
-    console.log("readAllpjworker func exe")
+    // console.log("readAllpjworker func exe")
     // [1.1] 표시 영역
     const pjworkerTbody = document.querySelector("#pjworkerTbody")
 
     // [1.2] fetch
     const r = await fetch(`/project/worker?pjNo=${pjNo}`, { method: "GET" })
     const d = await r.json()
-    console.log(d)
+    // console.log(d)
     let html = '';
     try {
         if (d.length != 0) {
@@ -98,7 +98,7 @@ const readAllpjworker = async () => {
             })
         }
         pjworkerTbody.innerHTML = html;
-        console.log(TemporarySaveWorker)
+        // console.log(TemporarySaveWorker)
     } catch (error) {
         console.log(error)
     }
@@ -161,7 +161,7 @@ document.addEventListener("click", function (e) {
 
 // [04] 행 추가 버튼 클릭 시 자유 입력 행 생성 =========================================
 const addClearRow = async () => {
-    console.log("addClearRow func exe")
+    // console.log("addClearRow func exe")
     const newRow = document.createElement("tr");
 
     // 임시 PK 생성
@@ -207,14 +207,14 @@ const addClearRow = async () => {
 
 // [05] 역할 템플릿 모달 내 대분류-소분류 불러오기===========================================
 const chooseRoleTemp = async () => {
-    console.log("chooseRoleTemp func exe")
+    // console.log("chooseRoleTemp func exe")
     // select 표시 영역
     const modalRoleTemplate = document.querySelector(".modalRoleTemplate")
     // 대분류 역할 정보 가져오기
     try {
         const r = await fetch("/roleTem")
         const d = await r.json()
-        console.log(d)
+        // console.log(d)
 
         let html = '';
         if (d.length != 0) {
@@ -237,7 +237,7 @@ const chooseRoleTemItem = async (rtNo) => {
     try {
         const r = await fetch(`/roleTem/Item?rtNo=${rtNo}`)
         const d = await r.json()
-        console.log(d)
+        // console.log(d)
 
         let html = '';
         let i = 1;
@@ -268,7 +268,7 @@ document.querySelector(".modalRoleTemplate").addEventListener("change", function
     // select 된 option을 변수에 저장
     currentRtName = this.options[this.selectedIndex].dataset.rtname;
     currentRtDescription = this.options[this.selectedIndex].dataset.rtdescription;
-    console.log(rtNo)
+    // console.log(rtNo)
     if (rtNo != 0) {
         chooseRoleTemItem(rtNo);
     }
@@ -339,13 +339,13 @@ document.querySelector("#pjworkerTbody").addEventListener("change", function (e)
 
 // [11] 인력 조회 ===================================================================
 const readAllUser = async () => {
-    console.log("readAllUser func exe")
+    // console.log("readAllUser func exe")
     const workerTbody = document.querySelector("#workerTbody")
 
     try {
         const r = await fetch(`/user/find/search`, { method: "GET" })
         const d = await r.json()
-        console.log(d)
+        // console.log(d)
 
         let html = ''
         let i = 0;
@@ -401,7 +401,9 @@ const searchUser = async (event) => {
             i++
         });
         tbody.innerHTML = html;
-    } catch (error) { console.log(error) }
+    } catch (error) { 
+        console.log(error) 
+    }
 }
 
 // [12-2] 엔터키 검색
