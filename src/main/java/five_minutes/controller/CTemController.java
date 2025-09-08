@@ -55,7 +55,6 @@ public class CTemController {  // class start
     })
     @PostMapping("")
     public int createCTem(@RequestBody CTemDto cTemDto, HttpSession session) {
-
         // 1. 로그인상태 확인
         if (session.getAttribute("loginUserNo") == null) {
             CTemDto dto = new CTemDto();

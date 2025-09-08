@@ -131,6 +131,9 @@ public class PjCheckService {
         if (pjCheckDto != null) {
             // 3. DTO에 pjNo와 pjHelpText 설정
             pjCheckDto.setPjNo(pjNo);
+            // 4. ctiHelpText를 pjHelpText에 넣기
+            pjCheckDto.setPjHelpText(pjCheckDto.getCtiHelpText());
+            // 5. DAO 호출하여 DB에 저장 및 결과 반환
             return pjCheckDao.loadPJCheckTem(pjCheckDto);
         }
         // 템플릿 정보 조회 실패 시 0 반환

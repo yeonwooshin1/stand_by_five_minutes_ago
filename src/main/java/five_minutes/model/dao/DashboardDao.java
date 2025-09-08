@@ -1,9 +1,6 @@
 package five_minutes.model.dao;
 
-import five_minutes.model.dto.DashboardDto;
-import five_minutes.model.dto.PjDto;
-import five_minutes.model.dto.ProjectPerformDto;
-import five_minutes.model.dto.ProjectPerformFileDto;
+import five_minutes.model.dto.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -73,6 +70,59 @@ public class DashboardDao {
      */
     public int uploadFilePJDash(ProjectPerformFileDto projectPerformFileDto){
         return 0;
+    }
+
+    // [5] 프로젝트 대시보드 - 업로드 파일 삭제
+    /*
+        fileNo를 입력받아 일치하는 pjPerformFile 테이블 레코드를 삭제한다.
+        * pjNo, bnNo를 확인하기
+     */
+    public int deleteFilePJDash(int fileNo) {
+        return 0;
+    }
+
+    // [6] 프로젝트 대시보드 - 근무 정보 메모 수정
+    /*
+        pjPerform 테이블의 pfNo, pfStatus, note를 입력받아 수정한다.
+        * pjNo, bnNo를 확인하기
+     */
+    public int updateNotePJDash (ProjectPerformDto projectPerformDto){
+        return 0;
+    }
+
+    // [7] 프로젝트 대시보드 - 근무자 상세 정보
+    /*
+        1. pjPerform의 pjRoleNo를 확인하여, pjWorker 테이블에서 일치하는 레코드를 확인한다.
+        2. 일치하는 레코드의 userNo를 확인하여, Users 테이블에서 일치하는 레코드를 조회한다.
+        * 로직 안내
+        1. pjPerform의 pjRoleNo를 확인하여, pjWorker 테이블에서 일치하는 레코드를 확인한다.
+        2. 일치하는 레코드의 userNo를 확인하여, Users 테이블에서 일치하는 레코드를 조회한다.
+        * 프론트에서 근무자 텍스트를 클릭할 시 화면에 띄우기
+     */
+    public UsersDto getUserInDash (int pjNo , int userNo){
+        return null;
+    }
+
+    // [8] 프로젝트 대시보드 - 역할명 상세 정보
+    /*
+        pjPerform의 pjRoleNo를 확인하여 pjWorker 테이블에서 일치하는 레코드를 조회한다.
+        * 로직 안내
+        pjPerform의 pjRoleNo를 확인하여 pjWorker 테이블에서 일치하는 레코드를 조회한다.
+        * 프론트에서 역할명 텍스트를 클릭할 시 화면에 띄우기
+     */
+    public ProjectWorkerDto getWorkerInDash (int pjNo , int pjRoleNo){
+        return null;
+    }
+
+    // [9] 프로젝트 대시보드 - 체크리스트 상세 정보
+    /*
+        pjPerform의 pjChkItemNo를 확인하여 pjChecklistItem 테이블에서 일치하는 레코드를 조회한다.
+        * 로직 안내
+        pjPerform의 pjChkItemNo를 확인하여 pjChecklistItem 테이블에서 일치하는 레코드를 조회한다.
+        * 프론트에서 체크리스트명 텍스트를 클릭할 시 화면에 띄우기
+     */
+    public PjCheckDto getCheckInDash (int pjNo , int pjChkItemNo){
+        return null;
     }
 
 
