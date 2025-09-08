@@ -30,6 +30,8 @@ public class PjCheckDto {
     // DB 테이블 외
     // [*] 세션 확인용
     private String bnNo;
+    // [*] 실패 표현용(성공, 실패, 세션실패)
+    private String status;
     // [1] 체크리스트 템플릿
     private int ctNo;
     private String ctName;

@@ -27,7 +27,7 @@ public class PjCheckService {
     private final PjCheckDao pjCheckDao;
 
     // [*] pjNo(프로젝트PK)이 로그인한 사용자의 bnNo(세션)인지 확인
-    public boolean checkPjNo(int pjNo , String bnNo){
+    public boolean checkPjNo(int pjNo, String bnNo) {
         return pjCheckDao.checkPjNo(pjNo, bnNo);
     }
 
@@ -52,7 +52,7 @@ public class PjCheckService {
         3. 프로젝트체크리스트 테이블의 DB를 모두 불러온다.
      */
 
-    public List<PjCheckDto> getPJCheck(int pjNo){
+    public List<PjCheckDto> getPJCheck(int pjNo) {
         return pjCheckDao.getPJCheck(pjNo);
     }
 
@@ -65,7 +65,7 @@ public class PjCheckService {
         * 체크리스트 설명 보기 클릭 했을 때 출력
      */
 
-    public PjCheckDto getInfoPJCheck(int pjNo , int pjChkItemNo){
+    public PjCheckDto getInfoPJCheck(int pjNo, int pjChkItemNo) {
         return pjCheckDao.getInfoPJCheck(pjNo, pjChkItemNo);
     }
 
@@ -77,18 +77,18 @@ public class PjCheckService {
         3. pjChklTitle와 pjhelpText를 입력 받는다.
         4. 프로젝트 체크리스트 DB를 수정한다.
      */
-    public int updatePJCheck(PjCheckDto pjCheckDto){
+    public int updatePJCheck(PjCheckDto pjCheckDto) {
         return pjCheckDao.updatePJCheck(pjCheckDto);
     }
 
     // [5] 프로젝트 체크리스트 삭제
     /*
         * 로직 안내
-        1. 일치하는  pjNo와 pjChkItemNo를 확인한다.
+        1. 일치하는 pjNo와 pjChkItemNo를 확인한다.
         2. 세션에서 bnNo(고용자번호/작성자번호)를 확인한다.
         3. pjChkIStatus(상태)를 0으로 변경한다.
      */
-    public int deletePJCheck(int pjChkItemNo){
+    public int deletePJCheck(int pjChkItemNo) {
         return pjCheckDao.deletePJCheck(pjChkItemNo);
     }
 
@@ -100,7 +100,7 @@ public class PjCheckService {
         3. CTemDto DB의 ctNo와, ctNo와 같은 레코드의 ctName을 꺼내온다.
         * 프론트에서는 체크리스트 추가 버튼 -> 대분류 셀렉트로 처리
      */
-    public CTemDto getPJCheckTem(int ctNo){
+    public CTemDto getPJCheckTem(int ctNo) {
         return pjCheckDao.getPJCheckTem(ctNo);
     }
 
@@ -111,7 +111,7 @@ public class PjCheckService {
         2. CTItemDto의 DB에서 ctiNo, ctiTitle를 불러온다.
         * ctiNo의 값에서 500000을 빼고 프론트에 송출해서 1, 2, 3번 식으로 출력하기
      */
-    public List<CTItemDto> getPJCheckItem(int ctNo){
+    public List<CTItemDto> getPJCheckItem(int ctNo) {
         return pjCheckDao.getPJCheckItem(ctNo);
     }
 
@@ -124,9 +124,17 @@ public class PjCheckService {
         4. 두 데이터를 조합해 PjCheckDto에 추가한다.
         * CTemDto_CTItemDto 스네이크 형식으로 데이터를 묶어 저장한다.
      */
-    public int loadPJCheckTem(PjCheckDto pjCheckDto){
-
-        return pjCheckDao.loadPJCheckTem(pjCheckDto);
+    public int loadAndSaveTemplate(int ctiNo, int pjNo) {
+        // 1. ctiNo로 템플릿 정보 조회
+        PjCheckDto pjCheckDto = pjCheckDao.sumPJCheckTem(ctiNo);
+        // 2. 템플릿 정보 조회 성공 시
+        if (pjCheckDto != null) {
+            // 3. DTO에 pjNo와 pjHelpText 설정
+            pjCheckDto.setPjNo(pjNo);
+            return pjCheckDao.loadPJCheckTem(pjCheckDto);
+        }
+        // 템플릿 정보 조회 실패 시 0 반환
+        return 0;
     }
 
 }

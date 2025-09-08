@@ -4,6 +4,7 @@ import five_minutes.model.dto.CTItemDto;
 import five_minutes.model.dto.CTemDto;
 import five_minutes.model.dto.PjCheckDto;
 import five_minutes.service.PjCheckService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class PjCheckController {
     // [*] DI
     private final PjCheckService pjCheckService;
 
-// [1] 프로젝트 체크리스트 추가
+    // [1] 프로젝트 체크리스트 추가
     /*
         * 로직 안내
         1. 일치하는 pjNo를 확인한다.
@@ -34,8 +35,22 @@ public class PjCheckController {
         3. 세션에서 bnNo를 확인 한다.
         4. 프로젝트 체크리스트 DB에 저장한다.
      */
+    /*
+        URL : http://localhost:8080/project/checklist
+        BODY :    { "pjNo" : 6000001 , "pjChklTitle" : "출근확인" , "pjHelpText" : "출근 최소 5분전에 출근 장소 도착" }
+     */
     @PostMapping("")
-    public int createPJCheck(PjCheckDto pjCheckDto) {
+    public int createPJCheck(@RequestBody PjCheckDto pjCheckDto, HttpSession session) {
+        // 세션 확인
+        if (session.getAttribute("loginUserNo") == null) {
+            pjCheckDto.setStatus("NOT_LOGGED_IN");
+            return -1; // 비로그인시 -1 리턴 및 setStatus 전송
+        }
+        // 2. pjNo가 맞으면 사업자번호 조회
+        String bnNo = (String) session.getAttribute("loginBnNo");
+        pjCheckService.checkPjNo(pjCheckDto.getPjNo() , bnNo);
+        // 3. 리턴
+        pjCheckDto.setStatus("ACCESS_OK");
         return pjCheckService.createPJCheck(pjCheckDto);
     }
 
@@ -48,7 +63,7 @@ public class PjCheckController {
      */
 
     @GetMapping("")
-    public List<PjCheckDto> getPJCheck(int pjNo){
+    public List<PjCheckDto> getPJCheck(int pjNo) {
         return pjCheckService.getPJCheck(pjNo);
     }
 
@@ -62,7 +77,7 @@ public class PjCheckController {
      */
 
     @GetMapping("/info")
-    public PjCheckDto getInfoPJCheck(int pjNo , int pjChkItemNo){
+    public PjCheckDto getInfoPJCheck(int pjNo, int pjChkItemNo) {
         return pjCheckService.getInfoPJCheck(pjNo, pjChkItemNo);
     }
 
@@ -75,7 +90,7 @@ public class PjCheckController {
         4. 프로젝트 체크리스트 DB를 수정한다.
      */
     @PutMapping("")
-    public int updatePJCheck(PjCheckDto pjCheckDto){
+    public int updatePJCheck(@RequestBody PjCheckDto pjCheckDto) {
         return pjCheckService.updatePJCheck(pjCheckDto);
     }
 
@@ -87,7 +102,7 @@ public class PjCheckController {
         3. pjChkIStatus(상태)를 0으로 변경한다.
      */
     @DeleteMapping("")
-    public int deletePJCheck(int pjChkItemNo){
+    public int deletePJCheck(int pjChkItemNo) {
         return pjCheckService.deletePJCheck(pjChkItemNo);
     }
 
@@ -100,7 +115,7 @@ public class PjCheckController {
         * 프론트에서는 체크리스트 추가 버튼 -> 대분류 셀렉트로 처리
      */
     @GetMapping("/tem")
-    public CTemDto getPJCheckTem(int ctNo){
+    public CTemDto getPJCheckTem(int ctNo) {
         return pjCheckService.getPJCheckTem(ctNo);
     }
 
@@ -112,7 +127,7 @@ public class PjCheckController {
         * ctiNo의 값에서 500000을 빼고 프론트에 송출해서 1, 2, 3번 식으로 출력하기
      */
     @GetMapping("/item")
-    public List<CTItemDto> getPJCheckItem(int ctNo){
+    public List<CTItemDto> getPJCheckItem(int ctNo) {
         return pjCheckService.getPJCheckItem(ctNo);
     }
 
@@ -126,8 +141,9 @@ public class PjCheckController {
         * CTemDto_CTItemDto 스네이크 형식으로 데이터를 묶어 저장한다.
      */
     @PostMapping("/tem")
-    public int loadPJCheckTem(PjCheckDto pjCheckDto){
-        return pjCheckService.loadPJCheckTem(pjCheckDto);
+    public int loadAndSaveTemplate(@RequestParam int ctiNo, @RequestParam int pjNo) {
+        int pjCheckId = pjCheckService.loadAndSaveTemplate(ctiNo, pjNo);
+        return pjCheckId;
     }
 
 

@@ -278,6 +278,3 @@ WHERE pjNo = ? AND bnNo = ?;
 SELECT COUNT(*) 
 FROM PjChecklistItem pc
 INNER JOIN ProjectInfo pi ON pc.pjNo = pi.pjNo;
-
-insert into PjChecklistItem ( pjNo, pjChklTitle , pjHelpText ) values ( 6000001, "ㅎㅎ" , "ㅋㅋ" );
-select * from PjChecklistItem where pjChkIStatus != 0 and pjNo = 6000001;
