@@ -6,6 +6,7 @@ import five_minutes.model.dto.ProjectWorkerDto;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -69,9 +70,9 @@ public class ExcelService {
                 writeProjectInfo(sheet1, pjDto);
 
                 // 두 번째 시트 작성
-//                List<ProjectWorkerDto> workers = projectWorkerService.getAllPJWorker(pjNo);
-//                Sheet sheet2 = workbook.getSheetAt(1);
-//                writeWorkers(sheet2, workers);
+                List<ProjectWorkerDto> workers = projectWorkerService.getAllPJWorker(pjNo);
+                Sheet sheet2 = workbook.getSheetAt(1);
+                writeWorkers(sheet2, workers);
 
                 // Todo OngTk - 연우님 기능 완성 후 연결
 //                // 세 번째 시트 작성
@@ -101,7 +102,7 @@ public class ExcelService {
         sheet.getRow(1).getCell(1).setCellValue(pjDto.getPjName());                                         // B2 - 프로젝트명
         sheet.getRow(2).getCell(1).setCellValue(pjDto.getPjStartDate());                                    // B3 - 시작일
         sheet.getRow(3).getCell(1).setCellValue(pjDto.getPjEndDate());                                      // B4 - 종료일
-        sheet.getRow(4).getCell(1).setCellValue(pjDto.getRoadAddress() + " "+ pjDto.getDetailAddress() );   // B5 - 장소
+        sheet.getRow(4).getCell(1).setCellValue(pjDto.getRoadAddress() + " " + pjDto.getDetailAddress());   // B5 - 장소
         sheet.getRow(5).getCell(1).setCellValue(pjDto.getPjMemo());                                         // B6 - 메모
         //클라이언트 정보
         sheet.getRow(7).getCell(1).setCellValue(pjDto.getClientName());                                     // B8 - 클라이언트 명
@@ -110,16 +111,21 @@ public class ExcelService {
         sheet.getRow(10).getCell(1).setCellValue(pjDto.getClientMemo());                                    // B11 - 요청사항
     } // func end
 
-//    // [03] 인력관리 시트 작성
-//    private void writeWorkers(Sheet sheet, List<ProjectWorkerDto> workers) {
-//        int rowIdx = 2;
-//        for (ProjectWorkerDto worker : workers) {
-//            Row row = sheet.createRow(rowIdx++);
-//            row.createCell(0).setCellValue(worker.getName());
-//            row.createCell(1).setCellValue(worker.getRole());
-//            // ... 필요한 정보 추가
-//        }
-//    }
+    // [03] 인력관리 시트 작성
+    private void writeWorkers(Sheet sheet, List<ProjectWorkerDto> workers) {
+        int rowIdx = 2;
+        for (ProjectWorkerDto dto : workers) {
+            Row row = sheet.getRow(rowIdx++);                                // 3행부터 작성
+            row.getCell(0).setCellValue(dto.getPjRoleName());               // A열 - 역할명
+            row.getCell(1).setCellValue(dto.getUserName());                 // B열 - 이름
+            row.getCell(2).setCellValue(dto.getUserPhone());                // C열 - 연락처
+            row.getCell(3).setCellValue(dto.getRoadAddress());              // D열 - 주소
+            String lv = dto.getPjRoleLv() == 1 ? "입문자" : dto.getPjRoleLv() == 2 ? "초급" : dto.getPjRoleLv() == 3 ? "중급" : dto.getPjRoleLv() == 4 ? "상급" : "전문가";
+            row.getCell(4).setCellValue(lv);                                // E열 - 숙련도
+            row.getCell(5).setCellValue(dto.getCreateDate());               // F열 - 작성일
+            row.getCell(6).setCellValue(dto.getUpdateDate());               // G열 - 수정일
+        }
+    } // func end
 
     // [04] 업무관리 시트 작성
 //    private void writePerforms(Sheet sheet, List<ProjectPerformDto> performs) {
