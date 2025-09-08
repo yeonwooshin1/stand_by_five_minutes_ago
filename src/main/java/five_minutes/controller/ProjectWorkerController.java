@@ -33,7 +33,7 @@ public class ProjectWorkerController {
         System.out.println("list = " + list + ", session = " + session);
 
         // 로그인 확인
-        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBnNo") == null){
+        if( session.getAttribute("loginUserNo") == null ||session.getAttribute("loginBNno") == null){
 //            return null;
         }
 
