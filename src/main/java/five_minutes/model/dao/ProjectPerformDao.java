@@ -112,7 +112,7 @@ public class ProjectPerformDao extends Dao {    // class start
         List<ProjectPerformDto> list = new ArrayList<>();
         try {
             String sql = "select p.*, w.pjroleName, w.pjNo, u.userName from pjPerform p inner join pjworker w on p.pjroleNo = w.pjroleNo " +
-                    " inner join Users u on w.userNo = u.userNo where w.pjNo = ?";
+                    " inner join Users u on w.userNo = u.userNo where w.pjNo = ?  order by pfStart ";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, pjNo);
             ResultSet rs = ps.executeQuery();
