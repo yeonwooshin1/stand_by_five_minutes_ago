@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /// **Info** =========================
@@ -41,20 +42,22 @@ public class PjCheckController {
      */
     @PostMapping("")
     public int createPJCheck(@RequestBody PjCheckDto pjCheckDto, HttpSession session) {
-        // 세션 확인
+        // 1. 세션 확인
         if (session.getAttribute("loginUserNo") == null) {
             pjCheckDto.setStatus("NOT_LOGGED_IN");
             return -1; // 비로그인시 -1 리턴 및 setStatus 전송
         }
         // 2. pjNo가 맞으면 사업자번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
-        pjCheckService.checkPjNo(pjCheckDto.getPjNo() , bnNo);
+        pjCheckService.checkPjNo(pjCheckDto.getPjNo(), bnNo);
+
         // 3. 리턴
         pjCheckDto.setStatus("ACCESS_OK");
         return pjCheckService.createPJCheck(pjCheckDto);
     }
 
     // [2] 프로젝트 체크리스트 목록조회
+    // URL : http://localhost:8080/project/checklist?pjNo=6000001
     /*
         * 로직 안내
         1. pjNo를 확인한다.
@@ -63,11 +66,43 @@ public class PjCheckController {
      */
 
     @GetMapping("")
-    public List<PjCheckDto> getPJCheck(int pjNo) {
-        return pjCheckService.getPJCheck(pjNo);
+    public List<PjCheckDto> getPJCheck(@RequestParam int pjNo, HttpSession session) {
+        List<PjCheckDto> list = pjCheckService.getPJCheck(pjNo);
+        // 1. 세션 확인
+        if (session.getAttribute("loginUserNo") == null) {
+            list = new ArrayList<>();
+            PjCheckDto dto = new PjCheckDto();
+            dto.setStatus("NOT_LOGGED_IN");
+            list.add(dto);
+            return list;
+        }
+        // 2. pjNo 맞으면 사업자번호 조회
+        String bnNo = (String) session.getAttribute("loginBnNo");
+        boolean loginCheck = pjCheckService.checkPjNo(pjNo, bnNo);
+        if (!loginCheck) {
+            list = new ArrayList<>();
+            PjCheckDto dto = new PjCheckDto();
+            dto.setStatus("ACCESS_DENIED");
+            list.add(dto);
+            return list;
+        }
+        // 3. pjNo 못 찾았으면
+        if (list.isEmpty()) {
+            PjCheckDto dto = new PjCheckDto();
+            dto.setStatus("NOT_FOUND");
+            list.add(dto);
+            return list;
+        }
+        // 4. 리턴
+        for (PjCheckDto dto : list) {
+            dto.setStatus("ACCESS_OK");
+            dto.setBnNo(bnNo); // 세션에서 가져온 bnNo 직접 넣기
+        }
+        return list;
     }
 
     // [3] 프로젝트 체크리스트 설명 조회
+    // URL : http://localhost:8080/project/checklist/info?pjNo=6000001&pjChkItemNo=8000001
     /*
         * 로직 안내
         1. pjNo와 pjChkItemNo를 확인한다.
@@ -77,11 +112,33 @@ public class PjCheckController {
      */
 
     @GetMapping("/info")
-    public PjCheckDto getInfoPJCheck(int pjNo, int pjChkItemNo) {
-        return pjCheckService.getInfoPJCheck(pjNo, pjChkItemNo);
+    public PjCheckDto getInfoPJCheck(@RequestParam int pjNo, @RequestParam int pjChkItemNo, HttpSession session) {
+        PjCheckDto dto = pjCheckService.getInfoPJCheck(pjNo, pjChkItemNo);
+        // 1. 세션 확인
+        if (session.getAttribute("loginUserNo") == null) {
+            dto.setStatus("NOT_LOGGED_IN");
+            return dto;
+        }
+        // 2. pjNo 맞으면 사업자번호 조회
+        String bnNo = (String) session.getAttribute("loginBnNo");
+        boolean loginCheck = pjCheckService.checkPjNo(pjNo, bnNo);
+        if (!loginCheck) {
+            dto = new PjCheckDto();
+            dto.setStatus("ACCESS_DENIED");
+            return dto;
+        }
+        // 3. DTO에서 pjNo 찾을 수 없는 경우
+        if (dto == null) {
+            dto.setStatus("NOT_FOUND");
+        }
+        // 3. 리턴
+        dto.setStatus("ACCESS_OK");
+        return dto;
     }
 
     // [4] 프로젝트 체크리스트 수정
+    // URL : http://localhost:8080/project/checklist
+    // BODY : {"pjChklTitle" : "출근확인 세부업무 1" , "pjHelpText" : "출근확인 수행을 위한 세부 zzz작업 " , "pjChkItemNo" : 8000001 }
     /*
         * 로직 안내
         1. 일치하는 pjNo와 pjChkItemNo를 확인한다.
@@ -90,11 +147,22 @@ public class PjCheckController {
         4. 프로젝트 체크리스트 DB를 수정한다.
      */
     @PutMapping("")
-    public int updatePJCheck(@RequestBody PjCheckDto pjCheckDto) {
+    public int updatePJCheck(@RequestBody PjCheckDto pjCheckDto, HttpSession session) {
+        // 1. 세션 확인
+        if (session.getAttribute("loginUserNo") == null) {
+            pjCheckDto.setStatus("NOT_LOGGED_IN");
+            return -1; // 비로그인시 -1 리턴 및 setStatus 전송
+        }
+        // 2. pjNo 맞으면 사업자번호 조회
+        String bnNo = (String) session.getAttribute("loginBnNo");
+        pjCheckService.checkPjNo(pjCheckDto.getPjNo(), bnNo);
+        // 3. 리턴
+        pjCheckDto.setStatus("ACCESS_OK");
         return pjCheckService.updatePJCheck(pjCheckDto);
     }
 
     // [5] 프로젝트 체크리스트 삭제
+    // URL : http://localhost:8080/project/checklist?pjNo=6000001&pjChkItemNo=8000001
     /*
         * 로직 안내
         1. 일치하는  pjNo와 pjChkItemNo를 확인한다.
@@ -102,11 +170,26 @@ public class PjCheckController {
         3. pjChkIStatus(상태)를 0으로 변경한다.
      */
     @DeleteMapping("")
-    public int deletePJCheck(int pjChkItemNo) {
+    public int deletePJCheck(@RequestParam int pjNo , @RequestParam int pjChkItemNo, HttpSession session) {
+        // 1. 세션 확인
+        if (session.getAttribute("loginUserNo") == null) {
+            PjCheckDto dto = new PjCheckDto();
+            dto.setStatus("NOT_LOGGED_IN");
+            return -1; // 비로그인시 -1 리턴 및 setStatus 전송
+        }
+        // 2. pjNo 맞으면 사업자번호 조회
+        String bnNo = (String) session.getAttribute("loginBnNo");
+        PjCheckDto dto = new PjCheckDto();
+        pjCheckService.checkPjNo(pjNo, bnNo);
+
+        // 3. 리턴
+        dto.setStatus("ACCESS_OK");
+        dto.setBnNo(bnNo);
         return pjCheckService.deletePJCheck(pjChkItemNo);
     }
 
     // [6] 프로젝트 체크리스트 템플릿 전체조회 - 대분류
+    // URL : http://localhost:8080/project/checklist/tem?ctNo=4000001
     /*
         * 로직 안내
         1. CTemDto의 ctNo 값을 확인한다.
@@ -115,11 +198,21 @@ public class PjCheckController {
         * 프론트에서는 체크리스트 추가 버튼 -> 대분류 셀렉트로 처리
      */
     @GetMapping("/tem")
-    public CTemDto getPJCheckTem(int ctNo) {
+    public CTemDto getPJCheckTem(@RequestParam int ctNo , HttpSession session) {
+        // 1. 세션 확인
+        if (session.getAttribute("loginUserNo") == null) {
+            CTemDto dto = new CTemDto();
+            dto.setStatus("NOT_LOGGED_IN");
+            return dto; // 비로그인시 -1 리턴 및 setStatus 전송
+        }
+        // 2. pjNo 맞으면 사업자번호 조회
+        String bnNo = (String) session.getAttribute("loginBnNo");
+        // 3. 리턴
         return pjCheckService.getPJCheckTem(ctNo);
     }
 
     // [7] 프로젝트 체크리스트 템플릿 전체조회 - 상세
+    // URL : /project/checklist/item?ctNo=4000001
     /*
         * 로직 안내
         1. CTItemDto의 ctNo 값이 CTemDto의 ctNo와 일치하는지 확인한다.
@@ -127,11 +220,25 @@ public class PjCheckController {
         * ctiNo의 값에서 500000을 빼고 프론트에 송출해서 1, 2, 3번 식으로 출력하기
      */
     @GetMapping("/item")
-    public List<CTItemDto> getPJCheckItem(int ctNo) {
+    public List<CTItemDto> getPJCheckItem(@RequestParam int ctNo , HttpSession session) {
+        List<CTItemDto> list;
+        // 1. 세션 확인
+        if (session.getAttribute("loginUserNo") == null) {
+            list = new ArrayList<>();
+            CTItemDto dto = new CTItemDto();
+            dto.setStatus("NOT_LOGGED_IN");
+            list.add(dto);
+            return list; // 비로그인시 -1 리턴 및 setStatus 전송
+        }
+        // 2. pjNo 맞으면 사업자번호 조회
+        String bnNo = (String) session.getAttribute("loginBnNo");
+        // 3. 리턴
         return pjCheckService.getPJCheckItem(ctNo);
     }
 
     // [8] 프로젝트 체크리스트 템플릿 불러오기
+    // URL : http://localhost:8080/project/checklist/tem
+    // BODY : { "ctiNo" = 5000001 , "pjNo" : 6000001 }
     /*
         * 로직 안내
         1. CTItemDto에서 ctiNo를 입력 받는다.
@@ -141,7 +248,17 @@ public class PjCheckController {
         * CTemDto_CTItemDto 스네이크 형식으로 데이터를 묶어 저장한다.
      */
     @PostMapping("/tem")
-    public int loadAndSaveTemplate(@RequestParam int ctiNo, @RequestParam int pjNo) {
+    public int loadAndSaveTemplate(@RequestParam int ctiNo, @RequestParam int pjNo , HttpSession session) {
+        // 1. 세션 확인
+        if (session.getAttribute("loginUserNo") == null) {
+            CTItemDto dto = new CTItemDto();
+            dto.setStatus("NOT_LOGGED_IN");
+            return -1; // 비로그인시 -1 리턴 및 setStatus 전송
+        }
+        // 2. pjNo 맞으면 사업자번호 조회
+        String bnNo = (String) session.getAttribute("loginBnNo");
+        pjCheckService.checkPjNo(pjNo, bnNo);
+        // 3. 리턴
         int pjCheckId = pjCheckService.loadAndSaveTemplate(ctiNo, pjNo);
         return pjCheckId;
     }

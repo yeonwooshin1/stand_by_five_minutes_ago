@@ -72,6 +72,7 @@ public class CTItemController {
         // 2. 로그인 중이면 세션에서 사업자번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
         ctItemService.searchCtNo(ctItemDto.getCtNo(), bnNo);
+
         // 3. 리턴
         ctItemDto.setStatus("ACCESS_OK");
         return ctItemService.createCTItem(ctItemDto);
@@ -95,7 +96,7 @@ public class CTItemController {
     })
     @GetMapping("")
     public List<CTItemDto> getCTItem(@RequestParam int ctNo, HttpSession session) {
-        List<CTItemDto> list;
+        List<CTItemDto> list = List.of();
         // 1. 로그인상태 확인
         if (session.getAttribute("loginUserNo") == null) {
             list = new ArrayList<>();
@@ -106,9 +107,16 @@ public class CTItemController {
         }
         // 2. 로그인 중일때 세션에서 사업자번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
-        ctItemService.searchCtNo(ctNo, bnNo);
+        boolean loginCheck = ctItemService.searchCtNo(ctNo, bnNo);
+        if (!loginCheck) {
+            list = new ArrayList<>();
+            CTItemDto dto = new CTItemDto();
+            dto.setStatus("ACCESS_DENIED");
+            list.add(dto);
+            return list;
+        }
         // 3. 사용자에게 입력받은 ctNo를 찾을 수 없을 경우
-        if (ctNo < 4000000) {
+        if (list.isEmpty()) {
             CTItemDto dto = new CTItemDto();
             dto.setStatus("NOT_FOUND");
         }
@@ -154,9 +162,15 @@ public class CTItemController {
         }
         // 2. (로그인 성공 시 )세션에서 사업자번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
-        ctItemService.searchCtNo(ctNo, bnNo);
+        boolean loginCheck = ctItemService.searchCtNo(ctNo, bnNo);
+        if (!loginCheck) {
+            dto = new CTItemDto();
+            dto.setStatus("ACCESS_DENIED");
+            return dto;
+        }
+
         // 3. DTO에서 ctiNo를 찾을 수 없을 경우
-        if (ctiNo < 5000000) {
+        if (dto == null) {
             dto = new CTItemDto();
             dto.setStatus("NOT_FOUND");
         }
@@ -198,9 +212,11 @@ public class CTItemController {
         // 2. 로그인 중일때 세션에서 사업자 번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
         ctItemService.searchCtNo(ctItemDto.getCtNo(), bnNo);
+
         // 3. DTO에서 ctiNo를 찾을 수 없는 경우
-        if (ctItemDto.getCtiNo() < 5000000) {
+        if (ctItemDto == null) {
             ctItemDto.setStatus("NOT_FOUND");
+            return 0;
         }
         // 4. 리턴
         ctItemDto.setStatus("ACCESS_OK");
@@ -239,14 +255,8 @@ public class CTItemController {
         // 2. 로그인 중일 때 세션에서 사업자 번호 조회
         String bnNo = (String) session.getAttribute("loginBnNo");
         CTItemDto dto = new CTItemDto();
-        ctItemService.searchCtNo(dto.getCtNo() , bnNo);
-        // 3. DTO에서 사용자의 ctiNo를 찾지 못했을 경우
-        if (ctiNo < 5000000){
-            dto.setStatus("NOT_FOUND");
-        }
-        // 4. 리턴
-        dto.setStatus("ACCESS_OK");
-        dto.setBnNo(bnNo);
+        ctItemService.searchCtNo(dto.getCtNo(), bnNo);
+        // 3. 리턴
         return ctItemService.deleteCTItem(ctiNo);
     }
 
