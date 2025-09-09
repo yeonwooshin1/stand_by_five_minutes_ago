@@ -46,7 +46,7 @@ $(document).ready(function () {
     });
 });
 
-// [1] 저장하기 이전 pjWorkDto를 저장 관리하기 위한 배열
+// [1] 저장하기 이전 pjWorkDto를 저장 관리하기 위한 임시배열
 const TemporarySaveWorker = [];
 let currentRtName = "";
 let currentRtDescription = "";
@@ -83,7 +83,7 @@ const readAllpjworker = async () => {
                 <td>${dto.updateDate}</td>
                 <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
                 </tr>`
-
+                // dto를 임시배열에 삽입
                 TemporarySaveWorker.push({
                     pjRoleNo: dto.pjRoleNo,
                     pjNo: dto.pjNo,
@@ -97,6 +97,7 @@ const readAllpjworker = async () => {
                 });
             })
         }
+        // 화면 출력
         pjworkerTbody.innerHTML = html;
         // console.log(TemporarySaveWorker)
     } catch (error) {
@@ -110,20 +111,25 @@ function generateTempRoleNo() {
     return tempRoleNoCounter--;
 }
 
-// [03] 역할템플릿 모달 내에서 선택 클릭시 행 추가 이벤트 ============================================
+// [03] 역할템플릿 모달 내에서, [선택] 버튼 클릭시 행 추가 이벤트 ============================================
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("selectTemplateBtn")) {
+        // 선택 버튼에 속성 dataset을 가져옴
         const rtiName = e.target.dataset.rtiname;
         const rtiDesc = e.target.dataset.rtidescription;
 
+        // 본문 입력을 위한 값 생성
         const fullRoleName = `${currentRtName}_${rtiName}`;
         const fullDescription = `${currentRtDescription}<br/>${rtiDesc}`;
 
+        // 임시 PK 발급
         const tempRoleNo = generateTempRoleNo();
 
+        // 본문 행 추가를 위한 tr 생성
         const newRow = document.createElement("tr");
+        // 신규 tr에 dataset 주입
         newRow.setAttribute("data-pjRoleNo", tempRoleNo)
-
+        // 신규 tr에 html 작성
         newRow.innerHTML = `
             <td>${fullRoleName}</td>
             <td><button class="btn btn-sm btn-outline-secondary viewDescBtn" onclick = "veiwDescription(${tempRoleNo})" 
@@ -144,17 +150,19 @@ document.addEventListener("click", function (e) {
             <td></td>
             <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>`;
 
+        // 신규 tr을 본문에 append! 추가!
         document.querySelector("#pjworkerTbody").appendChild(newRow);
 
+        // 임시배열 등록
         TemporarySaveWorker.push({
             pjRoleNo: tempRoleNo,
             pjNo: pjNo * 1,
             pjRoleName: fullRoleName,
             pjRoleDescription: fullDescription,
             userNo: null,
-            pjRoleLv: 5,
+            pjRoleLv: 5,                // 입문자
             createDate: null,
-            changeStatus: 1
+            changeStatus: 1             // 신규
         });
     }
 });
@@ -162,12 +170,14 @@ document.addEventListener("click", function (e) {
 // [04] 행 추가 버튼 클릭 시 자유 입력 행 생성 =========================================
 const addClearRow = async () => {
     // console.log("addClearRow func exe")
-    const newRow = document.createElement("tr");
 
+    // 신규 tr 생성
+    const newRow = document.createElement("tr");
     // 임시 PK 생성
     const tempRoleNo = generateTempRoleNo();
+    // 신규 tr에 dataset 주입
     newRow.setAttribute("data-pjRoleNo", tempRoleNo)
-
+    // 신규 tr에 html 작성
     newRow.innerHTML = `
         <td contenteditable="true">직접입력</td>
         <td><button class="btn btn-sm btn-outline-secondary viewDescBtn" onclick = "veiwDescription(${tempRoleNo})" 
@@ -190,8 +200,9 @@ const addClearRow = async () => {
         <td></td>
         <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
     `;
+    // 신규 tr을 본문 Tbody에 append
     document.querySelector("#pjworkerTbody").appendChild(newRow);
-
+    // 임시배열에 삽입
     TemporarySaveWorker.push({
         pjRoleNo: tempRoleNo,
         pjNo: pjNo * 1,
@@ -231,10 +242,12 @@ const chooseRoleTemp = async () => {
 } // func end
 chooseRoleTemp();
 
-// [06] 역할템플릿검색 모달 내에서 대분류 선택시 상세분류 표시====================================
+// [06] 역할템플릿검색 모달 내에서 대분류 선택시, [ 상세분류 표시 ]====================================
 const chooseRoleTemItem = async (rtNo) => {
+    // table body 영역
     const modalRoleTemTbdoy = document.querySelector("#modalRoleTemTbdoy")
     try {
+        // fetch
         const r = await fetch(`/roleTem/Item?rtNo=${rtNo}`)
         const d = await r.json()
         // console.log(d)
@@ -263,9 +276,10 @@ const chooseRoleTemItem = async (rtNo) => {
 } // func end
 
 // [06-1] 역할템플릿 모달 내에서 대분류 명을 선택하면 소분류 table이 업데이트 될 수 있도록 함 =====================
+// 모달에서 change가 event 발생하면 func 실행
 document.querySelector(".modalRoleTemplate").addEventListener("change", function () {
-    const rtNo = this.value;
-    // select 된 option을 변수에 저장
+    const rtNo = this.value; //select에서 선택한 option의 value
+    // select 된 option을 dataset에 저장
     currentRtName = this.options[this.selectedIndex].dataset.rtname;
     currentRtDescription = this.options[this.selectedIndex].dataset.rtdescription;
     // console.log(rtNo)
@@ -292,6 +306,7 @@ const veiwDescription = async (pjRoleNo) => {
 } // func end
 
 // [08] 설명 저장 ==========================================================
+// java와 통신하는 것이 아닌 임시배열에 변경 내용을 저장
 const saveFullTemplate = async (pjRoleNo) => {
     // 저장할 구역 가져오기
     const fullDescription = document.querySelector("#descriptionArea").value
@@ -401,8 +416,8 @@ const searchUser = async (event) => {
             i++
         });
         tbody.innerHTML = html;
-    } catch (error) { 
-        console.log(error) 
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -474,39 +489,39 @@ document.querySelector("#pjworkerTbody").addEventListener("click", (e) => {
 
 // [15] 저장 버튼 =========================
 const savePJworker = async () => {
-    try{
-    const r = await fetch("/project/worker", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(TemporarySaveWorker)
-    });
-    const d = await r.json();
+    try {
+        const r = await fetch("/project/worker", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(TemporarySaveWorker)
+        });
+        const d = await r.json();
 
-    let success = 0;
-    let fail = 0;
+        let success = 0;
+        let fail = 0;
 
-    d.forEach((value) => {
-        TemporarySaveWorker.forEach((worker) => {
-            if (worker.pjRoleNo == value.pjRoleNo && worker.changeStatus == 0) {
-                return;
-            } else if (worker.pjRoleNo == value.pjRoleNo && worker.changeStatus > 0) {
-                if (value.pjRoleNo > 7000000 && value.Result === value.pjRoleNo) {
-                    success++;
-                } else if (value.pjRoleNo > 7000000 && value.Result < 100) {
-                    fail++;
-                } else if (value.pjRoleNo < 7000000 && value.Result > 7000000) {
-                    success++;
-                } else if (value.pjRoleNo < 7000000 && value.Result < 100) {
-                    fail++;
+        d.forEach((value) => {
+            TemporarySaveWorker.forEach((worker) => {
+                if (worker.pjRoleNo == value.pjRoleNo && worker.changeStatus == 0) {
+                    return;
+                } else if (worker.pjRoleNo == value.pjRoleNo && worker.changeStatus > 0) {
+                    if (value.pjRoleNo > 7000000 && value.Result === value.pjRoleNo) {
+                        success++;
+                    } else if (value.pjRoleNo > 7000000 && value.Result < 100) {
+                        fail++;
+                    } else if (value.pjRoleNo < 7000000 && value.Result > 7000000) {
+                        success++;
+                    } else if (value.pjRoleNo < 7000000 && value.Result < 100) {
+                        fail++;
+                    }
                 }
-            }
-        })
-    });
-    // 저장 작업 완료 후 초기화
-    TemporarySaveWorker.length = 0;
-    alert(`성공 ${success}건 / 실패 ${fail}건`);
-    await readAllpjworker(); // 전체 조회 다시 실행
-    } catch(error){
+            })
+        });
+        // 저장 작업 완료 후 초기화
+        TemporarySaveWorker.length = 0;
+        alert(`성공 ${success}건 / 실패 ${fail}건`);
+        await readAllpjworker(); // 전체 조회 다시 실행
+    } catch (error) {
         console.log(error)
     }
 }

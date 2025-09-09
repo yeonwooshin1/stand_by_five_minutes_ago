@@ -56,3 +56,10 @@ a {
     align-items: center;
     margin: 0.5rem 0;
 }
+
+/* 테이블 내 요소 중앙정렬 */
+.table th,
+.table td {
+    text-align: center;
+    vertical-align: middle;
+}

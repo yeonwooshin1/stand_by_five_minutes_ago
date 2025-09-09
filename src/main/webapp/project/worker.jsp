@@ -43,7 +43,7 @@
         <jsp:include page="/project/navigation.jsp"></jsp:include>
 
         <!-- 본문 영역 -->
-        <div class="indexContainer">
+        <div class="indexContainer mt-4">
             <div class="titleArea mb-3">
                 <div class="title1">프로젝트 인력 관리</div>
                 <div>
@@ -51,7 +51,7 @@
                     <button type="button" class="btn btn-primary" onclick="nextStage()">다음</button>
                 </div>
             </div>
-            <div class="ContentBox">
+            <div class="ContentBox border rounded">
                 <div class="rowBox mb-2">
                     <button id="templateSearchBtn" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#roleTemplateModal">역할 템플릿 검색</button>

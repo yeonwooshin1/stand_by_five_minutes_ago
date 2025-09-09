@@ -1,6 +1,7 @@
 package five_minutes.controller;
 
 import five_minutes.model.dto.ProjectPerformDto;
+import five_minutes.model.dto.ReturnProjectPerformDto;
 import five_minutes.service.ProjectPerformService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +11,14 @@ import java.util.Map;
 
 @RestController             // 컨트롤러 컴포넌트
 @RequiredArgsConstructor    // 의존성 주입
-@RequestMapping("/projectPerform")
+@RequestMapping("/project")
 public class ProjectPerformController { // class start
 
     // 서비스 호출
     private final ProjectPerformService projectPerformService;
 
     // pjPerform 목록 가져오기
-    @GetMapping
+    @GetMapping("/perform")
     public List<ProjectPerformDto> list(@RequestParam int pjNo) {   // class start
         return projectPerformService.findByProject(pjNo);
     }   // func end
@@ -30,9 +31,10 @@ public class ProjectPerformController { // class start
         );
     }   // func end
 
-//    @PostMapping("/save")
-//    public ReturnProjectPerformDto save(@RequestParam Long pjNo, @RequestBody SaveProjectPerformDto req) {
-//
-//    }
+    @PostMapping("/perform")
+    public List<ProjectPerformDto> save(@RequestBody ReturnProjectPerformDto req,
+                                        @RequestParam int pjNo) {
+        return projectPerformService.saveAll(req, pjNo);
+    }
 
 }   // class end
