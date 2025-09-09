@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * <p> info =======================
  * <p> Chat방에 들어온 user을 관리
@@ -22,4 +24,9 @@ public class ChatRoomUserDto {
     private int userNo;
     private String joinDate;
 
+    // 임시 변수
+    private ChatRoomDto roomDto;
+    private List<Integer> participantUserNos;
+
 }
+

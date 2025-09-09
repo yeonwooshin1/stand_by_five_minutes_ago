@@ -68,6 +68,8 @@ dependencies {
 
     // webSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    // jackson  Java에서 JSON 데이터를 처리하기 위한 라이브러리
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 tasks.named('test') {
