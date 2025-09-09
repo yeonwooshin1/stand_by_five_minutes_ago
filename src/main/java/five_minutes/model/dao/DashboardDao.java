@@ -24,6 +24,8 @@ public class DashboardDao {
     // performInfo 안의 시작시간 가져오기
     // LocalTime startTime = response.getPerformInfo().getStartTime();
 
+    // [*]
+
     // [1] 프로젝트 대시보드  - 기본정보 조회
     /*
         * 로직 안내
@@ -32,9 +34,13 @@ public class DashboardDao {
         3. pjNo가 일치하는 ProjectInfo 레코드를 가져온다
      */
     public PjDto getInfoPJDash (int pjNo) {
-        PjDto dto = new PjDto();
-        return dto;
-    }
+        try{
+
+        } catch (Exception e){
+            System.out.println(e);
+        } // catch end
+        return null;
+    } // func end
 
     // [2] 프로젝트 대시보드  - 근무리스트 전체 조회
     /*

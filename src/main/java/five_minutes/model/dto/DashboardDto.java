@@ -24,7 +24,7 @@ public class DashboardDto {
     // 3-1 프로젝트 정보
     private PjDto pjDto;
     // 3-2 프로젝트 인력
-    // 완성되면 넣기
+    private ProjectWorkerDto pjWorkerDto;
     // 3-3 프로젝트 체크리스트
     private PjCheckDto pjCheckDto;
     // 4-1 프로젝트 실행
