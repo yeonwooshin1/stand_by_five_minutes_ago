@@ -474,12 +474,30 @@ document.getElementById('userPwdModal')?.addEventListener('click', (e) => {
 });
 
 // 비밀번호 형식 유효성 검사 함수(프론트엔드에서 검증, 자바도 -3으로 검증한다!!!)
+// 조건:
+//  - 길이 8~20자
+//  - 영문 대문자 1개 이상
+//  - 영문 소문자 1개 이상
+//  - 한글 포함 불가
+//  - 숫자/특수문자는 선택사항
 const strongPwd = (s) => {
   const v = String(s || '');
-  return (
-    v.length >= 8 &&
-    /[A-Za-z]/.test(v)   // 영문 대소문자 최소 1개 포함
-  );
+
+  // 길이 체크
+  if (v.length < 8 || v.length > 20) {
+    return false;
+  }
+
+  // 한글 포함 여부 (가-힣 유니코드)
+  if (/[가-힣]/.test(v)) {
+    return false;
+  }
+
+  // 대문자, 소문자 각각 1개 이상
+  const hasUpper = /[A-Z]/.test(v);
+  const hasLower = /[a-z]/.test(v);
+
+  return hasUpper && hasLower;
 };
 
 // 변경 눌렀을 때 이벤트리스너를 한다. 클릭으로 비동기로 해준다.
@@ -513,7 +531,7 @@ $('#btn-pwd-save')?.addEventListener('click', async (e) => {
     err.textContent = '새 비밀번호가 기존 비밀번호와 동일합니다.'; show(err); return;     // -> 서버코드 -4와 동일
   }
   if (!strongPwd(obj.newPassword)) {
-    err.textContent = '비밀번호 형식이 올바르지 않습니다. (대소문자/영문 포함 8자 이상)'; show(err); return; // -> 서버코드 -3과 동일
+    err.textContent = '비밀번호 형식이 올바르지 않습니다. (대소문자/영문 포함 8자 이상 20자 이하)'; show(err); return; // -> 서버코드 -3과 동일
   }
 
   // fetch 부분
