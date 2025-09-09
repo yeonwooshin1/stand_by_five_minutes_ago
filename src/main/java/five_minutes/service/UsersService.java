@@ -10,7 +10,8 @@ import five_minutes.util.PasswordValidatorUtil;
 import five_minutes.util.PhoneNumberUtil;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
+
+import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.stereotype.Service;
 
 
@@ -23,6 +24,71 @@ public class UsersService { // class start
     private final UsersDao usersDao;
     // csv 비밀번호 확인용 service 호출
     private final CsvPasswordService csvPasswordService;
+    // 로그인 실패 횟수 캐시화 하는 Caffeine 유틸 메소드 빈 호출
+    private final Cache<String , Integer> loginFailCache;
+
+    // 최대 로그인 시도 값 설정 ==> 이메일은 5회 , IP는 10회로 제한
+    // EMAIL
+    private static final int USER_LOCK_COUNT = 5;
+    // IP
+    private static final int IP_LOCK_COUNT = 10;
+
+    // KEY 만들기  => trim()과 소문자로 통합 후 관리
+    public String userKey(String email){ return "user:"+((email == null ? "" : email.trim().toLowerCase()));}
+    public String ipKey(String ip) {return "ip:" + (ip == null ? "" : ip.trim());}
+
+    // ------------------------------------- 공통 로그인 검증 유틸 -------------------------
+    // 1. 실패 카운트를 cache에서 가져오기
+    private int getFailCount(String key) {
+        // getIfPresent(key) => key값을 가져온다. 없으면 null 있으면 그 키의 value를 가져온다.
+        Integer value = loginFailCache.getIfPresent(key);
+        // value가 없으면 0으로 있으면 v값을 준다.
+        return (value == null) ? 0 : value;
+    }   // func end
+
+    // 2. 값을 증가 시킨다.
+    // put() =>  해당 cache에 값을 수동 할당함 --> Integer 실패 카운트에 +1 한 값을 cache에 저장를 해준다.
+    private void increaseCount(String key) {
+        loginFailCache.put(key, getFailCount(key) + 1);
+    }   // func end
+
+    // 3. 로그인 성공시 해당 캐시의 값을 초기화 한다.
+    private void clearCount(String key) {
+        // invalidate(key)  해당 key의 값을 캐시에서 삭제한다.
+        loginFailCache.invalidate(key);
+    }   // func end
+    // ---------------------------------- 공통 유틸 끝 ---------------------------------------
+
+    // ------------------------실제 로그인 실패 횟수를 파악 하는 메소드 서비스 --------------------
+    // email 실패 횟수가 5회보다 이상인지 확인한다.
+    public boolean isUserLocked(String userKey) {
+        return getFailCount(userKey) >= USER_LOCK_COUNT;
+    }   // func end
+
+    // ip 실패 횟수가 15회 이상인지 확인한다.
+    public boolean isIpLocked(String ipKey) {
+        return getFailCount(ipKey) >= IP_LOCK_COUNT;
+    }   //  func end
+
+    // 락이 되어있는지 확인 한다.
+    public boolean isAnyLocked(String userKey, String ipKey) {
+        // 둘 중 하나라도 true, 즉, 락 상태라면 true , 즉 잠금 상태라고 판정 후 리턴를 해서 락 반환한다.
+        return isUserLocked(userKey) || isIpLocked(ipKey);
+    }   // func end
+
+    // 로그인 실패시 실패 카운트를 증가시킨다.
+    public void onFailureBoth(String userKey, String ipKey) {
+        // util 쪽 메소드 호출
+        increaseCount(userKey);
+        increaseCount(ipKey);
+    }   // func end
+
+    // 로그인 성공시 두 실패 캐시를 삭제한다.
+    public void onSuccessBoth(String userKey, String ipKey) {
+        // util 쪽 메소드 호출
+        clearCount(userKey);
+        clearCount(ipKey);
+    }   // func end
 
 
     // 로그인 서비스
@@ -73,6 +139,8 @@ public class UsersService { // class start
 
     }   // func end
 
+
+
     // 이메일찾기 서비스
     public EmailRecoverDto recoverUserEmail( UsersDto usersDto ) {
 
@@ -120,7 +188,7 @@ public class UsersService { // class start
         // 기존 비밀번호와 새 비밀번호가 일치하면 못 변경하게 함.
         if(currentPassword.equals(newPassword)) return -4;
 
-        // 비밀번호 8글자 대소문자인지 확인하는 유효성 검사
+        // 비밀번호 유효성 검사
         if (!PasswordValidatorUtil.isValid(newPassword)) return -3;
 
         // csv 파일에 있는 해시화된 비밀번호 확인하는 service 호출
@@ -174,7 +242,7 @@ public class UsersService { // class start
         // UUID를 jti로 사용
         String jti = UUID.randomUUID().toString();
         // 컨트롤러에서 받은 토큰 확인
-        String token = jwtUtil.createToken(String.valueOf(loginUserNo), jti);
+        String token = jwtUtil.createApiToken(String.valueOf(loginUserNo), jti);
         // 토큰 값 확인
         System.out.println("발급된 토큰 : " + token);
         // 토큰 반환
