@@ -7,7 +7,7 @@ const naviBar = () => {
 
     let html = `<a class="nav-link" href="/project/info.jsp?pjNo=${pjNo}" data-page:"info.jsp">1. 프로젝트 정보</a>
                 <a class="nav-link" href="/project/worker.jsp?pjNo=${pjNo}" data-page:"worker.jsp">2. 인력 관리</a>
-                <a class="nav-link" href="/project/checklist.jsp?pjNo=${pjNo}" data-page:"checklist.jsp"> 3. 체크리스트 관리</a>
+                <a class="nav-link" href="/project/checkList.jsp?pjNo=${pjNo}" data-page:"checklist.jsp"> 3. 체크리스트 관리</a>
                 <a class="nav-link" href="/project/perform.jsp?pjNo=${pjNo}" data-page:"perform.jsp">4. 업무 배정</a>
                 <a class="nav-link" href="/project/performcheck.jsp?pjNo=${pjNo}" data-page:"performCheck.jsp">5. 업무 관리</a>`;
     projectNav.innerHTML = html;
