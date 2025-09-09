@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(header != null && header.startsWith("Bearer")) { // 토큰 유효성 검사
             String token = header.substring(7); // "Bearer " 글씨를 빼고 읽어줌
             try{
-                Jws<Claims> claimsJws = jwtUtil.parseAndValidate(token);
+                Jws<Claims> claimsJws = jwtUtil.parseAndValidateApi(token);
                 String userNo = claimsJws.getPayload().getSubject(); // sub 값
                 request.setAttribute("loginUserNo" , Integer.parseInt(userNo));
             } catch (Exception e){
