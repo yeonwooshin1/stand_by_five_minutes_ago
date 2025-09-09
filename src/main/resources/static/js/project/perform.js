@@ -293,7 +293,7 @@ function bindTableEvents() {
     const row = ROWS.find(r => Number(r.pfNo) === pfNo);
     if (!row) return;
 
-    if (!confirm("삭제하시겠습니까? (되돌릴 수 없습니다)")) return;
+    if (!confirm("삭제하시겠습니까? (저장 후엔 되돌릴 수 없습니다.))")) return;
 
     // 기존행이면 4(서버 삭제 대상), 신규행이면 2(로컬만 제거)
     row.changeStatus = isExisting(pfNo) ? 4 : 2;

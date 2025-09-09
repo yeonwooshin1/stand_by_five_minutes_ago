@@ -11,6 +11,7 @@
         <link rel='stylesheet' href='/CSS/index.css'>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
             /* 페이지 가로폭 */
             .indexContainer {
                 max-width: 1440px;
@@ -125,35 +126,35 @@
             </div>
 
             <div class="ContentBox">
-                <div id="pfSection" class="p-3 border rounded-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="fw-semibold">프로젝트 업무 배정/관리</div>
-                        <div class="d-flex gap-2">
-                            <button id="btnAdd" type="button" class="btn btn-primary btn-sm">행 추가</button>
-                        </div>
-                    </div>
 
-                    <div class="table-responsive">
-                        <table id="pfTable" class="table table-striped table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width:56px;" class="text-center">No</th>
-                                    <th style="min-width:200px;">역할</th>
-                                    <th style="width:320px;">체크리스트</th>
-                                    <th style="width:150px;">시작시간</th>
-                                    <th style="width:150px;">종료시간</th>
-                                    <th style="width:150px;">알림발송 조건</th>
-                                    <th style="width:140px;">알림발송 시간(분)</th>
-                                    <th style="min-width:80px;">진행상태</th>
-                                    <th style="width:84px;"> 비고</th>
-                                </tr>
-                            </thead>
-                            <tbody id="pfBody"><!-- rows go here --></tbody>
-                        </table>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="fw-semibold">프로젝트 업무 배정/관리</div>
+                    <div class="d-flex gap-2">
+                        <button id="btnAdd" type="button" class="btn btn-primary btn-sm">행 추가</button>
                     </div>
-
-                    <div id="pfError" class="text-danger small"></div>
                 </div>
+
+                <div class="table-responsive">
+                    <table id="pfTable" class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:56px;" class="text-center">No</th>
+                                <th style="min-width:200px;">역할</th>
+                                <th style="width:320px;">체크리스트</th>
+                                <th style="width:150px;">시작시간</th>
+                                <th style="width:150px;">종료시간</th>
+                                <th style="width:150px;">알림발송 조건</th>
+                                <th style="width:140px;">알림발송 시간(분)</th>
+                                <th style="min-width:80px;">진행상태</th>
+                                <th style="width:84px;"> 비고</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pfBody"><!-- rows go here --></tbody>
+                    </table>
+                </div>
+
+                <div id="pfError" class="text-danger small"></div>
+
             </div>
         </div>
 

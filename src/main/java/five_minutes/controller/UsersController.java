@@ -5,10 +5,11 @@ import five_minutes.model.dto.EmailRecoverDto;
 import five_minutes.model.dto.UsersDto;
 import five_minutes.service.UsersService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.stylesheets.LinkStyle;
+
 
 import java.util.List;
 import java.util.Map;
@@ -24,17 +25,33 @@ public class UsersController {  // class start
 
     // 로그인
     @PostMapping("/login")
-    public int login(@RequestBody UsersDto usersDto , HttpSession httpSession ) {
+    public int login(@RequestBody UsersDto usersDto , HttpSession httpSession , HttpServletRequest httpServletRequest) {
+
+        // 키를 준비한다. 이메일과 클라이언트 IP를 추출한다.
+        String email = usersDto.getEmail() == null ? null : usersDto.getEmail().trim().toLowerCase();
+        String clientIp = httpServletRequest.getRemoteAddr();
+        // 그것을 key 화 한다.
+        String uKey = usersService.userKey(email);  // user:{email}
+        String iKey = usersService.ipKey(clientIp); // ip:{ip}
+
+        // 이중 차단  계정/ IP 둘 중 하나라도 잠기면 차단을 한다
+        if (usersService.isAnyLocked(uKey, iKey)) {
+            return -1; // -1 : 로그인 다중 시도 실패
+        }   // if end
 
         // 서비스 호출하여 유효한 로그인인지 검사
         Map<String, Object> loginResult = usersService.login(usersDto);
-
         int loginUserNo = (int) loginResult.get("loginUserNo");
 
         // 로그인 실패할시 0을 반환
         if (loginUserNo == 0) {
+            // 그 전에 해당 key들 실패 카운트 증가
+            usersService.onFailureBoth(uKey, iKey);
             return 0;
         }   // if end
+
+        // 성공이면 기록 초기화 email과 ip 둘 다.
+        usersService.onSuccessBoth(uKey, iKey);
 
         // 로그인 성공 → 세션에 정보 저장
         // 유저 번호 저장

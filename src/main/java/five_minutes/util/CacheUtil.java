@@ -42,5 +42,18 @@ public class CacheUtil {    // class start
                 .build();                                // 실제 Cache를 생성.
     }   // func end
 
+    // 로그인 실패 횟수 캐시를 만드는 메소드
+    // key: "user:{email}", "ip:{clientIp}" 두 개를 각각 관리 -> 하나라도 달성시 그 ip 혹은 이메일 차단
+    // value: 실패 횟수를 Integer로 저장 카운트 추가 , 10분 경과 시 자동 만료됨 -> 다시 시도 가능
+    @Bean
+    public Cache<String, Integer> loginFailCache() {
+        return Caffeine.newBuilder()
+                .maximumSize(100_000)                      // 메모리 보호
+                .expireAfterWrite(Duration.ofMinutes(10))  // 10분 후 자동 제거
+                .build();
+    }   // func end
+
+
+
 
 }   // class end
