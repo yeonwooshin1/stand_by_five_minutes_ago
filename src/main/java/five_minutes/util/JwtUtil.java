@@ -123,5 +123,4 @@ public class JwtUtil {  // class start
 
     }   // func end
 
-
 }   // class end
