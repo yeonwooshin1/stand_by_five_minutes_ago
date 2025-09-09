@@ -71,8 +71,8 @@ public class DashboardService {
         pfNo, fileName을 입력받아 pjPerformFile 테이블에 저장한다.
         * pjNo, bnNo를 확인하기
      */
-    public int uploadFilePJDash(ProjectPerformDto projectPerformDto){
-        return dashboardDao.updateNotePJDash(projectPerformDto);
+    public int uploadFilePJDash(ProjectPerformFileDto projectPerformFileDto){
+        return dashboardDao.uploadFilePJDash(projectPerformFileDto);
     }
 
     // [5] 프로젝트 대시보드 - 업로드 파일 삭제
@@ -81,7 +81,7 @@ public class DashboardService {
         * pjNo, bnNo를 확인하기
      */
     public int deleteFilePJDash(int fileNo) {
-        return 0;
+        return dashboardDao.deleteFilePJDash(fileNo);
     }
 
     // [6] 프로젝트 대시보드 - 근무 정보 메모 수정
@@ -90,7 +90,7 @@ public class DashboardService {
         * pjNo, bnNo를 확인하기
      */
     public int updateNotePJDash (ProjectPerformDto projectPerformDto){
-        return 0;
+        return dashboardDao.updateNotePJDash(projectPerformDto);
     }
 
     // [7] 프로젝트 대시보드 - 근무자 상세 정보
@@ -103,7 +103,7 @@ public class DashboardService {
         * 프론트에서 근무자 텍스트를 클릭할 시 화면에 띄우기
      */
     public UsersDto getUserInDash (int pjNo , int userNo){
-        return null;
+        return dashboardDao.getUserInDash(pjNo, userNo);
     }
 
     // [8] 프로젝트 대시보드 - 역할명 상세 정보
@@ -114,7 +114,7 @@ public class DashboardService {
         * 프론트에서 역할명 텍스트를 클릭할 시 화면에 띄우기
      */
     public ProjectWorkerDto getWorkerInDash (int pjNo , int pjRoleNo){
-        return null;
+        return dashboardDao.getWorkerInDash(pjNo, pjRoleNo);
     }
 
     // [9] 프로젝트 대시보드 - 체크리스트 상세 정보
@@ -125,7 +125,7 @@ public class DashboardService {
         * 프론트에서 체크리스트명 텍스트를 클릭할 시 화면에 띄우기
      */
     public PjCheckDto getCheckInDash (int pjNo , int pjChkItemNo){
-        return null;
+        return dashboardDao.getCheckInDash(pjNo, pjChkItemNo);
     }
 
 }

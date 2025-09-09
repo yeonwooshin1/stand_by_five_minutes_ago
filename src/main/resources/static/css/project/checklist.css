@@ -1,0 +1,23 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.titleArea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.rowBox {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.rowBox > button {
+    margin-left: 0.3rem;
+}

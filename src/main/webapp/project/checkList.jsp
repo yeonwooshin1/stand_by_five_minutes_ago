@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        <!-- 역할 템플릿 모달 -->
+        <!-- 체크리스트 템플릿 모달 -->
         <div class="modal fade" id="checkTemplateModal" tabindex="-1"> <!-- id="checkTemplateModal" -->
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -105,12 +105,12 @@
         </div>
         </div>
 
-        <!-- 역할 설명 보기 모달 -->
+        <!-- 체크리스트 설명 보기 모달 -->
         <div class="modal fade" id="viewModal" tabindex="-1">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">역할 설명 보기 및 수정</h5>
+                        <h5 class="modal-title">체크리스트 설명 보기 및 수정</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body" id="fullDescriptBody">
@@ -124,7 +124,7 @@
         <!-- footer 연결 -->
         <jsp:include page="/footer.jsp"></jsp:include>
 
-        <script src="/js/project/worker.js"></script>
+        <script src="/js/project/checklist.js"></script>
 
     </body>
 
