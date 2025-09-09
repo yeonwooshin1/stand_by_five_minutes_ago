@@ -32,6 +32,8 @@ public class PjCheckDto {
     private String bnNo;
     // [*] 실패 표현용(성공, 실패, 세션실패)
     private String status;
+    // [*] 프론트엔드 변경 상태 관리
+    private int changeStatus;
     // [1] 체크리스트 템플릿
     private int ctNo;
     private String ctName;

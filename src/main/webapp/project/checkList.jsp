@@ -60,7 +60,7 @@
                 <table id="mainTable" class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>번호</th>
+                            <tr>No</tr>
                             <th>체크리스트명</th>
                             <th>체크리스트 설명</th>
                             <th>비고</th>

@@ -270,5 +270,16 @@ public class PjCheckController {
         return pjCheckService.loadAndSaveTemplate(ctiNo, pjNo);
     }
 
+    // [9] 프로젝트 체크리스트 일괄저장
+    @PostMapping("/save")
+    public List<Map<String, Integer>> savePJChecklist(@RequestBody List<PjCheckDto> list, HttpSession session) {
+        // 1. 세션 확인
+        if (session.getAttribute("loginUserNo") == null) {
+            return new ArrayList<>(); // 비로그인 시 빈 리스트 반환
+        }
+        // 2. 서비스 호출
+        return pjCheckService.savePJChecklist(list);
+    }
+
 
 }

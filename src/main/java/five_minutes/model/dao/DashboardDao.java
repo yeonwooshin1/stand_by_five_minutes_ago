@@ -3,6 +3,8 @@ package five_minutes.model.dao;
 import five_minutes.model.dto.*;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
 /// @author dongjin
 
 @Repository
-public class DashboardDao {
+public class DashboardDao extends Dao {
 
     // performInfo 안의 pfNo 가져오기
     // Long pfNo = response.getPerformInfo().getPfNo();
@@ -35,7 +37,18 @@ public class DashboardDao {
      */
     public PjDto getInfoPJDash (int pjNo) {
         try{
-
+            String sql = "select * from ProjectInfo where pjNo = ? ";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, pjNo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                PjDto pjDto = new PjDto();
+                pjDto.setPjNo(rs.getInt("pjNo"));
+                pjDto.setPjName(rs.getString("pjName"));
+                pjDto.setPjMemo(rs.getString("pjMemo"));
+                pjDto.setPjStartDate(rs.getString("pjStartDate"));
+                pjDto.setPjEndDate(rs.getString("pjEndDate"));
+            }
         } catch (Exception e){
             System.out.println(e);
         } // catch end
