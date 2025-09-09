@@ -1,9 +1,5 @@
 /*
 00. 로그인 체크
-01. 저장하기 이전 pjCheckDto를 저장하기위한 임시 배열 TemporarySaveWorker + 전역변수
-02. pjcheck 전체 조회 (PJC-02번 기능)
-/*
-00. 로그인 체크
 01. 전역 변수 및 임시 저장 배열
 02. pjcheck 전체 조회 (PJC-02)
 03. 템플릿 선택 시 행 추가 (PJC-08)
@@ -587,7 +583,7 @@ document.querySelector("#pjchecklistTbody").addEventListener("input", function (
         const pjChkItemNo = parseInt(tr.dataset.pjChkItemNo); // data-pjRoleNo 값 추출
         const newCheckName = e.target.textContent.trim(); // 변경된 역할명
 
-        TemporarySaveWorker.forEach((value) => {
+        TemporarySaveChecklist.forEach((value) => {
             if (value.pjChkItemNo == pjChkItemNo) {
                 value.pjChklTitle = newCheckName;
 
