@@ -65,6 +65,9 @@ dependencies {
     // Apache POI (마이크로소프트 오피스 InOut 처리 라이브러리)
     implementation 'org.apache.poi:poi:5.4.1'
     implementation 'org.apache.poi:poi-ooxml:5.4.1'
+
+    // webSocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
