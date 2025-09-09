@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class ProjectPerformDao extends Dao {    // class start
 
             while (rs.next()) {
                 ProjectPerformDto dto = new ProjectPerformDto();
-                dto.setPfNo(pjNo);
+                dto.setPfNo(rs.getInt("pfNo"));
                 dto.setPjRoleNo(rs.getInt("pjRoleNo"));
                 dto.setPjChkItemNo(rs.getInt("pjChkItemNo"));
                 dto.setPfStart(rs.getString("pfStart"));
@@ -57,7 +58,7 @@ public class ProjectPerformDao extends Dao {    // class start
 
         try {
             String sql = " select pjRoleNo, userName as pjUserName , pjRoleName " +
-                    "from pjWorker as pj inner join Users as u on pj.userNo = u.userNo where pjNo = ? ";
+                    "from pjWorker as pj inner join Users as u on pj.userNo = u.userNo where pjNo = ? and pjRoleStatus = 1 ";
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, pjNo);
@@ -83,7 +84,7 @@ public class ProjectPerformDao extends Dao {    // class start
         List<ChkItemLookupDto> list = new ArrayList<>();
 
         try {
-            String sql = " select pjChkItemNo , pjChklTitle from PjChecklistItem where pjNo = ? ";
+            String sql = " select pjChkItemNo , pjChklTitle , pjHelpText from PjChecklistItem where pjNo = ? and pjChkIStatus = 1 ";
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, pjNo);
@@ -93,6 +94,7 @@ public class ProjectPerformDao extends Dao {    // class start
                 ChkItemLookupDto dto = new ChkItemLookupDto();
                 dto.setPjChkItemNo(rs.getInt("pjChkItemNo"));
                 dto.setPjChklTitle(rs.getString("pjChklTitle"));
+                dto.setPjHelpText(rs.getString("pjHelpText"));
 
                 list.add(dto);
             }   // while end
@@ -100,6 +102,82 @@ public class ProjectPerformDao extends Dao {    // class start
             System.out.println("예외 발생");
         }
         return list;
+    }   // func end
+
+    // 새로운 행 추가 dao
+    public int insert(ProjectPerformDto d) {
+        try {
+            String sql = "insert into pjPerform " +
+                            "(pjChkItemNo, pjRoleNo, pfStart, pfEnd, notifyType, notifySetMins) " +
+                            "values (?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            ps.setInt(1, d.getPjChkItemNo());
+            ps.setInt(2, d.getPjRoleNo());
+            ps.setString(3, d.getPfStart());
+            ps.setString(4, d.getPfEnd());
+            ps.setInt(5, d.getNotifyType() == 0 ? 0 : d.getNotifyType());
+            ps.setInt(6, d.getNotifySetMins() == 0 ? 0 : d.getNotifySetMins());
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) return rs.getInt(1); // 새 pfNo
+
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        // 실패
+        return -1;
+    }   // func end
+
+    // 수정된 행 수정
+    public int update(ProjectPerformDto d) {
+        try {
+            String sql = "update pjPerform set pjChkItemNo= ?, pjRoleNo= ?, pfStart= ?, pfEnd= ?, notifyType= ?, notifySetMins=? "
+                    + " where pfNo=?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, d.getPjChkItemNo());
+            ps.setInt(2, d.getPjRoleNo());
+            ps.setString(3, d.getPfStart());
+            ps.setString(4, d.getPfEnd());
+            ps.setInt(5, d.getNotifyType());
+            ps.setInt(6, d.getNotifySetMins());
+            ps.setInt(7, d.getPfNo());
+            return ps.executeUpdate();
+
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        // 실패
+        return -1;
+    }   // func end
+
+    // 삭제할 것들
+    public int deleteByIds(List<Integer> deleteIndex) {
+        if (deleteIndex == null || deleteIndex.isEmpty()) return 0;
+        // builder 실행
+        StringBuilder in = new StringBuilder();
+
+        // list에서 가져온다. 몇 개의 ?를 줄 것인가
+        for (int i = 0; i < deleteIndex.size(); i++) {
+            if (i > 0) in.append(", ");
+            in.append("?");
+        }   // for end
+
+        try {
+            String sql = "delete from pjPerform where pfNo in (" + in + ")";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            int idx = 1;
+            // 받은 리스트를 하나하나 꺼내서 그 값을 넣어줘서 삭제한다.
+            for (Integer id : deleteIndex) ps.setInt(idx++, id);
+            return ps.executeUpdate();
+        } catch (Exception e){
+            System.out.println(e);
+        }   // catch end
+        // 실패 시 -1 반환
+        return -1;
     }   // func end
 
 
