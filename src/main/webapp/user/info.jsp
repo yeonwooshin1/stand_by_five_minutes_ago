@@ -320,11 +320,11 @@
                                             <label for="pwdNew" class="form-label">새 비밀번호</label>
                                             <div class="input-group">
                                                 <input type="password" class="form-control" id="pwdNew"
-                                                    placeholder="대/소문자 포함 8글자 이상" />
+                                                    placeholder="대/소문자 포함 8글자 이상 20글자 이하" />
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     data-toggle-eye="#pwdNew">표시</button>
                                             </div>
-                                            <div class="form-text">영문/숫자 조합 8~20자 권장</div>
+                                            <div class="form-text">대/소문자 조합 8~20자 필수</div>
                                         </div>
 
                                         <div class="col-12">
