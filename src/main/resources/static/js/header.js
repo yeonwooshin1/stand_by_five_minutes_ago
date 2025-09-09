@@ -90,6 +90,7 @@ const subMenu = async () => {
                     <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
     }
     subMenu.innerHTML = html
+    bindChatIconClick()
 } // func end
 
 
@@ -124,20 +125,23 @@ initHeader().then(() => {
     }
 });
 
+// svg파일이 js에서 동적으로 생성되므로, svg 생성 후 class 주입 및 func을 연결
+function bindChatIconClick() {
+  const chatIcon = document.querySelector('.chatIcon');
+  if (chatIcon) {
+    chatIcon.addEventListener('click', function () {
+      openPopup(userNo);
+    });
+  }
+}
+
 // SVG 클릭 시 팝업이 열리게 하는 Func
+
 function openPopup(userNo) {
     const url = `/chat/chat.jsp?userNo=${encodeURIComponent(userNo)}`;
     window.open(
         url,
         "popupWindow",
-        "width=600,height=400,left=100,top=100"
+        "width=800,height=800,left=100,top=100"
     );
 }
-
-window.onload = function () {
-    const chatIcon = document.querySelector('.chatIcon');
-    chatIcon.addEventListener('click', function () {
-        openPopup(userNo);
-    });
-};
-
