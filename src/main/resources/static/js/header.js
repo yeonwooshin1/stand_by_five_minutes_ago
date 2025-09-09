@@ -125,23 +125,39 @@ initHeader().then(() => {
     }
 });
 
-// svg파일이 js에서 동적으로 생성되므로, svg 생성 후 class 주입 및 func을 연결
+
+function openPopupWithPost(userNo) {
+    // 1. 폼 생성
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/chat/chat.jsp";
+    form.target = "popupWindow";
+
+    // 2. 숨겨진 input 생성
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "userNo";
+    input.value = userNo;
+    form.appendChild(input);
+
+    // 3. 폼을 body에 추가
+    document.body.appendChild(form);
+
+    // 4. 팝업창 열기
+    window.open("", "popupWindow", "width=800,height=800,left=100,top=100");
+
+    // 5. 폼 제출
+    form.submit();
+
+    // 6. 폼 제거
+    document.body.removeChild(form);
+}
+
 function bindChatIconClick() {
   const chatIcon = document.querySelector('.chatIcon');
   if (chatIcon) {
     chatIcon.addEventListener('click', function () {
-      openPopup(userNo);
+      openPopupWithPost(userNo);
     });
   }
-}
-
-// SVG 클릭 시 팝업이 열리게 하는 Func
-
-function openPopup(userNo) {
-    const url = `/chat/chat.jsp?userNo=${encodeURIComponent(userNo)}`;
-    window.open(
-        url,
-        "popupWindow",
-        "width=800,height=800,left=100,top=100"
-    );
 }
