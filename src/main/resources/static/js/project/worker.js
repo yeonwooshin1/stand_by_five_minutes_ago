@@ -46,7 +46,7 @@ $(document).ready(function () {
     });
 });
 
-// [1] 저장하기 이전 pjWorkDto를 저장 관리하기 위한 배열
+// [1] 저장하기 이전 pjWorkDto를 저장 관리하기 위한 임시배열
 const TemporarySaveWorker = [];
 let currentRtName = "";
 let currentRtDescription = "";
@@ -83,7 +83,7 @@ const readAllpjworker = async () => {
                 <td>${dto.updateDate}</td>
                 <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
                 </tr>`
-
+                // dto를 임시배열에 삽입
                 TemporarySaveWorker.push({
                     pjRoleNo: dto.pjRoleNo,
                     pjNo: dto.pjNo,
@@ -97,6 +97,7 @@ const readAllpjworker = async () => {
                 });
             })
         }
+        // 화면 출력
         pjworkerTbody.innerHTML = html;
         // console.log(TemporarySaveWorker)
     } catch (error) {
@@ -110,20 +111,25 @@ function generateTempRoleNo() {
     return tempRoleNoCounter--;
 }
 
-// [03] 역할템플릿 모달 내에서 선택 클릭시 행 추가 이벤트 ============================================
+// [03] 역할템플릿 모달 내에서, [선택] 버튼 클릭시 행 추가 이벤트 ============================================
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("selectTemplateBtn")) {
+        // 선택 버튼에 속성 dataset을 가져옴
         const rtiName = e.target.dataset.rtiname;
         const rtiDesc = e.target.dataset.rtidescription;
 
+        // 본문 입력을 위한 값 생성
         const fullRoleName = `${currentRtName}_${rtiName}`;
         const fullDescription = `${currentRtDescription}<br/>${rtiDesc}`;
 
+        // 임시 PK 발급
         const tempRoleNo = generateTempRoleNo();
 
+        // 본문 행 추가를 위한 tr 생성
         const newRow = document.createElement("tr");
+        // 신규 tr에 dataset 주입
         newRow.setAttribute("data-pjRoleNo", tempRoleNo)
-
+        // 신규 tr에 html 작성
         newRow.innerHTML = `
             <td>${fullRoleName}</td>
             <td><button class="btn btn-sm btn-outline-secondary viewDescBtn" onclick = "veiwDescription(${tempRoleNo})" 
@@ -144,17 +150,19 @@ document.addEventListener("click", function (e) {
             <td></td>
             <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>`;
 
+        // 신규 tr을 본문에 append! 추가!
         document.querySelector("#pjworkerTbody").appendChild(newRow);
 
+        // 임시배열 등록
         TemporarySaveWorker.push({
             pjRoleNo: tempRoleNo,
             pjNo: pjNo * 1,
             pjRoleName: fullRoleName,
             pjRoleDescription: fullDescription,
             userNo: null,
-            pjRoleLv: 5,
+            pjRoleLv: 5,                // 입문자
             createDate: null,
-            changeStatus: 1
+            changeStatus: 1             // 신규
         });
     }
 });
@@ -162,12 +170,14 @@ document.addEventListener("click", function (e) {
 // [04] 행 추가 버튼 클릭 시 자유 입력 행 생성 =========================================
 const addClearRow = async () => {
     // console.log("addClearRow func exe")
-    const newRow = document.createElement("tr");
 
+    // 신규 tr 생성
+    const newRow = document.createElement("tr");
     // 임시 PK 생성
     const tempRoleNo = generateTempRoleNo();
+    // 신규 tr에 dataset 주입
     newRow.setAttribute("data-pjRoleNo", tempRoleNo)
-
+    // 신규 tr에 html 작성
     newRow.innerHTML = `
         <td contenteditable="true">직접입력</td>
         <td><button class="btn btn-sm btn-outline-secondary viewDescBtn" onclick = "veiwDescription(${tempRoleNo})" 
@@ -190,8 +200,9 @@ const addClearRow = async () => {
         <td></td>
         <td><button class="btn btn-sm btn-danger deleteBtn">삭제</button></td>
     `;
+    // 신규 tr을 본문 Tbody에 append
     document.querySelector("#pjworkerTbody").appendChild(newRow);
-
+    // 임시배열에 삽입
     TemporarySaveWorker.push({
         pjRoleNo: tempRoleNo,
         pjNo: pjNo * 1,
