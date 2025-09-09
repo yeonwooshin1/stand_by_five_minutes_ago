@@ -47,20 +47,22 @@
             <div class="titleArea mb-3">
                 <div class="title1">체크리스트 관리</div>
                 <div>
-                    <button type="button" class="btn btn-primary" onclick="savePJchecklist()">저장</button> <!-- onclick="savePJchecklist()" -->
+                    <button type="button" class="btn btn-primary" onclick="savePJchecklist()">저장</button>
+                    <!-- onclick="savePJchecklist()" -->
                     <button type="button" class="btn btn-primary" onclick="nextStage()">다음</button>
                 </div>
             </div>
             <div class="ContentBox">
                 <div class="rowBox mb-2">
                     <button id="templateSearchBtn" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#checkTemplateModal">체크리스트 검색</button> <!-- data-bs-target="#checkTemplateModal" -->
+                        data-bs-target="#checkTemplateModal">체크리스트 검색</button>
+                    <!-- data-bs-target="#checkTemplateModal" -->
                     <button id="addRowBtn" class="btn btn-secondary" onclick="addClearRow()">행 추가</button>
                 </div>
                 <table id="mainTable" class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <tr>No</tr>
+                            <th>No</th>
                             <th>체크리스트명</th>
                             <th>체크리스트 설명</th>
                             <th>비고</th>
@@ -82,7 +84,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <select class="form-select modalCheckTemplate mb-3" aria-label="Default select"> <!-- modalCheckTemplate -->
+                        <select class="form-select modalCheckTemplate mb-3" aria-label="Default select">
+                            <!-- modalCheckTemplate -->
                             <option selected value="0">대분류를 선택하세요.</option>
                         </select>
                     </div>
@@ -114,7 +117,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body" id="fullDescriptBody">
-                        <div id="fullDescriptBtnBox" style="display: flex; justify-content: flex-end;" class="mb-2"></div>
+                        <div style="display: flex; justify-content: flex-end;" class="mb-2">
+                            <button type="button" class="btn btn-primary" id="saveDescBtn">저장</button>
+                        </div>
                         <textarea class="descriptionArea" id="descriptionArea" name="editordata"></textarea>
                     </div>
                 </div>
