@@ -125,7 +125,9 @@ initHeader().then(() => {
     }
 });
 
-
+// chat을 위해서는 userNo가 필요
+// 다만 URL에 userNo가 노출될 경우, 다른 user에 채팅에 접근이 가능함.
+// 이를 방지하기 위해 임시form을 만들어 userNo를 팝업창에 전송
 function openPopupWithPost(userNo) {
     // 1. 폼 생성
     const form = document.createElement("form");
