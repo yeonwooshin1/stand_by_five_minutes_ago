@@ -24,4 +24,4 @@ select * from projectInfo;
 select * from pjworker;
 select p.*, w.userNo from ProjectInfo p inner join pjworker w on p.pjno = w.pjno where userNo = 1000008;
 
-select p.*, w.pjroleName, w.pjNo, u.userName from pjPerform p inner join pjworker w on p.pjroleNo = w.pjroleNo  inner join Users u on w.userNo = u.userNo where w.pjNo = 6000001  order by pfStart
+select p.*, w.pjroleName, w.pjNo, u.userName from pjPerform p inner join pjworker w on p.pjroleNo = w.pjroleNo  inner join Users u on w.userNo = u.userNo where w.pjNo = 6000001  order by pfStart;
