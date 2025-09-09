@@ -28,7 +28,7 @@
         <jsp:include page="/project/navigation.jsp"></jsp:include>
 
         <!-- 본문 영역 -->
-        <div class="indexContainer">
+        <div class="indexContainer mt-4">
 
 
             <div class="titleArea">
@@ -39,7 +39,7 @@
                     <button type="button" class="btn btn-danger" onclick="deletePJInfo()">삭제</button>
                 </div>
             </div>
-            <div class="ContentBox">
+            <div class="ContentBox border rounded">
                 <form id="pjForm">
                     <div class="mb-3 text-end text-muted">
                         <small>생성일 : <span id="createDate"></span>
