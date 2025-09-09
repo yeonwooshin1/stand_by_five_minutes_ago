@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -279,6 +280,15 @@ public class PjCheckController {
         }
         // 2. 서비스 호출
         return pjCheckService.savePJChecklist(list);
+    }
+
+    // [*] changeStatus에 따른 
+    @GetMapping("/session-check")
+    public Map<String, Object> checkSession(HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("loggedIn", session.getAttribute("loginUserNo") != null);
+        result.put("isBusiness", session.getAttribute("loginBnNo") != null);
+        return result;
     }
 
 

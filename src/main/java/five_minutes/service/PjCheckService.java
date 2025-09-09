@@ -147,25 +147,30 @@ public class PjCheckService {
 
         for (PjCheckDto dto : list) {
             Map<String, Integer> resultMap = new HashMap<>();
-            resultMap.put("pjChkItemNo", dto.getPjChkItemNo() != 0 ? dto.getPjChkItemNo() : 0);
+            resultMap.put("pjChkItemNo", dto.getPjChkItemNo());
 
-            if (dto.getChangeStatus() == 0) { // 0: 변경 없음
-                resultMap.put("Result", dto.getPjChkItemNo());
-            } else if (dto.getChangeStatus() == 1) { // 1: 신규 추가
-                int createdId = pjCheckDao.createPJCheck(dto);
-                resultMap.put("Result", createdId);
-            } else if (dto.getChangeStatus() == 2) { // 2: 신규 데이터 삭제 (저장 전)
-                resultMap.put("Result", dto.getPjChkItemNo()); // 별도 처리 없음
-            } else if (dto.getChangeStatus() == 3) { // 3: 기존 데이터 수정
-                int updatedId = pjCheckDao.updatePJCheck(dto);
-                resultMap.put("Result", updatedId);
-            } else if (dto.getChangeStatus() == 4) { // 4: 기존 데이터 삭제
-                int deletedId = pjCheckDao.deletePJCheck(dto.getPjChkItemNo());
-                resultMap.put("Result", deletedId);
-            } else {
-                resultMap.put("Result", 0);
+            try {
+                if (dto.getChangeStatus() == 0) { // 0: 변경 없음
+                    resultMap.put("Result", dto.getPjChkItemNo());
+                } else if (dto.getChangeStatus() == 1) { // 1: 신규 추가
+                    int createdId = pjCheckDao.createPJCheck(dto);
+                    resultMap.put("Result", createdId);
+                } else if (dto.getChangeStatus() == 2) { // 2: 신규 데이터 삭제 (저장 전)
+                    resultMap.put("Result", dto.getPjChkItemNo()); // 별도 처리 없음
+                } else if (dto.getChangeStatus() == 3) { // 3: 기존 데이터 수정
+                    int updatedId = pjCheckDao.updatePJCheck(dto);
+                    resultMap.put("Result", updatedId);
+                } else if (dto.getChangeStatus() == 4) { // 4: 기존 데이터 삭제
+                    int deletedId = pjCheckDao.deletePJCheck(dto.getPjChkItemNo());
+                    resultMap.put("Result", deletedId);
+                } else {
+                    resultMap.put("Result", 0);
+                }
+                resultList.add(resultMap);
+            }catch (Exception e){
+                e.printStackTrace();
+                resultMap.put("Result" , 0);
             }
-            resultList.add(resultMap);
         }
         return resultList;
     }
