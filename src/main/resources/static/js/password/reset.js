@@ -6,13 +6,31 @@ function show(text, ok) {
   msg.style.color = ok ? 'green' : 'red';
 }
 
-// 비밀번호 형식 체크 (8자 이상, 영문 대소문자 최소 1개 포함)
+// 비밀번호 형식 유효성 검사 함수
+// 조건:
+//  - 길이 8~20자
+//  - 영문 대문자 1개 이상
+//  - 영문 소문자 1개 이상
+//  - 한글 포함 불가
+//  - 숫자/특수문자는 선택사항
 const strongPwd = (s) => {
   const v = String(s || '');
-  return (
-    v.length >= 8 &&
-    /[A-Za-z]/.test(v)   // 영문 대소문자 최소 1개 포함
-  );
+
+  // 길이 체크
+  if (v.length < 8 || v.length > 20) {
+    return false;
+  }
+
+  // 한글 포함 여부 (가-힣 유니코드)
+  if (/[가-힣]/.test(v)) {
+    return false;
+  }
+
+  // 대문자, 소문자 각각 1개 이상
+  const hasUpper = /[A-Z]/.test(v);
+  const hasLower = /[a-z]/.test(v);
+
+  return hasUpper && hasLower;
 };
 
 const resetPassword = async () => {
@@ -31,7 +49,7 @@ const resetPassword = async () => {
     return;
   }
   if (!strongPwd(newPassword)) {
-    show('비밀번호 형식이 올바르지 않습니다. (영문/숫자 포함 8자 이상)', false);
+    show('비밀번호 형식이 올바르지 않습니다. (영문/숫자 포함 8자 이상 20자 이하)', false);
     return;
   }
 
