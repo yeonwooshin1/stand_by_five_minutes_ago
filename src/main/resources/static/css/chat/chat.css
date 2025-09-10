@@ -1,0 +1,68 @@
+.chat-wrapper {
+    max-width: 800px;
+    height: 800px;
+    margin: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+}
+
+.chat-list {
+    background-color: #f1f1f1;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+}
+
+.chat-room {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    max-height: 50rem; /* 800px */
+}
+
+.chat-header {
+    padding: 1rem;
+    font-weight: bold;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    height: 50rem; /* 800px */
+    overflow-y: scroll;
+    padding: 1rem;
+    flex-grow: 0; /* 고정 높이로 설정 */
+}
+
+.chat-input {
+    border-top: 1px solid #ccc;
+    padding: 1rem;
+}
+
+@media (max-width: 768px) {
+    .chat-wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .chat-list,
+    .chat-room {
+        width: 100%;
+        height: 400px;
+    }
+}
+
+/* 세로 800px 초과시 스크롤 생성 */
+.chat-list{
+    max-height: 50rem; /* 800px */
+    overflow-y: scroll;
+}
+
+/* 스크롤은 유지되지만 스크롤바는 숨김 */
+.chat-list::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar {
+    display: none;
+}

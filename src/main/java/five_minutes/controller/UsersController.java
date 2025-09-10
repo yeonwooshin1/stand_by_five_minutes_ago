@@ -163,7 +163,7 @@ public class UsersController {  // class start
     public List<UsersDto> readAllUserInfo(@RequestParam(required = false) String keyword, HttpSession session) {
         System.out.println("UsersController.readAllUserInfo");
         System.out.println("keyword = " + keyword + ", session = " + session);
-
+        System.out.println(session.getAttribute("loginUserNo"));
         // 로그인 확인
         if( session.getAttribute("loginUserNo") == null){
             return null;

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p> info =======================
@@ -59,13 +60,22 @@ public class ChatRoomService {
 
     // 특정 유저가 참여하고 있는 채팅방 목록을 조회
     public List<ChatRoomDto> getChatRoomsByUser(int userNo) {
-        return chatRoomDao.selectChatRoomsByUserNo(userNo);
+        List<ChatRoomDto> chatRoomList = chatRoomDao.selectChatRoomsByUserNo(userNo);
+        for(ChatRoomDto chatRoomDto : chatRoomList){
+            List<Map<Integer, String>> participants = chatRoomUserDao.searchUserNoAtRoom(chatRoomDto.getRoomNo());
+            chatRoomDto.setParticipant(participants);
+        } // for end
+        return chatRoomList;
     } // func end
 
     // 그룹 채팅방 만들기
-    public int createGroupChatRoom(List<Integer> participantUserNoList, int creatorUserNo) {
+    public int createGroupChatRoom(ChatRoomUserDto chatRoomUserDto) {
+        List<Integer> participantUserNoList =chatRoomUserDto.getParticipantUserNos();
+        int creatorUserNo = chatRoomUserDto.getUserNo();
+        participantUserNoList.add(creatorUserNo);
         // 방이름 만들기 func 실행
         String roomName = generateRoomName(participantUserNoList);
+        System.out.println(roomName);
         // 방정보DTO
         ChatRoomDto roomDto = ChatRoomDto.builder()
                 .roomName(roomName)
@@ -91,6 +101,7 @@ public class ChatRoomService {
      * 그룹 - OOO 외 0명
      * */
     public String generateRoomName(List<Integer> userNoList) {
+        System.out.println("generateRoomName exe");
         // 이름을 모아두는 배열
         List<String> names = new ArrayList<>();
         // 반복문으로 이름 조회하여 이름 배열에 삽입
@@ -103,7 +114,7 @@ public class ChatRoomService {
         } else if (names.size() <= 3) { // 그룹 채팅
             return String.join(", ", names);
         } else {
-            return names.get(0) + ", " + names.get(1) + " 외 " + (names.size() - 2) + "명";
+            return names.get(0) +  " 외 " + (names.size() - 1) + "인";
         }
     } // func end
 

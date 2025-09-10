@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p> info =======================
@@ -32,19 +34,17 @@ public class ChatRoomUserDao extends Dao {
     }  //func end
 
     // 특정 방번호로 해당 방에 멤버를 불러옴
-    public List<ChatRoomUserDto> selectUsersByRoomNo(int roomNo) {
-        List<ChatRoomUserDto> list = new ArrayList<>();
+    public List<Map<Integer, String>> searchUserNoAtRoom(int roomNo) {
+        List<Map<Integer, String>> list = new ArrayList<>();
         try {
-            String sql = "SELECT * FROM ChatRoomUser WHERE roomNo = ?";
+            String sql = "SELECT * FROM ChatRoomUser c inner join users u on u.userno = c.userno WHERE roomNo = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, roomNo);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                ChatRoomUserDto dto = ChatRoomUserDto.builder()
-                        .roomNo(rs.getInt("roomNo"))
-                        .userNo(rs.getInt("userNo"))
-                        .joinDate(rs.getString("joinDate")).build();
-                list.add(dto);
+                Map<Integer, String> map = new HashMap<>();
+                map.put(rs.getInt("userNo"), rs.getString("userName"));
+                list.add(map);
             }
         } catch (Exception e) {
             System.out.println("ChatRoomUserDao.selectUsersByRoomNo " + e);
@@ -69,8 +69,7 @@ public class ChatRoomUserDao extends Dao {
                         JOIN ChatRoomUser cru2 ON cru1.roomNo = cru2.roomNo
                         JOIN ChatRoom cr ON cr.roomNo = cru1.roomNo
                         WHERE cru1.userNo = ? AND cru2.userNo = ? AND cr.isGroup = false
-                        GROUP BY cru1.roomNo
-                        HAVING COUNT(*) = 2
+                        GROUP BY cru1.roomNo;
                     """;
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, userA);

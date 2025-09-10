@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p> info =======================
  * <p> Chat 방 정보
@@ -25,5 +28,9 @@ public class ChatRoomDto {
     private boolean isGroup;
     private String createdDate;
     private String updateDate;
+
+    // 추가 정보
+    // 채팅방 참가자 List
+    private List<Map<Integer, String>> participant; // userNo, userName
 
 }
