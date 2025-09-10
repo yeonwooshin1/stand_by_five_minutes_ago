@@ -310,5 +310,12 @@ const updatePJPerform = async () => {
 }
 
 // [09] PDF 다운로드
+const downloadChecklistPdf = () => {
+    if(!pjNo) { 
+        alert("프로젝트 정보가 없습니다."); 
+        return; 
+    }
+    window.location.href = `/project/perform/check/pdf/checklist?pjNo=${pjNo}`;
+}
 
 

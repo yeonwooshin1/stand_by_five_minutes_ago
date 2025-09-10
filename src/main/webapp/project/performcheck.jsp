@@ -32,7 +32,7 @@
                 <div class='title1'>프로젝트 업무 관리</div>
                 <div>
                     <button type="button" class="btn btn-outline-success" onclick="downloadExcel()">Excel</button>
-                    <button type="button" class="btn btn-outline-danger">PDF</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="downloadChecklistPdf()">PDF</button>
                 </div>
             </div>
 
