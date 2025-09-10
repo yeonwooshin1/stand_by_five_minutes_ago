@@ -21,17 +21,23 @@ import java.util.Date;                    // JWT 표준 클레임에 쓰이는 D
 public class JwtUtil {  // class start
 
     // application.properties의 값을 @Value로 주입
-    @Value("${app.jwt.secret}") private String secret;   // 최소 32바이트(HS256 256bit 필요)
+    // 비밀번호 찾기용
+    @Value("${app.email.jwt.secret}") private String emailSecret;   // 최소 32바이트(HS256 256bit 필요)
+    // 로그인 api용 토큰
+    @Value("${app.api.jwt.secret}") private String apiSecret;
+
     @Value("${app.jwt.exp-min}") private long expMin; // 만료(분). 기본 15
 
-    // KEY 를 만드는 메소드
-    private SecretKey key() {
+    // email용 키를 만드는 메소드
+    private SecretKey emailKey() {
         // getBytes => 문자열을 바이트 배열로 변환
         // Keys.hmacShaKeyFor : 바이트 배열을 HS256/HS384/HS512용 비밀키(Key 객체) 로 변환해줌
-        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(emailSecret.getBytes(StandardCharsets.UTF_8));
     }   // func end
-
-
+    // api용
+    private SecretKey apiKey() {
+        return Keys.hmacShaKeyFor(apiSecret.getBytes(StandardCharsets.UTF_8));
+    }
     // -------------------------------------------------------------------------------------------------
     // [public String createToken(String userNo, String jti)]
     // - 목적: "이 사용자가 비밀번호 재설정을 할 수 있도록" 임시 JWT를 발급한다.
@@ -61,7 +67,7 @@ public class JwtUtil {  // class start
                 .id(jti)         // jti: 토큰 고유 식별자
                 .subject(userNo) // subject : 사용자 번호
                 .expiration(Date.from(now.plusSeconds(expMin * 60))) // exp: 만료 시간 15분.
-                .signWith(key(), Jwts.SIG.HS256 )    // KEY 값과 해당 키에 HS256 알고리즘을 쓰겠다는 거임.
+                .signWith(emailKey(), Jwts.SIG.HS256 )    // KEY 값과 해당 키에 HS256 알고리즘을 쓰겠다는 거임.
                 .compact(); // 최종 문자열 생성
     }   // func end
 
@@ -89,11 +95,32 @@ public class JwtUtil {  // class start
     public Jws<Claims> parseAndValidate(String token) {
         // Jwts.parser(): Jwts parse 빌더 시작
         return Jwts.parser()
-                .verifyWith(key())  // verifyWith: "이 키로 서명됐는지" 확인하도록 파서에 알려줌.
+                .verifyWith(emailKey())  // verifyWith: "이 키로 서명됐는지" 확인하도록 파서에 알려줌.
                 .build()            // .build(): 파서 완성
                 .parseSignedClaims(token);  // parseSignedClaims: 실제 파싱+검증. 실패하면 예외, 성공하면 Jws<Claims> 반환.
 
     }   // func end
 
+    // api 검증용 token 생성
+    public String createApiToken(String userNo, String jti) {
+
+        Instant now = Instant.now(); // 현재 시각
+
+        return Jwts.builder()
+                .id(jti)         // jti: 토큰 고유 식별자
+                .subject(userNo) // subject : 사용자 번호
+                .expiration(Date.from(now.plusSeconds(expMin * 60))) // exp: 만료 시간 15분.
+                .signWith(apiKey(), Jwts.SIG.HS256 )    // KEY 값과 해당 키에 HS256 알고리즘을 쓰겠다는 거임.
+                .compact(); // 최종 문자열 생성
+    }   // func end
+    // api 검증용 token 검증
+    public Jws<Claims> parseAndValidateApi(String token) {
+        // Jwts.parser(): Jwts parse 빌더 시작
+        return Jwts.parser()
+                .verifyWith(apiKey())  // verifyWith: "이 키로 서명됐는지" 확인하도록 파서에 알려줌.
+                .build()            // .build(): 파서 완성
+                .parseSignedClaims(token);  // parseSignedClaims: 실제 파싱+검증. 실패하면 예외, 성공하면 Jws<Claims> 반환.
+
+    }   // func end
 
 }   // class end
