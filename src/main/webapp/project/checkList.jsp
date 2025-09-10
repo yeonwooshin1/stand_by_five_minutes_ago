@@ -55,7 +55,7 @@
             <div class="ContentBox">
                 <div class="rowBox mb-2">
                     <button id="templateSearchBtn" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#checkTemplateModal">체크리스트 검색</button>
+                        data-bs-target="#checkTemplateModal" onclick="checkTemplateModalShow()">체크리스트 검색</button>
                     <!-- data-bs-target="#checkTemplateModal" -->
                     <button id="addRowBtn" class="btn btn-secondary" onclick="addClearRow()">행 추가</button>
                 </div>
