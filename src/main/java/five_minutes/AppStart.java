@@ -10,6 +10,5 @@ public class AppStart { // class start
     public static void main(String[] args) {    // main start
 
         SpringApplication.run(AppStart.class);
-
     }   // main end
 }   // class end
