@@ -30,8 +30,8 @@
                     <!-- 좌측: 채팅 목록 -->
                     <div class="chat-list pt-3 pb-3 col-3">
                         <div class="d-flex justify-content-end mb-3">
-                            <button type="button" class="btn btn-primary" style="width:100%;" onclick="">채팅방
-                                만들기</button>
+                            <button type="button" class="btn btn-primary" style="width:100%;" data-bs-toggle="modal"
+                                data-bs-target="#userSelectModal" onclick="fetchUserList()">채팅방 만들기</button>
                         </div>
 
                         <div class="btn-group-vertical chatRoomList" role="group" aria-label="Vertical button group"
@@ -43,22 +43,22 @@
 
                     <!-- 우측: 채팅방 -->
                     <div class="chat-room col-9 border rounded">
-                        <div class="chat-header mx-auto p-2 text-center" style="width: 20rem;"><span class="fs-4">채팅방
-                                명</span></div>
+                        <div class="chat-header mx-auto p-2 text-center" id="chatTilte" style="width: 20rem;"><span
+                                class="fs-3"></span></div>
                         <div class="chat-messages" id="chatMessages">
                             <!-- 받은 메세지 -->
                             <div class="row">
                                 <div class="mb-3 col-6">
-                                    <div class="bg-light p-2 rounded d-inline-block">안녕하세요</div>
-                                    <small class="text-muted d-block">00월 00일 00:00</small>
+                                    <div class="bg-light p-2 rounded d-inline-block"></div>
+                                    <small class="text-muted d-block"></small>
                                 </div>
                             </div>
                             <!-- 보낸 메세지 -->
                             <div class="row">
                                 <div class="col-6"></div>
                                 <div class="mb-3 text-end col-6">
-                                    <div class="bg-primary text-white p-2 rounded d-inline-block">안녕하세요</div>
-                                    <small class="text-muted d-block">00월 00일 00:00</small>
+                                    <div class="bg-primary text-white p-2 rounded d-inline-block"></div>
+                                    <small class="text-muted d-block"></small>
                                 </div>
                             </div>
                         </div>
@@ -71,6 +71,31 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 채팅방 만들기 모달 -->
+            <div id="userSelectModal" class="modal" tabindex="-1" id="choiceUser">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"> 사용자 선택 </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body " id="userListContainer">
+                            <!-- 사용자 목록이 여기에 렌더링됨 -->
+                            <div class="text-center">
+
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" onclick="createChatRoom()"
+                                data-bs-dismiss="modal">채팅방 생성</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <script src="/js/chat/chat.js"> </script>
 

@@ -21,9 +21,9 @@ public class ChatMessageDao extends Dao {
     // 메세지 이력 기록
     public void insertChatMessage(ChatMessageDto dto) {
         try {
-            String sql = "INSERT INTO ChatMessage (roomNO, sendUserNo, message) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO ChatMessage (roomNo, sendUserNo, message) VALUES (?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, dto.getRoomNO());
+            ps.setInt(1, dto.getRoomNo());
             ps.setInt(2, dto.getSendUserNo());
             ps.setString(3, dto.getMessage());
             ps.executeUpdate();
@@ -36,12 +36,12 @@ public class ChatMessageDao extends Dao {
     public List<ChatMessageDto> selectMessagesByRoomNo(int roomNo) {
         List<ChatMessageDto> list = new ArrayList<>();
         try {
-            String sql = "SELECT * FROM ChatMessage WHERE roomNO = ?";
+            String sql = "SELECT * FROM ChatMessage WHERE roomNo = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, roomNo);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                ChatMessageDto dto = ChatMessageDto.builder().messageNo(rs.getInt("messageNo")).roomNO(rs.getInt("roomNO")).sendUserNo(rs.getInt("sendUserNo")).message(rs.getString("message")).sentDate(rs.getString("sentDate")).build();
+                ChatMessageDto dto = ChatMessageDto.builder().messageNo(rs.getInt("messageNo")).roomNo(rs.getInt("roomNo")).sendUserNo(rs.getInt("sendUserNo")).message(rs.getString("message")).sentDate(rs.getString("sentDate")).build();
                 list.add(dto);
             }
         } catch (Exception e) {
