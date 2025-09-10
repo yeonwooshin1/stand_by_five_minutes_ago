@@ -36,13 +36,13 @@
 
                         <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="width: 100%;">
                             <button class="btn btn-outline-secondary" type="button">홍길동</button>
-                            <button class="btn btn-outline-secondary" type="button">가나다</button>
+                            <button class="btn btn-outline-secondary" type="button">가나다</button>                     
                         </div>
                     </div>
 
                     <!-- 우측: 채팅방 -->
                     <div class="chat-room col-9 border rounded">
-                        <div class="chat-header">채팅방 명</div>
+                        <div class="chat-header" style="margin:0 auto">채팅방 명</div>
                         <div class="chat-messages" id="chatMessages">
                             <div class="mb-3">
                                 <div class="bg-light p-2 rounded">안녕하세요</div>
