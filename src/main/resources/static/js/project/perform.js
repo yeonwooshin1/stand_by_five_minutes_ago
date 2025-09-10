@@ -162,14 +162,21 @@ function notifyTypeOptions(selected) {
 
 /** 테이블 렌더링 */
 function render() {
-  const rows = ROWS.filter(r => r.changeStatus !== 2 && r.changeStatus !== 4); // 화면에서 지운건 숨김 2면 진짜 백에서 지워야 할 것, 4면 그냥 프론트에서 지워야 할것
+  const rows = ROWS.filter(r => r.changeStatus !== 2 && r.changeStatus !== 4);
 
   const html = rows.map((row, idx) => {
-    const disabledMins = Number(row.notifyType) === 0 ? "disabled" : "";
+    const isSent = Number(row.notifyType) === -1;               // 알람발송됨
+    const disabledMins = (Number(row.notifyType) === 0 || isSent) ? "disabled" : "";
+
+    const notifyCell = isSent
+      ? `<div class="form-control-plaintext text-success fw-semibold">알람발송됨</div>`
+      : `<select class="form-select pf-notify-type">${notifyTypeOptions(row.notifyType)}</select>`;
+
     return `
       <tr data-pfno="${row.pfNo}">
         <td class="text-center">${idx + 1}</td>
 
+        <!-- 역할/체크리스트/삭제: 그대로 편집 가능 -->
         <td>
           <select class="form-select pf-role">
             ${roleOptions(row.pjRoleNo)}
@@ -177,23 +184,22 @@ function render() {
         </td>
 
         <td>
-            <div class="d-flex align-items-center gap-2 flex-nowrap">   <!-- ← flex-nowrap 추가 -->
-                <select class="form-select pf-chk w-auto">                 <!-- ← w-auto 추가 -->
-                ${itemOptions(row.pjChkItemNo)}
-                </select>
-                <button type="button" class="btn btn-sm btn-outline-secondary pf-help" style = "min-width:50px">설명</button>
-            </div>
+          <div class="d-flex align-items-center gap-2 flex-nowrap">
+            <select class="form-select pf-chk w-auto">
+              ${itemOptions(row.pjChkItemNo)}
+            </select>
+            <button type="button" class="btn btn-sm btn-outline-secondary pf-help" style="min-width:50px">설명</button>
+          </div>
         </td>
 
+        <!-- 시간: 발송완료여도 편집 가능(요구사항) -->
         <td><input type="time" class="form-control pf-start" value="${row.pfStart}"></td>
         <td><input type="time" class="form-control pf-end"   value="${row.pfEnd}"></td>
 
-        <td>
-          <select class="form-select pf-notify-type">
-            ${notifyTypeOptions(row.notifyType)}
-          </select>
-        </td>
+        <!-- 알림 타입: 발송완료면 배지로 고정 -->
+        <td>${notifyCell}</td>
 
+        <!-- 알림 분: 0 또는 발송완료면 비활성 -->
         <td>
           <input type="number" class="form-control pf-notify-mins" min="0" step="1"
                  value="${toNum0(row.notifySetMins)}" ${disabledMins}>
@@ -207,9 +213,43 @@ function render() {
   }).join("");
 
   $tbody.innerHTML = html;
-
-  // [ADD] 새로 렌더링될 때마다 설명 버튼을 다시 주입
   addHelpButtons();
+}
+
+
+// 현재 시각(초)
+function nowSeconds() {
+  const d = new Date();
+  return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
+}
+// "HH:mm" → 초
+function hhmmToSeconds(v) {
+  if (!v) return null;
+  const [h, m] = String(v).split(":").map(n => parseInt(n, 10));
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return null;
+  return h * 3600 + m * 60;
+}
+// row 기준 타겟 초 계산 (null: 계산 불가)
+function calcTargetSecond(row) {
+  const mins = Number(row.notifySetMins) || 0;
+  const offset = mins * 60;
+  const startSec = hhmmToSeconds(row.pfStart);
+  const endSec   = hhmmToSeconds(row.pfEnd);
+
+  switch (Number(row.notifyType)) {
+    case 1: return (startSec != null) ? (startSec - offset) : null; // 시작 전
+    case 2: return (startSec != null) ? (startSec + offset) : null; // 시작 후
+    case 3: return (endSec   != null) ? (endSec   - offset) : null; // 종료 전
+    case 4: return (endSec   != null) ? (endSec   + offset) : null; // 종료 후
+    case 0: return null; // 미발송은 검증 대상 아님
+    default: return null; // -1 등
+  }
+}
+// 발송 가능 검증: target >= now
+function isSchedulableNow(row) {
+  const t = calcTargetSecond(row);
+  if (t == null) return true; // 계산 불가/미발송 등은 통과
+  return t >= nowSeconds();
 }
 
 /** 번호 다시 채우기(삭제 후) */
@@ -252,9 +292,8 @@ function bindAddButton() {
 
 
 
-/** 테이블 값 변경/삭제 (이벤트 위임) */
+// 테이블 값 변경/삭제 (이벤트 위임)
 function bindTableEvents() {
-  // 값 변경
   $tbody.addEventListener("change", (e) => {
     const tr = e.target.closest("tr");
     if (!tr) return;
@@ -263,6 +302,10 @@ function bindTableEvents() {
     const row = ROWS.find(r => Number(r.pfNo) === pfNo);
     if (!row) return;
 
+    // 스냅샷(되돌리기용)
+    const prev = { ...row };
+
+    // 편집 분기
     if (e.target.classList.contains("pf-role")) {
       row.pjRoleNo = toNum0(e.target.value);
 
@@ -271,44 +314,48 @@ function bindTableEvents() {
 
     } else if (e.target.classList.contains("pf-start")) {
       row.pfStart = toHHMM(e.target.value);
-
-      // 시작/종료 시간 유효성 검사: 종료시간보다  시작시간이 이하여야함
       if (row.pfStart && row.pfEnd && cmpHHMM(row.pfEnd, row.pfStart) < 0) {
         alert("종료시간은 시작시간보다 빠를 수 없습니다.");
-        row.pfStart = "";           // 잘못 입력 초기화
-        e.target.value = "";        // 입력칸도 초기화
-        return;                     // 변경 플래그는 주지 않음
+        Object.assign(row, prev);
+        render();
+        return;
       }
 
     } else if (e.target.classList.contains("pf-end")) {
       row.pfEnd = toHHMM(e.target.value);
-
-      // [CHG] 시작/종료 시간 유효성 검사: 종료시간 ≥ 시작시간
       if (row.pfStart && row.pfEnd && cmpHHMM(row.pfEnd, row.pfStart) < 0) {
         alert("종료시간은 시작시간보다 빠를 수 없습니다.");
-        row.pfEnd = "";             // 잘못 입력 초기화
-        e.target.value = "";        // 입력칸도 초기화
-        return;                     // 변경 플래그는 주지 않음
+        Object.assign(row, prev);
+        render();
+        return;
       }
 
     } else if (e.target.classList.contains("pf-notify-type")) {
+      // -1 옵션은 셀렉트에 없으니 여기로 안 들어옴 (발송완료 행은 배지)
       row.notifyType = toNum0(e.target.value);
-      // 타입이 0(미발송)이면 분 입력 비활성화 + 0 세팅
-      const mins = tr.querySelector(".pf-notify-mins");
-      mins.disabled = row.notifyType === 0;
-      if (row.notifyType === 0) { row.notifySetMins = 0; mins.value = 0; }
+      const minsEl = tr.querySelector(".pf-notify-mins");
+      minsEl.disabled = row.notifyType === 0;
+      if (row.notifyType === 0) { row.notifySetMins = 0; minsEl.value = 0; }
 
     } else if (e.target.classList.contains("pf-notify-mins")) {
       row.notifySetMins = toNum0(e.target.value);
 
     } else {
       return;
-    } // if end
+    }
 
-    // [CHG] 유효하지 않아 return된 경우를 제외하고 변경 플래그 처리
-    if (isExisting(pfNo)) row.changeStatus = 3; // 기존행이면 3(수정), 신규행은 1 유지
+    // === 공통: 현재 시각 기준 발송 불가면 되돌림 ===
+    if (!isSchedulableNow(row)) {
+      alert("현재 시각 기준으로 알림 발송 시간이 이미 지났습니다. 알림 설정/시간을 다시 선택하세요.");
+      Object.assign(row, prev);
+      render();
+      return;
+    }
+
+    if (isExisting(pfNo)) row.changeStatus = 3; // 기존행 수정 플래그
   });
 }
+
 
 /* HH:mm 비교 유틸: a(종료) - b(시작)
    반환값 <0  => a < b (잘못된 종료시간)
@@ -383,10 +430,10 @@ async function onClickSave() {
       return;
     }
 
-    // ★ 백엔드가 "최신 목록(List<ProjectPerformDto>)"을 반환함 (방법 C)
+    // 백엔드가 최신 목록 반환하는 것
     const fresh = await response.json();
 
-    // 화면 버퍼 교체 + 초기화
+    // 화면 버퍼 교체와 초기화
     ROWS = (Array.isArray(fresh) ? fresh : []).map((dto) => ({
       pfNo:            Number(dto.pfNo) || 0,
       pjRoleNo:        Number(dto.pjRoleNo) || 0,
