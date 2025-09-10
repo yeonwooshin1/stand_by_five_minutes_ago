@@ -190,7 +190,7 @@
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 체크리스트 템플릿 설명</label>
-                            <div class="form-control ctDescription03" type="text" aria-disabled="true"></div> <!-- class="ctDescription03" -->
+                            <div class="form-control ctDescription03" type="text" disabled></div> <!-- class="ctDescription03" -->
                         </div>
 
                         <div class="">

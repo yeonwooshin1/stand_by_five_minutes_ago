@@ -172,7 +172,7 @@ const getIndiCTItem = async (ctNo, ctiNo) => {
         const updateCtName = document.querySelector('#updateCTI .ctName03');
         const updateCtDescription = document.querySelector('#updateCTI .ctDescription03');
         const updateCtiTitle = document.querySelector("#updateCtiTitle")
-        // const updateCtiHelpText = document.querySelector(".ctiContent .note-editable") 썸머노트로 관리
+        const updateCtiHelpText = document.querySelector(".ctiContent .note-editable")
 
         // [3.3] 화면에 표시
         // 미리보기 모달 데이터 설정
@@ -185,7 +185,7 @@ const getIndiCTItem = async (ctNo, ctiNo) => {
         updateCtName.value = ctInfo.ctName;                     // 대분류 템플릿명 (전역변수 가져오기)
         updateCtDescription.innerHTML = ctInfo.ctDescription;   // 대분류 템플릿 설명 (전역변수 가져오기)
         updateCtiTitle.value = d.ctiTitle;
-        // $('#updateCtiHelpText').summernote('code', d.ctiHelpText); // Summernote 내용 설정 (최상단 썸머노트로 관리)
+        $('#updateCtiHelpText').summernote('code', d.ctiHelpText); // Summernote 내용 설정 (최상단 썸머노트로 관리)
 
         // [3.4] 수정하기 버튼에 ctNo를 매개변수로 삽입해놓기
         const updateBox = document.querySelector(".updateBox")
