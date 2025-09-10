@@ -146,6 +146,8 @@ const getBusinessInfo = async () => {
         const bnItem       = (data.bnItem ?? '').toString().trim();
         const createDate   = (data.createDate ?? '').toString().trim();
         const updateDate   = (data.updateDate ?? '').toString().trim();
+        // 이미지 URL 저장
+        const bnDocuImg    = (data.bnDocuImg ?? '').toString().trim();
 
         // 관리자 데이터가 확실치 않으면 카드 숨김
         if (!bnNo && !bnName) {
@@ -166,6 +168,22 @@ const getBusinessInfo = async () => {
         setText('#bnItem',        bnItem);
         setText('#bizCreateDate', fmtDate(createDate));
         setText('#bizUpdateDate', fmtDate(updateDate));
+
+        // 버튼 토글: URL만 보관
+        const imgBtn = $('#btn-biz-image');
+        if (imgBtn) {
+          // 있으면 url 변수에 넣어줘라
+          if (bnDocuImg) {
+            _bnDocuImgUrl = bnDocuImg;   // 절대경로이므로 별도 가공 불필요
+            // 버튼 보여줘라
+            imgBtn.disabled = false;
+          } else {
+            // 없으면 null 값 주고 이미지 보여주지 마라.
+            _bnDocuImgUrl = null;
+            imgBtn.disabled = true;
+          } // if end
+        } // if end
+
 
         // 데이터 OK → 카드 보여줌
         show(card);
@@ -612,4 +630,23 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     userEditRoad(); // 앞서 추가한 openPostcode() 호출
   });
+});
+
+
+// 모달 show 시: 파일명만 인코딩 + 캐시 무효화
+document.getElementById('bizImageModal')?.addEventListener('show.bs.modal', () => {
+  // url 없으면 return
+  if (!_bnDocuImgUrl) return;
+  // dom 화 만약 dom이 없으면 return
+  const img = $('#bnDocuImgModal');
+  if (!img) return;
+
+  // 마지막 세그먼트(파일명)만 안전하게 인코딩
+  const encoded = _bnDocuImgUrl.replace(/[^/]+$/, (m) => {
+    try { return encodeURIComponent(decodeURIComponent(m)); } // 이미 인코딩된 경우 방지
+    catch { return encodeURIComponent(m); }
+  }); // -> 파일 한글명 인코딩
+
+  // 항상 최신 파일만 보여준다. 쿼리스트링에 날짜 붙여서
+  img.src = `${encoded}${encoded.includes('?') ? '&' : '?'}t=${Date.now()}`;
 });
