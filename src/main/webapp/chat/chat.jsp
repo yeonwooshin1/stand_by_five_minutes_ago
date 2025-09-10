@@ -48,8 +48,11 @@
                         <div class="chat-header mx-auto p-2 text-center fs-3" id="chatTilte" style="width: 20rem;">
                         </div>
                         <div class="chat-messages rounded-top" id="chatMessages" style="background-color: #eeeeee;">
+                            <div style="height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <div class="text-center">※ 좌측 채팅방을 클릭하면 대화 내역을 확인할 수 있습니다.</div>
+                            </div>
                             <!-- 받은 메세지 -->
-                            <div class="row">
+                            <div class="row" style="display: none;">
                                 <div class="mb-3 col-6">
                                     <div class="fw-semibold"></div>
                                     <div class="bg-light p-2 rounded d-inline-block"></div>
@@ -57,7 +60,7 @@
                                 </div>
                             </div>
                             <!-- 보낸 메세지 -->
-                            <div class="row">
+                            <div class="row" style="display: none;">
                                 <div class="col-6"></div>
                                 <div class="mb-3 text-end col-6">
                                     <div class="bg-primary text-white p-2 rounded d-inline-block"></div>

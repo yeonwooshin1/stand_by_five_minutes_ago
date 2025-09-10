@@ -60,7 +60,7 @@ function Postcode() {
     }).open();
 }
 
-// [1] PJ 정보 생성하기
+// [2] PJ 정보 생성하기
 const creatPJInfo = async () =>{
     console.log("createPJinfo")
 

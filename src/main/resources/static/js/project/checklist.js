@@ -309,11 +309,31 @@ document.querySelector("#pjchecklistTbody").addEventListener("input", function (
 });
 
 // [10] 삭제 버튼
-document.querySelector("#pjchecklistTbody").addEventListener("click", (e) => {
+document.querySelector("#pjchecklistTbody").addEventListener("click", async (e) => {
     if (!e.target.classList.contains("deleteBtn")) return;
 
     const tr = e.target.closest("tr");
     const pjChkItemNo = parseInt(tr.dataset.pjchkitemno);
+
+    // 만약 해당 pjChkItemNo 이 뒤에서 사용중이면 삭제불가처리
+    const usedPjChkItemNo = [];
+    try{
+        const r = await fetch(`/project/perform?pjNo=${pjNo}`)
+        const d = await r.json()
+        d.forEach( (dto) => {
+            // dto.pjRoleNo가 이미 존재하지 않으면 push >> 중복방지
+            if (!usedPjChkItemNo.includes(dto.pjChkItemNo)) {
+                usedPjChkItemNo.push(dto.pjChkItemNo);
+            }
+        })
+    }catch(error){
+        console.log(error)
+    }
+
+    if(usedPjChkItemNo.includes(pjChkItemNo)){
+        alert("[경고] 해당 체크리스트는 이미 배정되어있습니다. \n '4. 업무배정' 에서 삭제하시려는 체크리스트를 모두 제외시키신 후 체크리스 삭제를 다시 시도해주시기 바랍니다.")
+        return;
+    }
 
     if (!confirm("프로젝트 대시보드에서 체크리스트를 확인할 수 없습니다. 삭제하시겠습니까?")) return;
 

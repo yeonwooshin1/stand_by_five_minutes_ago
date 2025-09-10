@@ -467,11 +467,32 @@ document.addEventListener("click", function (e) {
 })
 
 // [14] 삭제 버튼 ==================================
-document.querySelector("#pjworkerTbody").addEventListener("click", (e) => {
+document.querySelector("#pjworkerTbody").addEventListener("click", async (e) => {
     if (!e.target.classList.contains("deleteBtn")) return;
 
     const tr = e.target.closest("tr");
     const pjRoleNo = parseInt(tr.dataset.pjroleno);
+
+    // 만약 해당 pjRoleNo이 뒤에서 사용중이면 삭제불가처리
+    const usedPjRoleNo = [];
+    try{
+        const r = await fetch(`/project/perform?pjNo=${pjNo}`)
+        const d = await r.json()
+        d.forEach( (dto) => {
+            // dto.pjRoleNo가 이미 존재하지 않으면 push >> 중복방지
+            if (!usedPjRoleNo.includes(dto.pjRoleNo)) {
+                usedPjRoleNo.push(dto.pjRoleNo);
+            }
+        })
+    }catch(error){
+        console.log(error)
+    }
+
+    if(usedPjRoleNo.includes(pjRoleNo)){
+        alert("[경고] 해당 역할은 이미 업무가 배정되어있습니다. \n '4. 업무배정' 에서 삭제하시려는 역할을 모두 제외시키신 후 역할 삭제를 다시 시도해주시기 바랍니다.")
+        return;
+    }
+
 
     const confirmDelete = confirm("한 번 삭제한 데이터는 복구할 수 없습니다. \n정말로 삭제하시겠습니까?");
     if (!confirmDelete) return;

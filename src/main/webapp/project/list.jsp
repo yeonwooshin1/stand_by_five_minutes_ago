@@ -30,7 +30,7 @@
     <div class="indexContainer">
         <div class="titleArea">
             <div class="title1">프로젝트 목록</div>
-            <button type="button" class="btn btn-primary" onclick="location.href='/project/create.jsp'">생성</button>
+            <button type="button" class="btn btn-primary createBtn" onclick="location.href='/project/create.jsp'">생성</button>
         </div>
         <div class="ContentBox">
             <table class="table table-striped table-hover pjList">
