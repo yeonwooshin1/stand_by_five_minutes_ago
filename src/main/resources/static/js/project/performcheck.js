@@ -2,6 +2,7 @@ console.log('info js exe')
 
 window.onHeaderReady = () => {
     loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+    userDisplay();
 };
 
 // [0] 로그인 체크
@@ -10,9 +11,21 @@ const loginCheck = async () => {
     if (userNo == null || userNo === 0) {
         alert("[경고] 로그인 후 이용가능합니다.")
         location.href = "/index.jsp"
-    } else if (businessNo == null || businessNo === 0) {
-        alert("[경고] 일반회원은 사용불가능한 메뉴입니다.")
-        location.href = "/index.jsp"
+    } 
+}
+
+// [0] 일반회원일 경우, 네비게이션바 비활성화
+const userDisplay = async () => {
+    const naviBar = document.querySelector('#projectNav');
+    const excelBtn = document.querySelector('#excelBtn')
+    if ((!userNo&&!businessNo) ||(userNo && !businessNo)) {
+        // 조건 만족 시 숨김 처리
+        naviBar.style.display = 'none';
+        excelBtn.style.display = 'none';
+    } else {
+        // 조건 불만족 시 다시 보이게
+        naviBar.style.display = '';
+        excelBtn.style.display = '';
     }
 }
 
