@@ -1,23 +1,9 @@
-/*
-00. 로그인 체크
-01. 전역 변수 및 임시 저장 배열
-02. pjcheck 전체 조회 (PJC-02)
-03. 템플릿 선택 시 행 추가 (PJC-08)
-04. 행 추가 버튼 클릭 시 자유 입력 행 생성 (PJC-01)
-05. 체크리스트 템플릿 대분류 조회 (PJC-06)
-06. 체크리스트 템플릿 소분류 조회 (PJC-07)
-07. 설명보기 버튼 클릭 (PJC-03)
-08. 설명 저장 (PJC-04)
-09. 체크리스트명 직접 수정
-10. 삭제 버튼 (PJC-05)
-11. 저장 버튼
-12. 다음 버튼
-*/
 
 console.log("checklist.js loaded");
 
 // 전역 변수
-const pjNo = new URLSearchParams(location.search).get("pjNo");
+// const pjNo = new URLSearchParams(location.search).get("pjNo");
+console.log( pjNo );
 const TemporarySaveChecklist = [];
 let currentCtName = "";
 let currentCtDescription = "";
@@ -28,17 +14,6 @@ window.onHeaderReady = async () => {
     await loginCheck();
     await readAllpjcheck();
 };
-
-// [00] 로그인 체크
-// async function loginCheck() {
-//     if (!userNo) {
-//         alert("[경고] 로그인 후 이용 가능합니다.");
-//         location.href = "/index.jsp";
-//     } else if (!businessNo) {
-//         alert("[경고] 기업 회원만 사용 가능한 메뉴입니다.");
-//         location.href = "/index.jsp";
-//     }
-// }
 
 // [00] 로그인 체크 - 수정된 버전
 async function loginCheck() {
@@ -102,7 +77,7 @@ async function readAllpjcheck() {
             data.forEach((dto, index) => {
                 html += `
                     <tr data-pjchkitemno="${dto.pjChkItemNo}">
-                        <td> ${index} </td>
+                        <td> ${index + 1} </td>
                         <td contenteditable="true">${dto.pjChklTitle}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-secondary viewDescBtn" onclick="viewDescription(${dto.pjChkItemNo})">
@@ -157,7 +132,8 @@ function addClearRow() {
 }
 
 // [05] 체크리스트 템플릿 모달 불러오기 (수정됨)
-$('#checkTemplateModal').on('show.bs.modal', async function () {
+// $('#checkTemplateModal').on('show.bs.modal', async function () {
+const checkTemplateModalShow = async()=>{
     const modalCheckTemplate = document.querySelector(".modalCheckTemplate");
 
     // 모달을 열 때마다 새로 불러오는 것을 방지하기 위해, 이미 옵션이 2개 이상 있다면(기본 옵션 포함) 함수를 종료합니다.
@@ -187,7 +163,7 @@ $('#checkTemplateModal').on('show.bs.modal', async function () {
         // 템플릿 목록을 불러오는 중 오류가 발생하면 콘솔에 에러를 출력합니다.
         console.error("체크리스트 템플릿 대분류를 불러오는 중 오류 발생:", error);
     }
-});
+};
 
 // [06] 대분류 선택 시 소분류 불러오기
 document.querySelector(".modalCheckTemplate").addEventListener("change", async function () {
@@ -288,8 +264,9 @@ document.addEventListener("click", async function (e) {
         }
 
         // 처리가 끝나면 모달창을 닫습니다.
-        const modal = bootstrap.Modal.getInstance(document.getElementById('checkTemplateModal'));
-        modal.hide();
+        // const modal = bootstrap.Modal.getInstance(document.getElementById('checkTemplateModal'));
+        // modal.hide();
+        document.querySelector('#checkTemplateModal .btn-close').click();
     }
 });
 
@@ -411,6 +388,6 @@ function nextStage() {
         }
     }
     // 다음 페이지 URL을 여기에 입력하세요. 예:
-    // location.href = `/project/nextpage.jsp?pjNo=${pjNo}`;
+    location.href = `/project/perform.jsp?pjNo=${pjNo}`;
     alert("다음 단계로 이동합니다.");
 }

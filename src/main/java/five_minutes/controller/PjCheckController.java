@@ -238,7 +238,7 @@ public class PjCheckController {
         return pjCheckService.getPJCheckItem(ctNo);
     }
 
-    // [8] 프로젝트 체크리스트 템플릿 불러오기 (수정됨)
+    // [8] 프로젝트 체크리스트 템플릿 불러오기
     // URL : http://localhost:8080/project/checklist/tem
     // BODY : { "ctiNo" : 5000001 , "pjNo" : 6000001 }
     /*
