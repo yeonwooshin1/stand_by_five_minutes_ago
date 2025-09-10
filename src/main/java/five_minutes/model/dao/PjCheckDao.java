@@ -195,17 +195,18 @@ public class PjCheckDao extends Dao {
         try{
             // 'cti.ctiNo'로 오타 수정
             String sql = "SELECT concat(ct.ctName, '_' , cti.ctiTitle) " +
-                            "as pjCheckTitle, ct.ctDescription , cti.ctiHelpText FROM CheckTemplateItem cti JOIN " +
-                            "CheckTemplate ct ON cti.ctNo = ct.ctNo " +
-                            "WHERE cti.ctiNo = ? ";
+                    "   as pj_check_title, " +
+                    "   concat(ct.ctDescription, '</br>' , cti.ctiHelpText) as pj_help_text " +
+                    "   FROM CheckTemplateItem cti JOIN " +
+                    "   CheckTemplate ct ON cti.ctNo = ct.ctNo " +
+                    "   WHERE cti.ctiNo = ? ";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, ctiNo);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
                 PjCheckDto pjCheckDto = new PjCheckDto();
-                pjCheckDto.setPjChklTitle(rs.getString("pjCheckTitle"));
-                pjCheckDto.setCtDescription(rs.getString("ctDescription"));
-                pjCheckDto.setCtiHelpText(rs.getString("ctiHelpText"));
+                pjCheckDto.setPjChklTitle(rs.getString("pj_check_title"));
+                pjCheckDto.setPjHelpText(rs.getString("pj_help_text"));
                 return pjCheckDto;
             }
         } catch (SQLException e){

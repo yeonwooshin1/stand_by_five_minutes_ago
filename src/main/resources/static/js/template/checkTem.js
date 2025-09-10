@@ -72,6 +72,7 @@ const getCT = async () => {
     // [2.1] HTML에 표시할 영역 정보
     const checkTemplateTbody = document.querySelector(".checkTemplateTbody")
     let html = '';
+    let index = 1;
 
     // [2.2] Fetch
     try {
@@ -82,7 +83,7 @@ const getCT = async () => {
         if (d.length != 1 || d[0].ctNo != 0) {
             d.forEach((dto) => {
                 html += `<tr>
-                    <td>${dto.ctNo}</td>
+                    <td>${index++}</td>
                     <td><a href="/template/checkTemItem.jsp?ctNo=${dto.ctNo}">${dto.ctName}</a></td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"

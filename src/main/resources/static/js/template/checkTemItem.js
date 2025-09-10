@@ -114,6 +114,7 @@ const getCTItem = async () => {
 
     // [2.1] 정보를 표시할 구역
     const CTITbody = document.querySelector(".CTITbody")
+    let index = 1;
 
     try {
         // [2.2] Fetch
@@ -126,7 +127,7 @@ const getCTItem = async () => {
         if (d.length != 0) {
             d.forEach(value => {
                 html += `<tr>
-                        <td>${value.ctiNo}</td>
+                        <td>${index++}</td>
                         <td>${value.ctiTitle}</td>
                         <td>
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"

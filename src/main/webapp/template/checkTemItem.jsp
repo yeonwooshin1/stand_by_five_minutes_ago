@@ -116,11 +116,11 @@
                         </div>
 
                         <div>
-                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿 제목</label>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿명</label>
                             <input class="form-control" id="ctiTitleInput" type="text" /> <!-- id="ctiTitleInput" -->
                         </div>
                         <div>
-                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 도움말</label>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿 설명</label>
                             <textarea class="ctiHelpText" id="ctiHelpText" name="editordata"></textarea> <!-- class="ctiHelpText" id="ctiHelpText" -->
                         </div>
                     </div>
@@ -156,11 +156,11 @@
                         </div>
 
                         <div>
-                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿 제목 </label>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿명 </label>
                             <input class="form-control" id="previewCtiTitle" type="text" disabled /> <!-- id="previewCtiTitle" -->
                         </div>
                         <div>
-                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 도움말 </label>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿 설명 </label>
                             <div id="previewCtiHelpText"></div> <!-- id="previewCtiHelpText" -->
                         </div>
                     </div>
@@ -194,11 +194,11 @@
                         </div>
 
                         <div class="">
-                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿 제목 </label>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿명 </label>
                             <input class="form-control" id="updateCtiTitle" type="text" /> <!-- id="updateCtiTitle" -->
                         </div>
                         <div class="ctiContent"> <!-- class="ctiContent" -->
-                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 도움말 </label>
+                            <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿 설명 </label>
                             <textarea class="updateCtiHelpText" id="updateCtiHelpText"
                                 name="editordata"></textarea> <!-- class="updateCtiHelpText" id="updateCtiHelpText" -->
                         </div>
