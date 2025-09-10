@@ -168,9 +168,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="d-flex justify-content-end gap-2 mt-3">
+                                    <!-- (신규) 사업자 이미지 보기 버튼 -->
+                                    <button class="btn btn-outline-secondary btn-sm" id="btn-biz-image"
+                                        data-bs-toggle="modal" data-bs-target="#bizImageModal" disabled>
+                                        사업자 등록증 보기
+                                    </button>
 
-                                <!-- ✅ 회사 정보 카드 - 액션 버튼 (오른쪽 하단) -->
-                                <div class="d-flex justify-content-end mt-3">
                                     <button class="btn btn-primary btn-sm" id="btn-edit-business" data-bs-toggle="modal"
                                         data-bs-target="#bizEditModal">
                                         사업자 정보 수정
@@ -320,11 +324,11 @@
                                             <label for="pwdNew" class="form-label">새 비밀번호</label>
                                             <div class="input-group">
                                                 <input type="password" class="form-control" id="pwdNew"
-                                                    placeholder="대/소문자 포함 8글자 이상" />
+                                                    placeholder="대/소문자 포함 8글자 이상 20글자 이하" />
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     data-toggle-eye="#pwdNew">표시</button>
                                             </div>
-                                            <div class="form-text">영문/숫자 조합 8~20자 권장</div>
+                                            <div class="form-text">대/소문자 조합 8~20자 필수</div>
                                         </div>
 
                                         <div class="col-12">
@@ -354,6 +358,21 @@
                         </div>
                     </div>
                     <!-- ▲▲▲ 비밀번호 변경 모달 끝 ▲▲▲ -->
+                    <div class="modal fade" id="bizImageModal" tabindex="-1" aria-labelledby="bizImageModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="bizImageModalLabel">사업자 등록증</h6>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="닫기"></button>
+                                </div>
+                                <div class="modal-body d-flex justify-content-center">
+                                    <img id="bnDocuImgModal" class="img-fluid rounded" alt="사업자등록증 이미지">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

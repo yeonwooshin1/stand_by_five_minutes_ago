@@ -18,10 +18,14 @@ public class BusinessService { // class start
     private final FileService fileService;
 
     // 회사 정보 조회 서비스
-    public BusinessDto getBusinessInfo(String bnNo ){
-        // Dao 호출 후 Dto 반환
-        return businessDao.getBusinessInfo( bnNo );
-
+    public BusinessDto getBusinessInfo(String bnNo) {
+        BusinessDto dto = businessDao.getBusinessInfo(bnNo);
+        // 이미지 경로 지정해주기 , 유효성 검사도 해줌
+        if (dto != null && dto.getBnDocuImg() != null && !dto.getBnDocuImg().isBlank()) {
+            dto.setBnDocuImg("/upload/bnDocu/" + dto.getBnDocuImg());
+        }else{ dto.setBnDocuImg(null); }   // if end
+        // dto 반환
+        return dto;
     }   // func end
 
     // 회사정보수정 서비스
