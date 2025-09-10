@@ -33,16 +33,15 @@ public class ChatController {
 
     // [chat-03] 1:1 채팅방 생성
     @PostMapping("/room")
-    public ResponseEntity<Integer> createOrGetOneToOneRoom(@RequestParam int loginUserNo,
-                                                           @RequestParam int targetUserNo) {
+    public ResponseEntity<Integer> createOrGetOneToOneRoom(@RequestParam int loginUserNo,@RequestParam int targetUserNo) {
         int roomNo = chatRoomService.createOrGetOneToOneRoom(loginUserNo, targetUserNo);
         return ResponseEntity.status(200).body(roomNo);
     } // func end
 
     // [chat-04] 그룹 채팅방 생성
     @PostMapping("/room/group")
-    public ResponseEntity<Integer> createGroupRoom(List<Integer> participantUserNoList, int creatorUserNo) {
-        int roomNo = chatRoomService.createGroupChatRoom(participantUserNoList, creatorUserNo);
+    public ResponseEntity<Integer> createGroupRoom(@RequestBody ChatRoomUserDto chatRoomUserDto) {
+        int roomNo = chatRoomService.createGroupChatRoom(chatRoomUserDto);
         return ResponseEntity.status(200).body(roomNo);
     }
 

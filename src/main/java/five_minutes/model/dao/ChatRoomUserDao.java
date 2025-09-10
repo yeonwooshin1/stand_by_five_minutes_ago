@@ -69,8 +69,7 @@ public class ChatRoomUserDao extends Dao {
                         JOIN ChatRoomUser cru2 ON cru1.roomNo = cru2.roomNo
                         JOIN ChatRoom cr ON cr.roomNo = cru1.roomNo
                         WHERE cru1.userNo = ? AND cru2.userNo = ? AND cr.isGroup = false
-                        GROUP BY cru1.roomNo
-                        HAVING COUNT(*) = 2
+                        GROUP BY cru1.roomNo;
                     """;
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, userA);

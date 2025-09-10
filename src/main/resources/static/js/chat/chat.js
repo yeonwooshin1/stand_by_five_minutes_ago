@@ -13,7 +13,7 @@
 
 console.log("chat js exe")
 
-// ※ 주의 userNo는 이미 전역변수로 선언되어 있음
+// ※ 주의 userNo / managerNameHeader / userNameHeader는 이미 전역변수로 선언되어 있음
 
 // Socket 연결
 let socket = null;
@@ -43,7 +43,8 @@ const renderMessage = (data) => {
         row.className = "row"
         chatMessages.appendChild(row);
         row.innerHTML = `<div class="mb-3 col-6">
-                                <div class="bg-light p-2 rounded d-inline-block">${data.message}</div>
+                                <div class="bg-light p-2 rounded d-inline-block">
+                                ${data.message}</div>
                                 <small class="text-muted d-block">${formatDate(data.sentDate)}</small>
                             </div>`
     }
@@ -76,7 +77,8 @@ const renderPreMessage = async (messages) => {
             // 받은 메시지
             messageRow.innerHTML = `
                 <div class="mb-3 col-6">
-                    <div class="bg-light p-2 rounded d-inline-block">${msg.message}</div>
+                    <div class="bg-light p-2 rounded d-inline-block">                                
+                    ${msg.message}</div>
                     <small class="text-muted d-block">${formatDate(msg.sentDate)}</small>
                 </div>
             `;
@@ -248,6 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
             roomNo: currentRoomNo,
             sendUserNo: parseInt(userNo),
             message: message,
+            userName : userNameHeader,
             sentDate: new Date().toISOString()
         };
         console.log(payload)
@@ -267,7 +270,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // =========================================================
-let selectedUserNos = [];
 
 // [10] 일반 회원 목록 조회
 const fetchUserList = async () => {
@@ -279,9 +281,9 @@ const fetchUserList = async () => {
         const container = document.querySelector("#userListContainer > div");
         container.innerHTML = "";
         let html = ''
-        d.forEach((dto) => { 
-            html +=`<button type="button" class="btn btn-outline-secondary m-1" data-bs-toggle="button"
-            data-userNo="${dto.userNo}"> ${dto.userName}</button>`                              
+        d.forEach((dto) => {
+            html += `<button type="button" class="btn btn-outline-secondary m-1" data-bs-toggle="button"
+            data-userNo="${dto.userNo}"> ${dto.userName}</button>`
         })
         container.innerHTML = html;
     } catch (error) {
@@ -290,40 +292,56 @@ const fetchUserList = async () => {
 }
 
 
-// function closeUserSelectModal() {
-//     document.getElementById("userSelectModal").style.display = "none";
-//     selectedUserNos = [];
-// }
+const createChatRoom = async () => {
+    const activeButtons = document.querySelectorAll("#userListContainer button.active");
+    const selectedUserNos = Array.from(activeButtons).map(btn => parseInt(btn.dataset.userno));
+    console.log(selectedUserNos)
 
+    if (selectedUserNos.length == 0) {
+        alert("최소 1명을 선택해주세요.");
+        return;
+    }
 
-// function createChatRoom() {
-//     if (selectedUserNos.length === 0) {
-//         alert("최소 1명을 선택해주세요.");
-//         return;
-//     }
+    if (selectedUserNos.length === 1) {
+        // 1:1 채팅 생성 또는 기존 채팅방 반환
+        try {
+            const r = await fetch(`/chat/room?loginUserNo=${userNo}&targetUserNo=${selectedUserNos[0]}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" }
+            })
+            const d = await r.json()
+            console.log(d)
 
-//     const payload = {
-//         creatorUserNo: userNo, // 로그인 사용자
-//         participantUserNos: selectedUserNos
-//     };
+            if (d > 11000000) {
+                loadChatRooms(userNo);
+            }
+        } catch (error) {
+            alert("채팅방 생성 중 오류 발생");
+            console.error(err);
+        }
+    } else {
+        console.log("group chat exe")
+        // 그룹 채팅 생성
+        const data = {
+            userNo: userNo,
+            participantUserNos: selectedUserNos
+        };
+        try {
+            const r = await fetch("/chat/room/group", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            const d = await r.json()
+            console.log(d)
 
-//     fetch("/api/chat/create", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(payload)
-//     })
-//         .then(res => {
-//             if (!res.ok) throw new Error("채팅방 생성 실패");
-//             return res.json();
-//         })
-//         .then(room => {
-//             alert("채팅방이 생성되었습니다.");
-//             closeUserSelectModal();
-//             loadChatRooms(userNo); // 목록 새로고침
-//             openChatRoom(room.roomNo); // 자동 입장
-//         })
-//         .catch(err => {
-//             alert("이미 존재하는 1:1 채팅방이거나 오류가 발생했습니다.");
-//             console.error(err);
-//         });
-// }
+            if (d > 11000000) {
+                loadChatRooms(userNo);
+            }
+        } catch (error) {
+            alert("채팅방 생성 중 오류 발생");
+            console.error(err);
+        }
+    }
+
+}

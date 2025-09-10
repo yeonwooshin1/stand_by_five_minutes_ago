@@ -31,7 +31,7 @@ public class ChatRoomDao extends Dao {
             ps.setBoolean(3, dto.isGroup());
             int count = ps.executeUpdate();
             if(count == 1) {
-                ResultSet rs = ps.executeQuery();
+                ResultSet rs = ps.getGeneratedKeys();
                 if(rs.next()) return rs.getInt(1);
             }
         } catch (SQLException e) {

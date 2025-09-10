@@ -69,9 +69,13 @@ public class ChatRoomService {
     } // func end
 
     // 그룹 채팅방 만들기
-    public int createGroupChatRoom(List<Integer> participantUserNoList, int creatorUserNo) {
+    public int createGroupChatRoom(ChatRoomUserDto chatRoomUserDto) {
+        List<Integer> participantUserNoList =chatRoomUserDto.getParticipantUserNos();
+        int creatorUserNo = chatRoomUserDto.getUserNo();
+        participantUserNoList.add(creatorUserNo);
         // 방이름 만들기 func 실행
         String roomName = generateRoomName(participantUserNoList);
+        System.out.println(roomName);
         // 방정보DTO
         ChatRoomDto roomDto = ChatRoomDto.builder()
                 .roomName(roomName)
@@ -97,6 +101,7 @@ public class ChatRoomService {
      * 그룹 - OOO 외 0명
      * */
     public String generateRoomName(List<Integer> userNoList) {
+        System.out.println("generateRoomName exe");
         // 이름을 모아두는 배열
         List<String> names = new ArrayList<>();
         // 반복문으로 이름 조회하여 이름 배열에 삽입
@@ -109,7 +114,7 @@ public class ChatRoomService {
         } else if (names.size() <= 3) { // 그룹 채팅
             return String.join(", ", names);
         } else {
-            return names.get(0) + ", " + names.get(1) + " 외 " + (names.size() - 2) + "명";
+            return names.get(0) +  " 외 " + (names.size() - 1) + "인";
         }
     } // func end
 

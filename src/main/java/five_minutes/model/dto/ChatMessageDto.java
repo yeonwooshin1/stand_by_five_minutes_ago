@@ -24,4 +24,7 @@ public class ChatMessageDto {
     private String message;
     private String sentDate;
 
+    // 임시저장
+    private String userName;
+
 }
