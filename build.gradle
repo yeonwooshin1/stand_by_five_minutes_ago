@@ -70,6 +70,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     // jackson  Java에서 JSON 데이터를 처리하기 위한 라이브러리
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    // Jasypt (csv 파일 자체를 암호화/복호화하는 라이브러리 - yeonwoo)
+    implementation 'org.jasypt:jasypt:1.9.3'
 }
 
 tasks.named('test') {

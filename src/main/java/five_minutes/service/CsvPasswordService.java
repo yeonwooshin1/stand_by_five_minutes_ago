@@ -6,11 +6,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.RandomAccessFile;
-import java.nio.charset.StandardCharsets;
 
+// (파일 전체 복호화 Reader/암호화 Writer 사용을 위한 import
+import java.io.Reader;
+import java.io.BufferedReader;
 
+import five_minutes.util.CsvCryptoUtil;
 
 @Service                    // 서비스 어노테이션
 @RequiredArgsConstructor    // 의존성 주입
@@ -18,8 +19,14 @@ public class CsvPasswordService {   // class start
 
     // 파일 경로 지정
     private final String path = "src/main/resources/csv/password.csv";
+    // 평문 CSV 대신 암호화본 (.enc)만 저장됨
+    private final String encPath = path + ".enc"; // src/main/resources/csv/password.csv.enc
+
     // BCrypt 라이브러리
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    // properties 기반 CsvCryptoUtil ==> 암호화 복호화 하는 유틸 클래스 주입
+    private final CsvCryptoUtil cryptoUtil;
 
     // -- 로그인할 시에 userNo와 평문 비밀번호를 받은 걸 csv 파일에 저장된 해시 비밀번호와 일치하는지 검증하는 메소드 --
     // 유의 할 점 : 절대 평문 비밀번호를 직접 해시해서 문자열 비교하지 않는다.
@@ -52,7 +59,7 @@ public class CsvPasswordService {   // class start
         }   // try end
     }   // func end
 
-
+    // 암호화 파일을 복호화 하는 cryptoUtil.openDecryptedReader() 가 추가됨
     // CSV 파일에서 특정 userNo에 해당하는 bcrypt 해시를 찾아 반환하는 매소드 ( matches 메소드의 헬퍼 메소드 )
     private String findHashByUserNo(int putUserNo) {
         // file 객체 생성
@@ -61,14 +68,18 @@ public class CsvPasswordService {   // class start
         // 파일이 존재하지 않으면?
         if (!file.exists()) {
             // null 반환
-            return null;
+            // 평문 CSV 대신 암호화본 .enc 파일 존재 여부를 확인
+            File encFile = new File(encPath);
+            if (!encFile.exists()) {
+                return null;
+            }   // if end
         }   // if end
-        try {
-            // 한국어로 인코딩하고 내가 위에 설정한 경로로 file을 읽어온다.
-            FileReader fileReader = new FileReader(path, StandardCharsets.UTF_8);
 
-            // CSV 파일 읽어온다.
-            CSVReader csvReader = new CSVReader(fileReader);
+        try {
+            // 파일이 있으면 암호화된 파일을 util 에서 복호화 하고 내가 위에 설정한 경로로 file을 읽어온다.
+            Reader decReader = cryptoUtil.openDecryptedReader(new File(encPath));
+            // 복호화한 CSV 파일 읽어온다.
+            CSVReader csvReader = new CSVReader(decReader);
 
             // 파일 행 읽어올 문자열 배열 변수
             String[] row;
@@ -77,7 +88,6 @@ public class CsvPasswordService {   // class start
             while( (row = csvReader.readNext()) != null ) {
                 // 행이 두 개 미만이면 애초에 잘못 이루어진 csv 이니까 continue;
                 if( (row.length < 2) ) continue;
-
 
                 // userNo 변수 할당
                 int userNo;
@@ -130,80 +140,20 @@ public class CsvPasswordService {   // class start
         // 파일이 존재하지 않으면?
         if (!file.exists()) {
             // null 반환
-            return false;
+            // (ADD) 암호화 파일을 사용하므로 enc 파일 존재 여부 확인으로 대체
+            File encFile = new File(encPath);             // (ADD)
+            if (!encFile.exists()) {
+                return false;
+            }
         }   // if end
 
-        // 읽기 쓰기 다 가능한 RandomAccessFile 클래스
-        // "rw" 는 읽기 쓰기 다 하겠단 것.
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(path , "rw") ){
-            // ADD: 첫 줄(헤더)만 건너뛰기 위해서 필요한 것 => NumberFormatException 예외 때문에 필요하다 => String을 int로 파서할 때 'userNo' 는 int로 파서할 수 없어서 뜨는 예외를 막아줌
-            boolean skipHeader = true;
-            String line;            // 현재 읽은 한 줄 문자열
-            long pointerLine;       // 현재 줄이 시작되는 파일 위치를 기억하기 위한 변수
-
-            while(true) {
-
-                // 현재 파일 행 위치를 기억하는 변수
-                pointerLine = randomAccessFile.getFilePointer();
-
-                // readLine() 현재 위치에서 한 줄을 읽는 걸 기억하는 변수
-                line = randomAccessFile.readLine();
-
-                // 첫 줄(헤더) continue 해주는 것.
-                if (skipHeader) {
-                    skipHeader = false;
-                    continue;
-                }   // if end
-
-                // null 이면 다 읽었다는 뜻이니까 반복문 종료
-                if(line == null) break;
-
-                // 그 읽어온 행을 ,을 기준으로 나누고 배열에 저장한다.
-                String[] cols = line.split(",");
-
-                // userNo랑 비밀번호 두 개의 행이 쪼개지는 거니까 최소 length 2개의 배열은 나와야한다. 만약 안나오면 잘못된 형식이니까 continue
-                if(cols.length < 2) continue;
-
-
-                try{
-                    // cols 변수의 0번째 열은 userNo의 정보니까 그것을 변수로 저장
-                    int rowUserNo = Integer.parseInt(cols[0].trim());
-
-                    // 그것이 찾는 userNo와 같다면 이 줄이 우리가 수정할 대상임.
-                    if (rowUserNo == userNo) {
-                        // newLine의 변수에 해당 userNo와 , 새로운 비밀번호 해시화 한 것을 담아서 저장
-                        String newLine = rowUserNo + "," + newPwdHash;
-
-                        // 기존 줄이랑 길이가 다르면 형식 오류임 : 왜냐면 BCrypt는 길이가 다 동일하다.
-                        if( newLine.length() != line.length() ){
-                            System.out.println("확인용 : 기존 줄이랑 길이가 달라서 덮어쓰기 안되는 오류");
-                            return false;
-                        }   // if end
-
-                        // 파일 포인터를 그 행의 시작으로 돌린다.
-                        randomAccessFile.seek(pointerLine);
-                        // 현재 포인터 위치(= 줄 시작)에 바뀐 비밀번호가 포함한 새 문자열을 그대로 덮어쓴다
-                        randomAccessFile.writeBytes(newLine);
-
-                        // 덮어쓰면 성공처리
-                        return true;
-                    }   // if end
-                } catch ( NumberFormatException e ){
-                    // Integer 할 때 숫자가 아닌 것을 숫자로 변환할 때 생기는 예외 처리
-                    System.out.println("int로 타입변환 중 생기는 예외");
-                }   // try end
-            }   // while end
-            // 못 찾으면 없으니까 실패 반환
-            return false;
-        } catch (Exception e){
-            // 파일 읽어오는데 예외처리
-            return false;
-        }   // try end
+        // enc 파일을 복호화해 메모리에서 전체 CSV를 수정 후 다시 암호화하여 enc 파일로 저장하는 헬퍼메소드 호출
+        return rewriteFileEnc(userNo, newPwdHash);
 
     }   // func end
 
     // 비밀번호 변경 csv 에 해시화 비밀번호 넣기
-    public boolean changePassword(int userNo, String newPassword) {
+    public boolean changePassword( int userNo, String newPassword ) {
 
         // 새 비밀번호 bcrypt 해시 생성 한다.
         final String newPwdHash;
@@ -220,76 +170,112 @@ public class CsvPasswordService {   // class start
         // 파일이 존재하지 않으면?
         if (!file.exists()) {
             // null 반환
-            return false;
+            // (ADD) enc 파일 체크로 대체
+            File encFile = new File(encPath);             // (ADD)
+            if (!encFile.exists()) {
+                return false;
+            }
         }   // if end
 
-        // 읽기 쓰기 다 가능한 RandomAccessFile 클래스
-        // "rw" 는 읽기 쓰기 다 하겠단 것.
-        try (RandomAccessFile randomAccessFile = new RandomAccessFile(path , "rw") ){
-            // ADD: 첫 줄(헤더)만 건너뛰기 위해서 필요한 것 => NumberFormatException 예외 때문에 필요하다 => String을 int로 파서할 때 'userNo' 는 int로 파서할 수 없어서 뜨는 예외를 막아줌
-            boolean skipHeader = true;
-            String line;            // 현재 읽은 한 줄 문자열
-            long pointerLine;       // 현재 줄이 시작되는 파일 위치를 기억하기 위한 변수
-
-            while(true) {
-
-                // 현재 파일 행 위치를 기억하는 변수
-                pointerLine = randomAccessFile.getFilePointer();
-
-                // readLine() 현재 위치에서 한 줄을 읽는 걸 기억하는 변수
-                line = randomAccessFile.readLine();
-
-                // 첫 줄(헤더) continue 해주는 것.
-                if (skipHeader) {
-                    skipHeader = false;
-                    continue;
-                }   // if end
-
-                // null 이면 다 읽었다는 뜻이니까 반복문 종료
-                if(line == null) break;
-
-                // 그 읽어온 행을 ,을 기준으로 나누고 배열에 저장한다.
-                String[] cols = line.split(",");
-
-                // userNo랑 비밀번호 두 개의 행이 쪼개지는 거니까 최소 length 2개의 배열은 나와야한다. 만약 안나오면 잘못된 형식이니까 continue
-                if(cols.length < 2) continue;
-
-
-                try{
-                    // cols 변수의 0번째 열은 userNo의 정보니까 그것을 변수로 저장
-                    int rowUserNo = Integer.parseInt(cols[0].trim());
-
-                    // 그것이 찾는 userNo와 같다면 이 줄이 우리가 수정할 대상임.
-                    if (rowUserNo == userNo) {
-                        // newLine의 변수에 해당 userNo와 , 새로운 비밀번호 해시화 한 것을 담아서 저장
-                        String newLine = rowUserNo + "," + newPwdHash;
-
-                        // 기존 줄이랑 길이가 다르면 형식 오류임 : 왜냐면 BCrypt는 길이가 다 동일하다.
-                        if( newLine.length() != line.length() ){
-                            System.out.println("확인용 : 기존 줄이랑 길이가 달라서 덮어쓰기 안되는 오류");
-                            return false;
-                        }   // if end
-
-                        // 파일 포인터를 그 행의 시작으로 돌린다.
-                        randomAccessFile.seek(pointerLine);
-                        // 현재 포인터 위치(= 줄 시작)에 바뀐 비밀번호가 포함한 새 문자열을 그대로 덮어쓴다
-                        randomAccessFile.writeBytes(newLine);
-                        // 덮어쓰면 성공처리
-                        return true;
-                    }   // if end
-                } catch ( NumberFormatException e ){
-                    // Integer 할 때 숫자가 아닌 것을 숫자로 변환할 때 생기는 예외 처리
-                    System.out.println("int로 타입변환 중 생기는 예외");
-                }   // try end
-            }   // while end
-            // 못 찾으면 없으니까 실패 반환
-            return false;
-        } catch (Exception e){
-            // 파일 읽어오는데 예외처리
-            return false;
-        }   // try end
+        //  enc 파일을 복호화해 메모리에서 전체 CSV를 수정 후 다시 암호화하여 enc 파일로 저장하는 헬퍼메소드 호출
+        return rewriteFileEnc(userNo, newPwdHash);
 
     }   // func end
 
+
+    // 비밀번호 변경에서 전체 재작성 하기 (파일 전체 암호화 , 복호화 버전)
+    // .enc 파일을 복호화하여 평문 CSV를 메모리에 올린 뒤, 대상 행만 bcrypt 해시로 교체
+    // 전체 평문 CSV 문자열을 다시 암호화하여 enc 파일로 저장한다!
+    private boolean rewriteFileEnc( int targetUserNo, String newPwdHash ) {
+        try {
+            // 1. .enc 파일을 복호화 Reader로 복호화 한다.
+            Reader decReader = cryptoUtil.openDecryptedReader(new File(encPath)); // (ADD)
+            // reader를 한 줄씩 편하게 읽을 수 있게 하는 BufferedReader 객체 생성
+            BufferedReader br = new BufferedReader(decReader);
+
+            // 2. 평문 CSV 전체를 메모리로 읽어와 대상 행만 교체한다.
+            // 수정된 CSV 내용을 임시로 담아놓고 연결하는 StringBuilder 객체 생성
+            StringBuilder sb = new StringBuilder();
+            // 한 행씩 읽을 때 임시로 담는 변수 Line
+            String line;
+            // 첫 번째 줄이 헤더인지 체크함 (처음에 UserNo , HashPassword 같은 거 말하는 거임)
+            boolean isHeader = true;
+            // 실제로 비밀번호를 바꿨는지 알려주는 boolean 변수
+            boolean updated = false;
+
+            // 한줄씩 읽는 것을 line에 저장하는데 line이 null 이 아닐 때까지 반복한다. => 즉 파일 끝까지 읽겠다.
+            while ((line = br.readLine()) != null) {
+                // isHeader가 있으면? => 즉 첫줄이면?
+                if (isHeader) {
+                    // 헤더는 그대로 복사해서 StringBuilder로 복사한다. ( 더해준다가 맞음.)
+                    sb.append(line).append("\n");
+                    // 이제 헤더 아니니까 false로 바꿈
+                    isHeader = false;
+                    // continue
+                    continue;
+                }   // if end
+                // 줄이 비어있으면 그냥 유지한다.
+                if (line.isEmpty()) {
+                    // \n로 유지한다.
+                    sb.append("\n");
+                    // continue 해줌
+                    continue;
+                }   // if end
+                // 빈줄도 아니고 헤더도 아니면?
+                // 문자열 배열을 만든다.
+                // 배열.split(분리할 기준점, 숫자) => 숫자에서 0이면 딱 그 값들만 자른다. 양수면 숫자만큼만 자른다.
+                // 음수면 userNo , hashPassword , 이런 콤마 뒤에 빈 값까지 가져온다.
+                // 왜 음수냐면 userNo,  이렇게 userNo 뒤에 비밀번호가 비어있을 때 그냥 가져오기 위해서 쓴다.
+                String[] cols = line.split(",", -1);
+                // 배열의 행이 2 미만이면? 오류다. userNo랑 해시 비번 2개의 행이 있어야 함.
+                if (cols.length < 2) {
+                    // 잘못된 행은 그냥 보존하고 넘어간다.
+                    sb.append(line).append("\n");
+                    // continue
+                    continue;
+                }   // if end
+
+                // 이제부터 진짜 행 찾기
+                // 그 행의 userNo를 저장하기 위한 변수 rowUserNo
+                int rowUserNo;
+                //
+                try {
+                    // 첫 열의 값을 parseInt 해서 숫자 변수로 만들어준다.
+                    rowUserNo = Integer.parseInt(cols[0].trim());
+                } catch (NumberFormatException e) { // NumberFormatException => 숫자가 아닌걸 parseInt 했을때 생기는 예외
+                    // 숫자 변환 불가 라인은 보존한다.
+                    sb.append(line).append("\n");
+                    // continue
+                    continue;
+                }   // try end
+
+                // 매개변수로 받은 userNo랑 해당 행의 첫열의 userNo랑 같다면? 바꿔야할 대상임
+                if (rowUserNo == targetUserNo) {
+                    // 대상 행만 매개변수로 받은 bcrypt 해시된 비밀번호 값 넣어주기.
+                    String newLine = rowUserNo + "," + (newPwdHash == null ? "" : newPwdHash);
+                    // 그행에 append 해준다.
+                    sb.append(newLine).append("\n");
+                    // 업데이트 된 걸 true로 바꿔준다.
+                    updated = true;
+                } else {
+                    // 아니라면 그대로 보존해서 append 해준다.
+                    sb.append(line).append("\n");
+                }   // if end
+                // 참고로 여기서 찾았는데 break 안해주는 이유는 전부 업데이트라 다 append 해줘야한다.
+            }   // while end
+            // 업데이트된 행이 없으면 실패 반환
+            if (!updated) return false;
+
+            // 3. 수정된 평문 CSV 전체를 다시 암호화해 같은 .enc 파일에 저장한다.
+            // StringBuilder.toString() 임시로 append한 것들 최종 문자열로 바꾼다.
+            cryptoUtil.writeEncrypted(new File(encPath), sb.toString());
+            // 수정 됐으면 true
+            return true;
+
+        } catch (Exception e) {
+            // util에서 던진 모든 예외들과 여기서 생긴 예외들 생기면 전부다 실패로 간주
+            return false;
+        }   // try end
+    } // func end
 
 }   // class end
