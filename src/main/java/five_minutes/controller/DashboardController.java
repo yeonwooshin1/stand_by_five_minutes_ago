@@ -45,12 +45,12 @@ public class DashboardController {
     @GetMapping("")
     public DashboardDto getInfoPJDash (@RequestParam int pjNo , HttpSession session) {
         // 1. 세션 확인
-        String bnNo = (String) session.getAttribute("loginBnNo");
-        if (bnNo == null){
+        Integer userNo = (Integer) session.getAttribute("loginUserNo");
+        if (userNo == null){
             return null;
         }
         // 3. 리턴
-        return dashboardService.getInfoPJDash(pjNo , bnNo);
+        return dashboardService.getInfoPJDash(pjNo , userNo);
     }
 
     // [2] 프로젝트 대시보드  - 근무리스트 전체 조회

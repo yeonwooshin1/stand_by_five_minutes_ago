@@ -54,8 +54,8 @@ public class DashboardService {
         2. pjNo를 확인한다(쿼리스트링)
         3. pjNo가 일치하는 ProjectInfo 레코드를 가져온다
      */
-    public DashboardDto getInfoPJDash(int pjNo, String bnNo) {
-        if (bnNo != null && dashboardDao.checkBusiness(bnNo)) {
+    public DashboardDto getInfoPJDash(int pjNo, Integer userNo) {
+        if (userNo != null && dashboardDao.checkUser(userNo)) {
             return dashboardDao.getInfoPJDash(pjNo);
         }
         return new DashboardDto();

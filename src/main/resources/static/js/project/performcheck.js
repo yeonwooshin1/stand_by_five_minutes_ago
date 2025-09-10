@@ -10,10 +10,7 @@ const loginCheck = async () => {
     if (userNo == null || userNo === 0) {
         alert("[경고] 로그인 후 이용가능합니다.")
         location.href = "/index.jsp"
-    } else if (businessNo == null || businessNo === 0) {
-        alert("[경고] 일반회원은 사용불가능한 메뉴입니다.")
-        location.href = "/index.jsp"
-    }
+    } 
 }
 
 // [1] 카카오 우편번호 검색 / 도로명 주소 검색 
