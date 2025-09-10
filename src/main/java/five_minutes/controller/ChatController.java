@@ -40,8 +40,6 @@ public class ChatController {
     } // func end
 
     // [chat-04] 그룹 채팅방 생성
-
-
     @PostMapping("/room/group")
     public ResponseEntity<Integer> createGroupRoom(List<Integer> participantUserNoList, int creatorUserNo) {
         int roomNo = chatRoomService.createGroupChatRoom(participantUserNoList, creatorUserNo);

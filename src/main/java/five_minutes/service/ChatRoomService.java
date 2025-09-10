@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p> info =======================
@@ -59,7 +60,12 @@ public class ChatRoomService {
 
     // 특정 유저가 참여하고 있는 채팅방 목록을 조회
     public List<ChatRoomDto> getChatRoomsByUser(int userNo) {
-        return chatRoomDao.selectChatRoomsByUserNo(userNo);
+        List<ChatRoomDto> chatRoomList = chatRoomDao.selectChatRoomsByUserNo(userNo);
+        for(ChatRoomDto chatRoomDto : chatRoomList){
+            List<Map<Integer, String>> participants = chatRoomUserDao.searchUserNoAtRoom(chatRoomDto.getRoomNo());
+            chatRoomDto.setParticipant(participants);
+        } // for end
+        return chatRoomList;
     } // func end
 
     // 그룹 채팅방 만들기

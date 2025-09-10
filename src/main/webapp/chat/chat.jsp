@@ -20,41 +20,50 @@
                 const userNo = "<%= userNo %>";
                 console.log("userNo from JSP:", userNo);
             </script>
-            <script src="/css/chat/chat.css"> </script>
+            <link rel='stylesheet' href='/css/chat/chat.css' />
 
         </head>
 
         <body>
-
             <div class="container mt-4">
                 <div class="chat-wrapper row">
                     <!-- 좌측: 채팅 목록 -->
-                    <div class="chat-list col-3">
+                    <div class="chat-list pt-3 pb-3 col-3">
                         <div class="d-flex justify-content-end mb-3">
-                        <button type="button" class="btn btn-primary" onclick="">채팅방 만들기</button>
+                            <button type="button" class="btn btn-primary" style="width:100%;" onclick="">채팅방
+                                만들기</button>
                         </div>
 
-                        <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="width: 100%;">
+                        <div class="btn-group-vertical chatRoomList" role="group" aria-label="Vertical button group"
+                            style="width: 100%;">
                             <button class="btn btn-outline-secondary" type="button">홍길동</button>
-                            <button class="btn btn-outline-secondary" type="button">가나다</button>                     
+                            <button class="btn btn-outline-secondary" type="button">가나다</button>
                         </div>
                     </div>
 
                     <!-- 우측: 채팅방 -->
                     <div class="chat-room col-9 border rounded">
-                        <div class="chat-header" style="margin:0 auto">채팅방 명</div>
+                        <div class="chat-header mx-auto p-2 text-center" style="width: 20rem;"><span class="fs-4">채팅방
+                                명</span></div>
                         <div class="chat-messages" id="chatMessages">
-                            <div class="mb-3">
-                                <div class="bg-light p-2 rounded">안녕하세요</div>
-                                <small class="text-muted">00월 00일 00:00</small>
+                            <!-- 받은 메세지 -->
+                            <div class="row">
+                                <div class="mb-3 col-6">
+                                    <div class="bg-light p-2 rounded d-inline-block">안녕하세요</div>
+                                    <small class="text-muted d-block">00월 00일 00:00</small>
+                                </div>
                             </div>
-                            <div class="mb-3 text-end">
-                                <div class="bg-primary text-white p-2 rounded d-inline-block">안녕하세요</div>
-                                <small class="text-muted d-block">00월 00일 00:00</small>
+                            <!-- 보낸 메세지 -->
+                            <div class="row">
+                                <div class="col-6"></div>
+                                <div class="mb-3 text-end col-6">
+                                    <div class="bg-primary text-white p-2 rounded d-inline-block">안녕하세요</div>
+                                    <small class="text-muted d-block">00월 00일 00:00</small>
+                                </div>
                             </div>
                         </div>
                         <div class="chat-input">
-                            <div class="input-group">
+                            <div class="input-group mb-3">
                                 <input type="text" class="form-control" placeholder="메시지를 입력하세요">
                                 <button class="btn btn-primary">전송</button>
                             </div>

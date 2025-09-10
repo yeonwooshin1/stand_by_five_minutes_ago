@@ -261,10 +261,10 @@ INSERT INTO pjPerform (pfNo, pjChkItemNo, pjRoleNo, pfStart, pfEnd, notifyType, 
 
 
 
-INSERT INTO ChatRoom (roomNo, roomName, creatorUserNo, isGroup, createdDate, updateDate) VALUES (11000001, 'Chat with 1000002', 1000001, FALSE, NOW(), NOW());
-INSERT INTO ChatRoom (roomNo, roomName, creatorUserNo, isGroup, createdDate, updateDate) VALUES (11000002, 'Chat with 1000003', 1000001, FALSE, NOW(), NOW());
-INSERT INTO ChatRoom (roomNo, roomName, creatorUserNo, isGroup, createdDate, updateDate) VALUES (11000003, 'Chat with 1000004', 1000001, FALSE, NOW(), NOW());
-INSERT INTO ChatRoom (roomNo, roomName, creatorUserNo, isGroup, createdDate, updateDate) VALUES (11000004, 'Chat with 1000005', 1000001, FALSE, NOW(), NOW());
+INSERT INTO ChatRoom (roomNo, roomName, creatorUserNo, isGroup, createdDate, updateDate) VALUES (11000001, '이서연', 1000001, FALSE, NOW(), NOW());
+INSERT INTO ChatRoom (roomNo, roomName, creatorUserNo, isGroup, createdDate, updateDate) VALUES (11000002, '박지훈', 1000001, FALSE, NOW(), NOW());
+INSERT INTO ChatRoom (roomNo, roomName, creatorUserNo, isGroup, createdDate, updateDate) VALUES (11000003, '최유진', 1000001, FALSE, NOW(), NOW());
+INSERT INTO ChatRoom (roomNo, roomName, creatorUserNo, isGroup, createdDate, updateDate) VALUES (11000004, '정하늘', 1000001, FALSE, NOW(), NOW());
 INSERT INTO ChatRoomUser (roomNo, userNo, joinDate) VALUES (11000001, 1000001, NOW());
 INSERT INTO ChatRoomUser (roomNo, userNo, joinDate) VALUES (11000001, 1000002, NOW());
 INSERT INTO ChatRoomUser (roomNo, userNo, joinDate) VALUES (11000002, 1000001, NOW());
