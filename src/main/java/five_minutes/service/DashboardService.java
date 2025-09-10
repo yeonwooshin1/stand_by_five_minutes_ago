@@ -2,7 +2,6 @@ package five_minutes.service;
 
 import five_minutes.model.dao.DashboardDao;
 import five_minutes.model.dto.*;
-import five_minutes.util.DashboardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +26,6 @@ public class DashboardService {
     // DI
     private final DashboardDao dashboardDao;
     private final FileService fileService;
-    private final DashboardMapper dashboardMapper;
 
     // performInfo 안의 pfNo 가져오기
     // Long pfNo = response.getPerformInfo().getPfNo();
@@ -206,7 +204,7 @@ public class DashboardService {
     public List<DashboardDto> getPersonalPerformancesSorted(int pjNo, int userNo) {
         // 매퍼를 호출하여 userNo에 해당하는 사용자의 pjPerform 레코드를 시간순으로 정렬하여 가져옵니다.
         // pjWorker와 Users 테이블을 조인하여 userNo에 해당하는 pjRoleNo를 찾아야 합니다.
-        return dashboardMapper.getPersonalPerformancesSorted(pjNo, userNo);
+        return dashboardDao.getPersonalPerformancesSorted(pjNo, userNo);
     }
 
 

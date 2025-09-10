@@ -444,6 +444,7 @@ public class DashboardDao extends Dao {
         return null;
     }
 
+
     // [9] 프로젝트 대시보드 - 체크리스트 상세 정보
     /*
         pjPerform의 pjChkItemNo를 확인하여 pjChecklistItem 테이블에서 일치하는 레코드를 조회한다.
@@ -455,5 +456,44 @@ public class DashboardDao extends Dao {
         return null;
     }
 
+    // [10] PDF 생성
+    public List<DashboardDto> getPersonalPerformancesSorted(int pjNo, int userNo) {
+        List<DashboardDto> list = new ArrayList<>();
+        String sql = "SELECT " +
+                "p.pfNo, " +
+                "p.pfStart, " +
+                "p.pfEnd, " +
+                "p.pfStatus, " +
+                "w.pjRoleName, " +
+                "c.pjChklTitle, " +
+                "u.userName " +
+                "FROM pjPerform p " +
+                "INNER JOIN pjWorker w ON p.pjRoleNo = w.pjRoleNo " +
+                "INNER JOIN users u ON w.userNo = u.userNo " +
+                "INNER JOIN PjChecklistItem c ON p.pjChkItemNo = c.pjChkItemNo " +
+                "WHERE p.pjNo = ? AND u.userNo = ? " +
+                "ORDER BY p.pfStart ASC";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, pjNo);
+            ps.setInt(2, userNo);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                DashboardDto dto = new DashboardDto();
+                dto.getPjPerDto().setPfNo(rs.getInt("pfNo"));
+                dto.getPjPerDto().setPfStart(rs.getString("pfStart"));
+                dto.getPjPerDto().setPfEnd(rs.getString("pfEnd"));
+                dto.getPjPerDto().setPfStatus(rs.getInt("pfStatus"));
+                dto.getPjWorkerDto().setPjRoleName(rs.getString("pjRoleName"));
+                dto.getPjCheckDto().setPjChklTitle(rs.getString("pjChklTitle"));
+                dto.getUsersDto().setUserName(rs.getString("userName"));
+                list.add(dto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 } // class end

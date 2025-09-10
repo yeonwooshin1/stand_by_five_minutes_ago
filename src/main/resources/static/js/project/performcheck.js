@@ -315,7 +315,5 @@ const downloadChecklistPdf = () => {
         alert("프로젝트 정보가 없습니다."); 
         return; 
     }
-    window.location.href = `/project/perform/check/pdf/checklist?pjNo=${pjNo}`;
+    window.location.href = `/project/perform/check/pdf/all?pjNo=${pjNo}`;
 }
-
-

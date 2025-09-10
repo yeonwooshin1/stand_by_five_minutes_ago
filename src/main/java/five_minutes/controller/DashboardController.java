@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /// **Info** =========================
@@ -201,51 +203,81 @@ public class DashboardController {
     }
 
     // [10] 프로젝트 대시보드 - 체크리스트 PDF 다운로드
-
-    @GetMapping("/pdf/checklist")
-    public void downloadFullReportPdf(@RequestParam int pjNo, HttpSession session, HttpServletResponse response) throws IOException {
-        // 1. 세션에서 사용자 정보 조회
+    // 전체 근무리스트
+    @GetMapping("/pdf/all")
+    public void downloadAllPerformancesPdf(@RequestParam int pjNo, HttpSession session, HttpServletResponse response) throws IOException {
         Integer userNo = (Integer) session.getAttribute("loginUserNo");
         String bnNo = (String) session.getAttribute("loginBnNo");
+        if (userNo == null && bnNo == null) { response.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
 
-        // 2. 유효성 검사 : 관리자가 아니면서, 요청한 userNo가 세션의 userNo와 다른 경우 권한 없음
-        boolean isAdmin = (bnNo != null);
-        boolean isOwner = (userNo != null && userNo.equals(userNo));
-
-        if (!isAdmin && isOwner) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "권한이 없습니다.");
-            return;
-        }
-
-        // 2. PDF 생성에 필요한 데이터 조회
-        // 2-1. 프로젝트 정보
-        PjDto projectInfo = pjService.read(pjNo, bnNo); // PjService 주입 필요
-        if (projectInfo == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "프로젝트를 찾을 수 없습니다.");
-            return;
-        }
-        
-        // 2-2. 근무자 정보
-        UsersDto workerInfo = dashboardService.getUserInDash(pjNo, userNo);
-        if (workerInfo == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "근무자를 찾을 수 없습니다.");
-            return;
-        }
-
-        // 개인별 시간순 정렬된 업무 리스트 (서비스에 새로운 메소드 필요)
-        List<DashboardDto> performances = dashboardService.getPersonalPerformancesSorted(pjNo, userNo);
-
-        // 3. HTTP 헤더 설정
+        List<DashboardDto> list = dashboardService.getListPJDash(pjNo, userNo, bnNo);
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"Personal_Checklist_" + workerInfo.getUserName() + "_" + pjNo + ".pdf\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"performances_" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".pdf\"");
 
-        // 4. PDF 생성 및 전송
         try {
-            pdfGeneratorUtil.generatePersonalChecklistPdf(projectInfo, workerInfo.getUserName(), performances, response.getOutputStream());
-        } catch (DocumentException e) {
-            throw new IOException("PDF 생성 중 오류가 발생했습니다.", e);
-        }
+            pdfGeneratorUtil.generateAllPerPdf(list, response.getOutputStream());
+        } catch (DocumentException e) { throw new IOException(e.getMessage()); }
     }
+    // 개인 체크리스트
+//    @GetMapping("/pdf/single")
+//    public void downloadSinglePerformancePdf(@RequestParam int pjNo, @RequestParam int pfNo, HttpSession session, HttpServletResponse response) throws IOException {
+//        Integer userNo = (Integer) session.getAttribute("loginUserNo");
+//        String bnNo = (String) session.getAttribute("loginBnNo");
+//        if (userNo == null && bnNo == null) { response.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
+//
+//        DashboardDto dto = dashboardService.getIndiListPJDash(pjNo, pfNo, userNo, bnNo);
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"performance_" + pfNo + ".pdf\"");
+//
+//        try {
+//            pdfGeneratorUtil.generateDetailPerPdf(dto, response.getOutputStream());
+//        } catch (DocumentException e) { throw new IOException(e.getMessage()); }
+//    }
+
+//    @GetMapping("/pdf/checklist")
+//    public void downloadFullReportPdf(@RequestParam int pjNo, HttpSession session, HttpServletResponse response) throws IOException {
+//        // 1. 세션에서 사용자 정보 조회
+//        Integer userNo = (Integer) session.getAttribute("loginUserNo");
+//        String bnNo = (String) session.getAttribute("loginBnNo");
+//
+//        // 2. 유효성 검사 : 관리자가 아니면서, 요청한 userNo가 세션의 userNo와 다른 경우 권한 없음
+//        boolean isAdmin = (bnNo != null);
+//        boolean isOwner = (userNo != null && userNo.equals(userNo));
+//
+//        if (!isAdmin && !isOwner) {
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "권한이 없습니다.");
+//            return;
+//        }
+//
+//        // 2. PDF 생성에 필요한 데이터 조회
+//        // 2-1. 프로젝트 정보
+//        PjDto projectInfo = pjService.read(pjNo, bnNo); // PjService 주입 필요
+//        if (projectInfo == null) {
+//            response.sendError(HttpServletResponse.SC_NOT_FOUND, "프로젝트를 찾을 수 없습니다.");
+//            return;
+//        }
+//
+//        // 2-2. 근무자 정보
+//        UsersDto workerInfo = dashboardService.getUserInDash(pjNo, userNo);
+//        if (workerInfo == null) {
+//            response.sendError(HttpServletResponse.SC_NOT_FOUND, "근무자를 찾을 수 없습니다.");
+//            return;
+//        }
+//
+//        // 개인별 시간순 정렬된 업무 리스트 (서비스에 새로운 메소드 필요)
+//        List<DashboardDto> performances = dashboardService.getPersonalPerformancesSorted(pjNo, userNo);
+//
+//        // 3. HTTP 헤더 설정
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"Personal_Checklist_" + workerInfo.getUserName() + "_" + pjNo + ".pdf\"");
+//
+//        // 4. PDF 생성 및 전송
+//        try {
+//            pdfGeneratorUtil.generatePersonalChecklistPdf(projectInfo, workerInfo.getUserName(), performances, response.getOutputStream());
+//        } catch (DocumentException e) {
+//            throw new IOException("PDF 생성 중 오류가 발생했습니다.", e);
+//        }
+//    }
 
 
 } // class end
