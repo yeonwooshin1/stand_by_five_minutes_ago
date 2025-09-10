@@ -250,6 +250,8 @@ function bindAddButton() {
   });
 }
 
+
+
 /** 테이블 값 변경/삭제 (이벤트 위임) */
 function bindTableEvents() {
   // 값 변경
@@ -263,44 +265,82 @@ function bindTableEvents() {
 
     if (e.target.classList.contains("pf-role")) {
       row.pjRoleNo = toNum0(e.target.value);
+
     } else if (e.target.classList.contains("pf-chk")) {
       row.pjChkItemNo = toNum0(e.target.value);
+
     } else if (e.target.classList.contains("pf-start")) {
       row.pfStart = toHHMM(e.target.value);
+
+      // 시작/종료 시간 유효성 검사: 종료시간보다  시작시간이 이하여야함
+      if (row.pfStart && row.pfEnd && cmpHHMM(row.pfEnd, row.pfStart) < 0) {
+        alert("종료시간은 시작시간보다 빠를 수 없습니다.");
+        row.pfStart = "";           // 잘못 입력 초기화
+        e.target.value = "";        // 입력칸도 초기화
+        return;                     // 변경 플래그는 주지 않음
+      }
+
     } else if (e.target.classList.contains("pf-end")) {
       row.pfEnd = toHHMM(e.target.value);
+
+      // [CHG] 시작/종료 시간 유효성 검사: 종료시간 ≥ 시작시간
+      if (row.pfStart && row.pfEnd && cmpHHMM(row.pfEnd, row.pfStart) < 0) {
+        alert("종료시간은 시작시간보다 빠를 수 없습니다.");
+        row.pfEnd = "";             // 잘못 입력 초기화
+        e.target.value = "";        // 입력칸도 초기화
+        return;                     // 변경 플래그는 주지 않음
+      }
+
     } else if (e.target.classList.contains("pf-notify-type")) {
       row.notifyType = toNum0(e.target.value);
       // 타입이 0(미발송)이면 분 입력 비활성화 + 0 세팅
       const mins = tr.querySelector(".pf-notify-mins");
       mins.disabled = row.notifyType === 0;
       if (row.notifyType === 0) { row.notifySetMins = 0; mins.value = 0; }
+
     } else if (e.target.classList.contains("pf-notify-mins")) {
       row.notifySetMins = toNum0(e.target.value);
+
     } else {
       return;
-    }
+    } // if end
 
-    // 변경 플래그: 기존행이면 3(수정), 신규행은 1 유지
-    if (isExisting(pfNo)) row.changeStatus = 3;
-  });
-
-  // 삭제
-  $tbody.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("pf-del")) return;
-    const tr = e.target.closest("tr");
-    const pfNo = Number(tr.dataset.pfno);
-    const row = ROWS.find(r => Number(r.pfNo) === pfNo);
-    if (!row) return;
-
-    if (!confirm("삭제하시겠습니까? (저장 후엔 되돌릴 수 없습니다.))")) return;
-
-    // 기존행이면 4(서버 삭제 대상), 신규행이면 2(로컬만 제거)
-    row.changeStatus = isExisting(pfNo) ? 4 : 2;
-    tr.remove();
-    renumber();
+    // [CHG] 유효하지 않아 return된 경우를 제외하고 변경 플래그 처리
+    if (isExisting(pfNo)) row.changeStatus = 3; // 기존행이면 3(수정), 신규행은 1 유지
   });
 }
+
+/* HH:mm 비교 유틸: a(종료) - b(시작)
+   반환값 <0  => a < b (잘못된 종료시간)
+            0 => a == b
+           >0 => a > b
+*/
+function cmpHHMM(a, b) {
+  // a,b는 "HH:mm" 가정 (toHHMM으로 정리됨)
+  const [ah, am] = String(a).split(":").map(n => parseInt(n, 10));
+  const [bh, bm] = String(b).split(":").map(n => parseInt(n, 10));
+  const aMin = (Number.isFinite(ah) ? ah : 0) * 60 + (Number.isFinite(am) ? am : 0);
+  const bMin = (Number.isFinite(bh) ? bh : 0) * 60 + (Number.isFinite(bm) ? bm : 0);
+  return aMin - bMin;
+}
+
+
+// 삭제
+$tbody.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("pf-del")) return;
+  const tr = e.target.closest("tr");
+  const pfNo = Number(tr.dataset.pfno);
+  const row = ROWS.find(r => Number(r.pfNo) === pfNo);
+  if (!row) return;
+
+  if (!confirm("삭제하시겠습니까? (저장 후엔 되돌릴 수 없습니다.))")) return;
+
+  // 기존행이면 4(서버 삭제 대상), 신규행이면 2(로컬만 제거)
+  row.changeStatus = isExisting(pfNo) ? 4 : 2;
+  tr.remove();
+  renumber();
+});
+
 
 // ===== 저장/이동 =====
 

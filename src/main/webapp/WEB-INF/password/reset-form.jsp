@@ -38,7 +38,7 @@
                         <label for="pw1" class="form-label">새 비밀번호</label>
                         <div class="input-group">
                             <input id="pw1" name="newPassword" type="password" class="form-control" minlength="8"
-                                required placeholder="대/소문자 포함 8글자 이상" autocomplete="new-password" />
+                                required placeholder="대/소문자 포함 8글자 이상 20자 이하" autocomplete="new-password" />
                             <button class="btn btn-outline-secondary" type="button" data-toggle-eye="#pw1"
                                 aria-label="비밀번호 표시/숨김">표시</button>
                         </div>

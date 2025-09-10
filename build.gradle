@@ -65,6 +65,11 @@ dependencies {
     // Apache POI (마이크로소프트 오피스 InOut 처리 라이브러리)
     implementation 'org.apache.poi:poi:5.4.1'
     implementation 'org.apache.poi:poi-ooxml:5.4.1'
+
+    // webSocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    // jackson  Java에서 JSON 데이터를 처리하기 위한 라이브러리
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 tasks.named('test') {
