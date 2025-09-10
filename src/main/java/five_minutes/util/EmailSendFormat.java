@@ -1,8 +1,12 @@
 package five_minutes.util;
 
+import five_minutes.model.dto.ScheduledDto;
+import org.springframework.web.util.HtmlUtils;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -162,4 +166,146 @@ public final class EmailSendFormat {
     private static String nullSafe(String v, String def) {
         return (v == null || v.isEmpty()) ? def : v;
     }
-}
+
+    // 알림 스케쥴 이메일 양식
+
+    /** 메일 제목 (알림/프로젝트/할일) */
+    public static String subject(ScheduledDto d) {
+        return "[Stand by five minutes ago] " + nz(d.getPjName()) + " · " + nz(d.getTodoTitle());
+    }
+
+    /** 메일 본문 HTML (notifyType/notifySetMins 미표시) */
+    public static String html(ScheduledDto d, String actionUrl) {
+        String userName   = esc(d.getUserName());
+        String userEmail  = esc(d.getUserEmail());
+
+        String pjName     = esc(d.getPjName());
+        String roadAddr   = esc(d.getProjectRoadAddress());
+        String detailAddr = esc(d.getProjectDetailAddress());
+        String pjStart    = esc(nz(d.getPjStartDate()));
+        String pjEnd      = esc(nz(d.getPjEndDate()));
+
+        String roleName   = esc(d.getRoleName());
+        String roleDesc   = esc(nz(d.getRoleDescription()));
+        String roleLv     = String.valueOf(d.getRoleLevel());
+
+        String todoTitle  = esc(d.getTodoTitle());
+        String todoHelp   = esc(nz(d.getTodoHelpText()));
+
+        String startTime  = esc(fmtTime(d.getPfStart()));
+        String endTime    = esc(fmtTime(d.getPfEnd()));
+
+        String bnName     = esc(d.getBnName());
+        String manager    = esc(d.getManagerName());
+        String managerTel = esc(d.getManagerPhone());
+
+        String cta = (actionUrl != null && !actionUrl.isBlank())
+                ? "<div style=\"margin-top:8px\">" +
+                "<a href=\"" + escAttr(actionUrl) + "\" " +
+                "style=\"background:#2563eb;color:#fff;text-decoration:none;padding:12px 18px;" +
+                "border-radius:10px;display:inline-block;font-weight:600\">작업 열기</a></div>"
+                : "";
+
+        return """
+        <!doctype html>
+        <html lang="ko">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>알림 메일</title>
+        </head>
+        <body style="margin:0;padding:0;background:#f6f7fb;font-family:Apple SD Gothic Neo, Malgun Gothic, 'Noto Sans KR', Arial, sans-serif;">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%%" style="background:#f6f7fb;padding:24px 12px;">
+            <tr><td align="center">
+              <table role="presentation" cellpadding="0" cellspacing="0" width="640" style="max-width:640px;background:#ffffff;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.06);overflow:hidden">
+                <tr>
+                  <td style="background:#1f2937;color:#fff;padding:22px 24px;">
+                    <div style="font-size:14px;opacity:.9">%s</div>
+                    <div style="font-size:20px;font-weight:700;margin-top:4px;">%s</div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <div style="font-size:16px;font-weight:700;color:#111827;margin:4px 0 12px">안내</div>
+                    <div style="font-size:14px;color:#374151;line-height:1.6">
+                      안녕하세요 %s 님,<br>
+                      아래의 작업 정보를 확인해주세요.
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:0 24px 8px">
+                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%%" style="border-collapse:separate;border-spacing:0 10px">
+                      %s
+                    </table>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:8px 24px 20px">
+                    %s
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:0 24px 20px">
+                    <hr style="border:none;border-top:1px solid #e5e7eb;margin:0 0 16px">
+                    <div style="font-size:12px;color:#6b7280;line-height:1.6">
+                      발신: %s | 담당자 %s (%s)<br>
+                      수신: %s<br>
+                      본 메일은 자동 발송되었습니다.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>
+        </body>
+        </html>
+        """.formatted(
+                bnName, pjName,            // 헤더
+                userName,                  // 인사
+                sectionsHtml(
+                        row("프로젝트", pjName),
+                        row("주소", roadAddr + " " + detailAddr),
+                        row("기간", pjStart + " ~ " + pjEnd),
+                        row("역할", roleName + " (Lv." + roleLv + ")"),
+                        !roleDesc.isBlank() ? row("역할 설명", roleDesc) : "",
+                        row("할 일", todoTitle),
+                        !todoHelp.isBlank() ? row("도움말", todoHelp) : "",
+                        row("스케줄", "시작 " + startTime + " / 종료 " + endTime)
+                ),
+                cta,                       // CTA 버튼(옵션)
+                bnName, manager, managerTel, // 푸터 발신
+                userEmail                  // 푸터 수신
+        );
+    }
+
+    /* ---------- helpers ---------- */
+
+    private static String sectionsHtml(String... rows) {
+        StringBuilder sb = new StringBuilder();
+        for (String r : rows) if (r != null && !r.isBlank()) sb.append(r);
+        return sb.toString();
+    }
+
+    private static String row(String key, String val) {
+        return """
+               <tr>
+                 <td style="width:120px;vertical-align:top;padding:10px 12px;background:#f9fafb;border:1px solid #eef0f4;border-right:none;border-radius:8px 0 0 8px;font-size:13px;color:#6b7280;">%s</td>
+                 <td style="vertical-align:top;padding:10px 12px;background:#ffffff;border:1px solid #eef0f4;border-left:none;border-radius:0 8px 8px 0;font-size:14px;color:#111827;line-height:1.6">%s</td>
+               </tr>
+               """.formatted(esc(key), esc(val));
+    }
+
+    private static String fmtTime(LocalTime t) {
+        if (t == null) return "-";
+        int h = t.getHour(), m = t.getMinute();
+        return (h < 10 ? "0" + h : String.valueOf(h)) + ":" + (m < 10 ? "0" + m : String.valueOf(m));
+    }
+    private static String nz(String s) { return s == null ? "" : s; }
+    private static String esc(String s) { return HtmlUtils.htmlEscape(nz(s)); }
+    private static String escAttr(String s) { return HtmlUtils.htmlEscape(nz(s)); }
+}   // class end
