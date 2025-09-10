@@ -4,12 +4,15 @@ import five_minutes.model.dto.*;
 import five_minutes.service.DashboardService;
 import five_minutes.service.FileService;
 import five_minutes.service.PjService;
+import five_minutes.util.PdfGeneratorUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /// **Info** =========================
@@ -29,7 +32,7 @@ public class DashboardController {
 
     // DI
     private final DashboardService dashboardService;
-    private final FileService fileService;
+    private final PdfGeneratorUtil pdfGeneratorUtil;
 
     // [1] 프로젝트 대시보드  - 기본정보 조회
     // URL : /project/perform/check?pjNo=6000001
@@ -98,7 +101,7 @@ public class DashboardController {
         * pjNo, bnNo를 확인하기
      */
     @PostMapping("/file")
-    public int uploadFilePJDash(@RequestBody MultipartFile file , @RequestParam("pfNo") int pfNo , HttpSession session){
+    public int uploadFilePJDash(@RequestParam("file") MultipartFile file , @RequestParam("pfNo") int pfNo , HttpSession session){
         // 1. 세션 확인
         Integer userNo = (Integer) session.getAttribute("loginUserNo");
         if (userNo == null) {
@@ -192,4 +195,18 @@ public class DashboardController {
     public PjCheckDto getCheckInDash (int pjNo , int pjChkItemNo){
         return dashboardService.getCheckInDash(pjNo, pjChkItemNo);
     }
-}
+
+    // [10] 프로젝트 대시보드 - 전체 근무 리스트 PDF 다운로드
+    @GetMapping("/pdf/all")
+    public void downloadAllPerPdf (@RequestParam int pjNo , HttpSession session , HttpServletResponse response) throws IOException {
+        // 세션 확인
+        Integer userNo = (Integer) session.getAttribute("loginUserNo");
+        String bnNo = (String) session.getAttribute("loginBnNo");
+        if (userNo == null && bnNo == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
+            return;
+        }
+    }
+
+
+} // class end

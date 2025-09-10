@@ -1,6 +1,6 @@
-# PDF 다운로드 기능 구현 가이드 (이미지 포함)
+# PDF 다운로드 기능 구현 가이드
 
-이 가이드는 `PdfGeneratorUtil.java`를 기반으로 프로젝트 업무 리스트 전체 및 개별 상세 정보를 PDF로 다운로드하는 기능을 구현하는 방법을 안내합니다. '개별 정보' PDF에는 로고 이미지를 포함합니다.
+이 가이드는 `PdfGeneratorUtil.java`를 기반으로 프로젝트 업무 리스트 전체 및 개별 상세 정보를 PDF로 다운로드하는 기능을 구현하는 방법을 안내합니다.
 
 ## 1. 전체 흐름
 
@@ -11,7 +11,9 @@
 
 ## 2. `PdfGeneratorUtil.java` 리팩토링
 
-`C:\Users\tj-bu-702-07\Desktop\cording\fiveMinutes\src\main\java\five_minutes\util\PdfGeneratorUtil.java` 파일을 아래 내용으로 수정하세요.
+기존의 테스트용 `main` 메소드 대신, `Service` 계층에서 호출할 수 있도록 클래스를 Spring 컴포넌트로 변경하고 재사용 가능한 메소드를 만듭니다.
+
+**`C:\Users\tj-bu-702-07\Desktop\cording\fiveMinutes\src\main\java\five_minutes\util\PdfGeneratorUtil.java`** 파일을 아래 내용으로 수정하세요.
 
 ```java
 package five_minutes.util;
@@ -35,31 +37,37 @@ public class PdfGeneratorUtil {
     private Font tableHeaderFont;
     private Font tableBodyFont;
 
+    // 생성자에서 폰트 초기화
     public PdfGeneratorUtil() {
         try {
+            // Noto Sans KR 폰트 경로 (resources/font/...) - 실제 경로에 맞게 조정 필요
             BaseFont baseFont = BaseFont.createFont("font/NotoSansKR-VariableFont_wght.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             this.titleFont = new Font(baseFont, 18, Font.BOLD);
             this.tableHeaderFont = new Font(baseFont, 12, Font.BOLD);
             this.tableBodyFont = new Font(baseFont, 11);
         } catch (IOException | DocumentException e) {
             e.printStackTrace();
+            // 프로덕션 환경에서는 로깅 등으로 처리하는 것이 좋습니다.
         }
     }
 
+    // 전체 근무 리스트 PDF 생성
     public void generateAllPerformancesPdf(List<DashboardDto> performances, OutputStream outputStream) throws DocumentException {
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, outputStream);
         document.open();
 
         document.add(new Paragraph("프로젝트 업무 관리 전체 리스트", titleFont));
-        document.add(new Paragraph(" "));
+        document.add(new Paragraph(" ")); // 공백
 
-        PdfPTable table = new PdfPTable(7);
+        PdfPTable table = new PdfPTable(7); // 7개 컬럼
         table.setWidthPercentage(100);
         table.setWidths(new float[]{1, 2, 3, 4, 3, 3, 2});
 
+        // 테이블 헤더
         addTableHeader(table, "No", "근무자", "역할명", "체크리스트명", "시작시간", "종료시간", "상태");
 
+        // 테이블 바디
         int index = 1;
         for (DashboardDto dto : performances) {
             table.addCell(new PdfPCell(new Paragraph(String.valueOf(index++), tableBodyFont)));
@@ -75,22 +83,16 @@ public class PdfGeneratorUtil {
         document.close();
     }
 
-    public void generateSinglePerformancePdf(DashboardDto performance, OutputStream outputStream) throws DocumentException, IOException {
+    // 개별 근무 정보 PDF 생성
+    public void generateSinglePerformancePdf(DashboardDto performance, OutputStream outputStream) throws DocumentException {
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, outputStream);
         document.open();
 
-        try {
-            Image logo = Image.getInstance("src/main/resources/static/img/logo.png"); // 로고 경로
-            logo.scaleToFit(120, 60);
-            document.add(logo);
-        } catch (IOException e) {
-            System.err.println("PDF 로고 이미지를 찾을 수 없습니다: " + e.getMessage());
-        }
-
         document.add(new Paragraph("근무 정보 상세보기", titleFont));
         document.add(new Paragraph(" "));
 
+        // 테이블을 사용하여 깔끔하게 표시
         PdfPTable table = new PdfPTable(2);
         table.setWidthPercentage(80);
         table.setWidths(new float[]{1, 3});
@@ -137,7 +139,7 @@ public class PdfGeneratorUtil {
 
 ## 3. `DashboardController.java`에 PDF 다운로드 엔드포인트 추가
 
-`DashboardController.java` 파일에 PDF 다운로드 관련 코드를 추가합니다.
+`DashboardController.java` 파일에 아래 두 개의 메소드를 추가합니다.
 
 ```java
 // ... 기존 Controller 코드 ...
@@ -152,74 +154,123 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class DashboardController {
 
-    private final DashboardService dashboardService;
-    private final FileService fileService;
+    // ... 기존 DI ...
     private final PdfGeneratorUtil pdfGeneratorUtil; // PdfGeneratorUtil 주입
 
     // ... 기존 메소드 ...
 
+    // [10] 프로젝트 대시보드 - 전체 근무 리스트 PDF 다운로드
     @GetMapping("/pdf/all")
     public void downloadAllPerformancesPdf(@RequestParam int pjNo, HttpSession session, HttpServletResponse response) throws IOException {
+        // 세션 확인
         Integer userNo = (Integer) session.getAttribute("loginUserNo");
         String bnNo = (String) session.getAttribute("loginBnNo");
-        if (userNo == null && bnNo == null) { response.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
+        if (userNo == null && bnNo == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
+            return;
+        }
 
-        List<DashboardDto> list = dashboardService.getListPJDash(pjNo, userNo, bnNo);
+        // 데이터 조회
+        List<DashboardDto> performanceList = dashboardService.getListPJDash(pjNo, userNo, bnNo);
+
+        // 파일명 설정
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String fileName = "attachment; filename=\"performances_" + timeStamp + ".pdf\"";
+
+        // Response Header 설정
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"performances_" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".pdf\"");
+        response.setHeader("Content-Disposition", fileName);
 
+        // PDF 생성 및 전송
         try {
-            pdfGeneratorUtil.generateAllPerformancesPdf(list, response.getOutputStream());
-        } catch (DocumentException e) { throw new IOException(e.getMessage()); }
+            pdfGeneratorUtil.generateAllPerformancesPdf(performanceList, response.getOutputStream());
+        } catch (DocumentException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
+    // [11] 프로젝트 대시보드 - 개별 근무 정보 PDF 다운로드
     @GetMapping("/pdf/single")
     public void downloadSinglePerformancePdf(@RequestParam int pjNo, @RequestParam int pfNo, HttpSession session, HttpServletResponse response) throws IOException {
+        // 세션 확인
         Integer userNo = (Integer) session.getAttribute("loginUserNo");
         String bnNo = (String) session.getAttribute("loginBnNo");
-        if (userNo == null && bnNo == null) { response.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
+        if (userNo == null && bnNo == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
+            return;
+        }
 
-        DashboardDto dto = dashboardService.getIndiListPJDash(pjNo, pfNo, userNo, bnNo);
+        // 데이터 조회
+        DashboardDto performance = dashboardService.getIndiListPJDash(pjNo, pfNo, userNo, bnNo);
+
+        // 파일명 설정
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String fileName = "attachment; filename=\"performance_" + pfNo + "_" + timeStamp + ".pdf\"";
+
+        // Response Header 설정
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"performance_" + pfNo + ".pdf\"");
+        response.setHeader("Content-Disposition", fileName);
 
+        // PDF 생성 및 전송
         try {
-            pdfGeneratorUtil.generateSinglePerformancePdf(dto, response.getOutputStream());
-        } catch (DocumentException e) { throw new IOException(e.getMessage()); }
+            pdfGeneratorUtil.generateSinglePerformancePdf(performance, response.getOutputStream());
+        } catch (DocumentException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 }
 ```
 
 ## 4. `performcheck.js` 및 `performcheck.jsp` 수정
 
-**`performcheck.js`** 파일 하단에 아래 함수들을 추가합니다.
+### 4.1. `performcheck.js`
+
+PDF 다운로드를 호출하는 JavaScript 함수를 추가합니다. 파일 하단에 아래 코드를 추가하세요.
 
 ```javascript
-function downloadAllPdf() {
+// [09] PDF 다운로드 (전체)
+const downloadAllPdf = () => {
+    if(!pjNo) { alert("프로젝트 정보가 없습니다."); return; }
     window.location.href = `/project/perform/check/pdf/all?pjNo=${pjNo}`;
 }
 
-function downloadSinglePdf() {
-    if (!currentPfNo) { alert("먼저 상세보기를 통해 근무 정보를 선택해주세요."); return; }
+// [10] PDF 다운로드 (개별)
+const downloadSinglePdf = () => {
+    if(!pjNo || !currentPfNo) { alert("조회된 근무 정보가 없습니다."); return; }
     window.location.href = `/project/perform/check/pdf/single?pjNo=${pjNo}&pfNo=${currentPfNo}`;
 }
 ```
 
-**`performcheck.jsp`** 에서 버튼 부분을 수정합니다.
+### 4.2. `performcheck.jsp`
+
+기존 PDF 버튼의 `onclick` 이벤트를 수정하고, 모달 창에 개별 다운로드 버튼을 추가합니다.
+
+**기존 PDF 버튼 수정:**
 
 ```html
-<!-- 전체 다운로드 버튼 -->
-<button type="button" class="btn btn-outline-danger" onclick="downloadAllPdf()">PDF</button>
+<!-- 수정 전 -->
+<button type="button" class="btn btn-outline-danger">PDF</button>
 
-<!-- 모달 창 안의 개별 다운로드 버튼 -->
+<!-- 수정 후 -->
+<button type="button" class="btn btn-outline-danger" onclick="downloadAllPdf()">PDF</button>
+```
+
+**모달 푸터(footer)에 버튼 추가:**
+
+근무 정보 상세보기 모달의 `modal-footer` 영역에 아래 버튼을 추가합니다.
+
+```html
 <div class="modal-footer">
-    <button type="button" class="btn btn-info" onclick="downloadSinglePdf()">PDF 저장</button>
+    <button type="button" class="btn btn-info" onclick="downloadSinglePdf()">PDF 저장</button> <!-- 이 버튼 추가 -->
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
     <button type="button" class="btn btn-primary" onclick="updatePJPerform()" data-bs-dismiss="modal">수정</button>
 </div>
 ```
 
-## 5. 폰트 및 이미지 파일 준비
+## 5. 폰트 파일 준비
 
-- **폰트**: `src/main/resources/font/` 디렉터리에 `NotoSansKR-VariableFont_wght.ttf` 파일을 위치시켜 주세요.
-- **이미지**: `src/main/resources/static/img/` 디렉터리에 `logo.png` 파일을 위치시켜 주세요. (경로와 파일명은 실제 사용하는 리소스에 맞게 `PdfGeneratorUtil.java`에서 수정할 수 있습니다.)
+`PdfGeneratorUtil.java`에서 참조하는 한글 폰트 파일(`NotoSansKR-VariableFont_wght.ttf`)을 `src/main/resources/font/` 디렉터리에 위치시켜야 합니다. 만약 디렉터리가 없다면 생성해주세요.
+
+---
+
+위의 모든 단계를 완료하고 애플리케이션을 다시 실행하면 PDF 다운로드 기능이 정상적으로 동작할 것입니다.

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Objects;
 import java.util.UUID;
 
 // 파일 서비스
@@ -22,9 +23,9 @@ public class FileService {
     private String baseDir = System.getProperty("user.dir");
     // 2. 방법2 처럼 개발자폴더가 아닌 실행된 서버의 폴더로 업로드 경로 지정하기 , *개발환경* 에 따라 달라진다.
     // 체크리스트 경로
-    private String uploadPathChk = baseDir + "/build/resources/main/static/upload/check";
+    private String uploadPathChk = baseDir + "/build/resources/main/static/upload/check/";
     // 사업자등록증 경로
-    private String uploadPathBn = baseDir + "/build/resources/main/static/upload/bnDocu";
+    private String uploadPathBn = baseDir + "/build/resources/main/static/upload/bnDocu/";
 
     // [1] 파일 업로드 : 스프링에서는 MultipartFile 인터페이스 지원( 대용량 바이트 조작 )
     public String fileUpload(int type, MultipartFile multipartFile) {
@@ -51,7 +52,7 @@ public class FileService {
         // 2. 업로드 경로 와 파일명 합치기
         String uploadFilePath = uploadPath + fileName;
         // 3. 만약에 업로드한 경로가 upload 폴더가 존재하지 않으면 폴더생성
-        File pathFile = new File(uploadPath); // File 클래스 : 다양한 파일/폴더 함수를 제공
+        File pathFile = new File(Objects.requireNonNull(uploadPath)); // File 클래스 : 다양한 파일/폴더 함수를 제공
         if (!pathFile.exists()) { // .exists() : 지정한 경로가 존재하면 true 존재하지 않으면 false 반환 메소드
             pathFile.mkdir(); // .mkdir() : 지정한 경로 생성 메소드
         }

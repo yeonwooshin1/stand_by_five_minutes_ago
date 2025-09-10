@@ -146,8 +146,14 @@ const readAllPJworker = async () => {
 }
 readAllPJworker(); // 초기화
 
+// 전역변수에 pfNo 저장
+let currentPfNo = null;
+
 // [05] 프로젝트 근무리스트 개별 조회(모달)
 const readPJworker = async (pfNo) => {
+
+    // 현재 pfNo 저장
+    currentPfNo = pfNo;
 
     // 마크업
     const userName = document.querySelector('#userName');
@@ -174,6 +180,10 @@ const readPJworker = async (pfNo) => {
         pfStatus.value = data.pjPerDto.pfStatus;
         note.value = data.pjPerDto.note;
 
+        // 현재 값을 전역변수로 저장해서 수정 메소드에 활용
+        window.prevPfStatus = data.pjPerDto.pfStatus;
+        window.prevNote = data.pjPerDto.note;
+
     } catch (error) {
         console.log(error)
     }
@@ -181,11 +191,59 @@ const readPJworker = async (pfNo) => {
 
 
 // [06] 파일 업로드
+const uploadFile = async ( ) => {
+
+    // 마크업
+    const fileInput = document.querySelector('#fileName');
+    const file = fileInput.files[0];
+
+    // 유효성 검사
+    if (!currentPfNo){
+        alert("근무 정보를 선택하세요.")
+        return;
+    }
+    if (!file) {
+        alert("업로드할 파일을 선택하세요.");
+        return;
+    }
+
+    // 폼데이터 함수
+    const formData = new FormData();
+    formData.append("pfNo", currentPfNo); // FK 번호
+    formData.append("file", file); // 실제 파일
+
+    // fetch
+    try {
+        const option = {
+            method: "POST",
+            body: formData
+        }
+        const response = await fetch(`/project/perform/check/file?pfNo=${currentPfNo}`, option)
+        const data = await response.json();
+        console.log(data);
+
+        if (data > 0) {
+            alert("파일이 업로드 되었습니다.")
+            fileInput.value = ``; // 입력 초기화
+        } else {
+            alert("파일 업로드 실패")
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+
+}
 
 // [07] 파일 삭제
 
 // [08] 근무 정보 메모 수정
 const updatePJPerform = async () => {
+
+    if (!currentPfNo) {
+        alert("근무 정보를 선택하세요.")
+        return;
+    }
 
     // 마크업
     const pfStatus = document.querySelector('.pjPerformStatus');
@@ -205,23 +263,26 @@ const updatePJPerform = async () => {
     const prevNote = window.prevNote;
 
     // 유효성 검사
-    if (pfStatus == prevPfStatus && note == prevNote){
+    if (pfStatus == prevPfStatus && note == prevNote) {
         alert("수정된 근무 정보가 없습니다.")
         return;
     }
-    if (pfStatus == "1" && now >= pfStart ){
+    if (pfStatus == "1" && now >= pfStart) {
         alert("이미 시작 시간이 지났습니다. '시작 전' 상태로 변경할 수 없습니다.");
         return;
     }
-    if (pfStatus == "1" && now >= pfEnd){
+    if (pfStatus == "1" && now >= pfEnd) {
         alert("이미 종료 시간이 지났습니다. '시작 전' 상태로 변경할 수 없습니다.");
         return;
     }
 
     // 객체화
     const obj = {
-        pfStatus,
-        note
+        pjPerDto: {
+            pfNo : currentPfNo,
+            pfStatus : parseInt(pfStatus.value),
+            note : note.value
+        }
     }
 
     // fetch
@@ -234,11 +295,16 @@ const updatePJPerform = async () => {
         const response = await fetch('/project/perform/check', option);
         const data = await response.json();
 
+        console.log("update response : " + data)
+
 
         if (data > 0) {
             alert("근무 정보가 수정되었습니다.")
-            readPJworker(pfNo);
-        } 
+            readAllPJworker();
+            // 값 업데이트하기
+            window.prevPfStatus = parseInt(pfStatus.value);
+            window.prevNote = note.value;
+        }
 
     } catch (error) {
         console.log

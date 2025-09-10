@@ -1,13 +1,18 @@
 package five_minutes.util;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
+import com.lowagie.text.*;
 import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import five_minutes.model.dto.DashboardDto;
+import org.apache.jasper.tagplugins.jstl.core.Out;
+import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
 
 /// **Info** =========================
 ///
@@ -19,37 +24,125 @@ import java.io.FileOutputStream;
 ///
 /// @author dongjin
 
+@Component
 public class PdfGeneratorUtil {
-    public static void main(String[] args) {
-        // 1. Document 객체를 생성합니다.
-        Document document = new Document();
-        // 2. 파일명을 정의합니다.
-        String outputPath = "HelloWorld.pdf";
+
+    // [*] 멤버변수
+    private Font titleFont;
+    private Font headFont;
+    private Font bodyFont;
+
+    // [*] 생성자에서 폰트 초기화
+    public PdfGeneratorUtil() {
         try {
-            // 3. PdfWriter로 Document를 파일 스트림에 연결합니다
-            PdfWriter.getInstance(document, new FileOutputStream(outputPath));
-            // 4. Document를 엽니다.
-            document.open();
-            // 5. 영문 폰트는 기본으로 설정합니다. (5번 따라하면 커스텀 가능)
-            // Font defaultFont = new Font(Font.HELVETICA, 12 ,Font.NORMAL);
-            // 6. 한글 폰트를 쓰고 싶다면, 폰트가 있는 경로에 폰트 파일을 배치
-            // * noto sans kr가 한글 영문을 모두 지원하므로, 하나로 통일합니다.
+            // [*] 폰트 스타일 지정. noto sans kr가 한글 영문을 모두 지원하므로, 하나로 통일합니다.
             BaseFont baseFont = BaseFont.createFont("/font/NotoSansKR-VariableFont_wght.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            Font font = new Font(baseFont, 12);
-            // 7. 내용 추가
-            document.add(new Paragraph("Hello, OpenPDF!", font));
-            document.add(new Paragraph("안녕하세요. OpenPDF를 사용한 한글 PDF 생성 예제입니다.", font));
-            System.out.println("'" + outputPath + "' 파일이 성공적으로 생성되었습니다.");
-
-        } catch (Exception e) {
-            System.out.println(e);
-        } finally {
-            // 8. Document 닫기
-            if (document.isOpen()) {
-                document.close();
-            }
+            this.titleFont = new Font(baseFont , 18, Font.BOLD);
+            this.headFont = new Font(baseFont, 12, Font.BOLD);
+            this.bodyFont = new Font(baseFont , 11);
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
         }
+    } // func end
 
+    // [*] 테이블 헤더 만들기
+    private void addTableHeader(PdfPTable table, String... headers) {
+        for (String header : headers) {
+            PdfPCell cell = new PdfPCell(new Paragraph(header, headFont));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+        }
     }
 
-}
+    // [*] 상태 표현
+    private String getStatusString(int status) {
+        switch (status) {
+            case 1: return "시작전";
+            case 2: return "진행중";
+            case 3: return "완료됨";
+            case 4: return "취소됨";
+            case 5: return "보류중";
+            default: return "알 수 없음";
+        }
+    }
+
+    // [*] 테이블 열 표현
+    private void addDetailRow(PdfPTable table, String label, String value) {
+        PdfPCell labelCell = new PdfPCell(new Paragraph(label, headFont));
+        PdfPCell valueCell = new PdfPCell(new Paragraph(value, bodyFont));
+        table.addCell(labelCell);
+        table.addCell(valueCell);
+    }
+    
+    // [1] 프로젝트 기본 정보 PDF 생성
+    public void generateInfoPdf(DashboardDto info , OutputStream outputStream) throws DocumentException {
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, outputStream);
+        document.open();
+
+        document.add(new Paragraph("프로젝트 기본정보" , titleFont));
+        document.add(new Paragraph(" ")); // 공백 한 줄
+
+        
+    }
+
+    // [2] 전체 근무 리스트 PDF 생성
+    public void generateAllPerPdf(List<DashboardDto> performances , OutputStream outputStream) throws DocumentException {
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, outputStream);
+        document.open();
+        
+        document.add(new Paragraph("프로젝트 근무 리스트" , titleFont));
+        document.add(new Paragraph(" ")); // 공백 한 줄
+
+        PdfPTable table = new PdfPTable(7);
+        table.setWidthPercentage(100);
+        table.setWidths(new float[]{1, 2, 3, 4, 3, 3, 2}); // td가 차지하는 길이
+
+        // 테이블 헤더
+        addTableHeader(table , "No" , "근무자" , "역할명" , "체크리스트명" , "시작시간" , "종료시간" , "상태");
+        
+        // 테이블 바디
+        int index = 1;
+        for (DashboardDto dto : performances) {
+            table.addCell(new PdfPCell(new Paragraph(String.valueOf(index++), bodyFont)));
+            table.addCell(new PdfPCell(new Paragraph(dto.getUsersDto().getUserName(), bodyFont)));
+            table.addCell(new PdfPCell(new Paragraph(dto.getPjWorkerDto().getPjRoleName(), bodyFont)));
+            table.addCell(new PdfPCell(new Paragraph(dto.getPjCheckDto().getPjChklTitle(), bodyFont)));
+            table.addCell(new PdfPCell(new Paragraph(dto.getPjPerDto().getPfStart(), bodyFont)));
+            table.addCell(new PdfPCell(new Paragraph(dto.getPjPerDto().getPfEnd(), bodyFont)));
+            table.addCell(new PdfPCell(new Paragraph(getStatusString(dto.getPjPerDto().getPfStatus()), bodyFont)));
+        }
+        document.add(table);
+        document.close();
+    } // func end
+    
+    // [3] 개별 근무 정보 PDF 생성
+    public void generateDetailPerPdf(DashboardDto performance , OutputStream outputStream) throws DocumentException {
+        Document document = new Document(PageSize.A4);
+        PdfWriter.getInstance(document, outputStream);
+        document.open();
+
+        document.add(new Paragraph("근무 정보 상세보기", titleFont));
+        document.add(new Paragraph(" "));
+
+        // 테이블을 사용하여 깔끔하게 표시
+        PdfPTable table = new PdfPTable(2);
+        table.setWidthPercentage(80);
+        table.setWidths(new float[]{1, 3});
+
+        addDetailRow(table, "근무자", performance.getUsersDto().getUserName());
+        addDetailRow(table, "역할", performance.getPjWorkerDto().getPjRoleName());
+        addDetailRow(table, "체크리스트", performance.getPjCheckDto().getPjChklTitle());
+        addDetailRow(table, "시작시간", performance.getPjPerDto().getPfStart());
+        addDetailRow(table, "종료시간", performance.getPjPerDto().getPfEnd());
+        addDetailRow(table, "상태", getStatusString(performance.getPjPerDto().getPfStatus()));
+        addDetailRow(table, "메모", performance.getPjPerDto().getNote());
+
+        document.add(table);
+        document.close();
+    }
+
+
+
+} // class end

@@ -176,6 +176,7 @@
                             <div class="d-flex">
                                 <label for="memo" class="form-label me-2 mt-2" style="width: 120px;">파일</label>
                                 <input type="file" name="fileName" id="fileName" />
+                                <button type="button" class="btn btn-primary" onclick="uploadFile()"> 전송 </button>
                             </div>
                         </div>
                     </div>
