@@ -4,6 +4,7 @@ import five_minutes.model.dto.ChkItemLookupDto;
 import five_minutes.model.dto.ProjectPerformDto;
 
 import five_minutes.model.dto.RoleLookupDto;
+import five_minutes.model.dto.ScheduledDto;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -180,6 +181,120 @@ public class ProjectPerformDao extends Dao {    // class start
         return -1;
     }   // func end
 
+
+    // 스케쥴 조회
+    public List<ScheduledDto> getScheduledItem() {
+        List<ScheduledDto> list = new ArrayList<>();
+        try {
+            // 대문자로 하여 구분 쉽게 함.
+            String sql = "SELECT" +
+                    // --메일 받는 유저 정보
+                    // 이메일과 유저 이름
+                    " u.userName As userName , u.email AS userEmail,"+
+                    // --메일 주는 회사 정보
+                    // 회사명과 회사 담당자 이름, 회사 연락처
+                     "b.bnName As bnName, b.managerName	As managerName, b.managerPhone As managerPhone,"+
+                    // --프로젝트 정보
+                    // 프로젝트 이름 , 도로명주소와 상세주소 , 프로젝트 시작날짜와 종료날짜
+                    " pj.pjName AS pjName, pj.roadAddress AS projectRoadAddress," +
+                    " pj.detailAddress AS projectDetailAddress, pj.pjstartDate AS pjStartDate," +
+                    " pj.pjEndDate  AS pjEndDate," +
+                    // --역할
+                    // 역할이름과 역할의 상세 설명
+                    " pw.pjRoleName AS roleName," +
+                    " pw.pjRoleDescription AS roleDescription, pw.pjRoleLv AS roleLevel," +
+                    // --할 일들
+                    // 체크리스트 사본과 그 사본의 상세정보
+                    " pci.pjChklTitle AS todoTitle," +
+                    " pci.pjHelpText AS todoHelpText," +
+                    // --메일 발송 판단용
+                    // 알림 타입과 분으로 나타낸 것, 언제 시작이고 언제 끝나는지, 그리고 그 수행하는 것의 수행상태
+                    " pf.notifyType AS notifyType," +
+                    " pf.notifySetMins AS notifySetMins," +
+                    " pf.pfStart AS pfStart," +
+                    " pf.pfEnd AS pfEnd," +
+                    " pf.pfStatus AS pfStatus," +
+                    " pf.pfNo AS pfNo"+
+                    // --어느 테이블에서 가져올 것인가?
+                    // 프로젝트 perform 에서
+                    " FROM pjPerform AS pf" +
+                    // --join 하는 것들
+                    // pwWorker , Users, PjChecklistItem, ProjectInfo, BusinessUser
+                    " JOIN pjWorker AS pw" +
+                    " ON pw.pjRoleNo = pf.pjRoleNo" +
+                    " JOIN Users AS u" +
+                    " ON u.userNo = pw.userNo" +
+                    " JOIN PjChecklistItem AS pci" +
+                    " ON pci.pjChkItemNo = pf.pjChkItemNo" +
+                    " JOIN ProjectInfo AS pj" +
+                    " ON pj.pjNo = pci.pjNo" +
+                    " AND pj.pjNo = pw.pjNo"+
+                    " JOIN BusinessUser AS b"+
+                    " ON b.bnNo = pj.bnNo"+
+                    // -- 가져오는 조건
+                    // 프로젝트, 역할과 체크리스트, 회사가 활성상태에 알림 컬럼이 1,2,3,4 만 허용
+                    " WHERE pj.pjStatus = 1" +
+                    " AND pw.pjRoleStatus = 1" +
+                    " AND pci.pjChkIStatus = 1" +
+                    " AND b.bnStatus = 1" +
+                    " AND pf.notifyType IN (1,2,3,4)";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                ScheduledDto dto = new ScheduledDto();
+
+                dto.setUserName(rs.getString("userName"));
+                dto.setUserEmail(rs.getString("userEmail"));
+
+                dto.setBnName(rs.getString("bnName"));
+                dto.setManagerName(rs.getString("managerName"));
+                dto.setManagerPhone(rs.getString("managerPhone"));
+
+                dto.setPjName(rs.getString("pjName"));
+                dto.setProjectRoadAddress(rs.getString("projectRoadAddress"));
+                dto.setProjectDetailAddress(rs.getString("projectDetailAddress"));
+                dto.setPjStartDate(rs.getString("pjStartDate"));
+                dto.setPjEndDate(rs.getString("pjEndDate"));
+
+                dto.setRoleName(rs.getString("roleName"));
+                dto.setRoleDescription(rs.getString("roleDescription"));
+                dto.setRoleLevel(rs.getInt("roleLevel"));
+
+                dto.setTodoTitle(rs.getString("todoTitle"));
+                dto.setTodoHelpText(rs.getString("todoHelpText"));
+
+                dto.setNotifyType(rs.getInt("notifyType"));
+                dto.setNotifySetMins(rs.getInt("notifySetMins"));
+                dto.setPfStart(rs.getTime("pfStart").toLocalTime());
+                dto.setPfEnd(rs.getTime("pfEnd").toLocalTime());
+                dto.setPfStatus(rs.getInt("pfStatus"));
+                dto.setPfNo(rs.getInt("pfNo"));
+
+                list.add(dto);
+            }   // while end
+
+        } catch (Exception e){
+            System.out.println("알림을 보내는데 가져오는 데이터에 예외가 있습니다.");
+        }   // try end
+        return list;
+    }   // func end
+
+    // 스케쥴 알림 보내고 난 후 상태 업데이트
+    public boolean updateNotifyType(int pfNo) {
+        try {
+            String sql = "update pjPerform set notifyType = -1 where pfNo = ? and notifyType in (1,2,3,4)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, pfNo);
+
+            return ps.executeUpdate() == 1;
+
+        } catch (Exception e){
+            System.out.println("알림 보낸 후 상태가 업데이트 되지 않는 상태입니다.");
+        } // try end
+        return false;
+    }   // func end
 
     // @Author OngTK
     // 엑셀출력용 메소드
