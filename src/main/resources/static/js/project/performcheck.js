@@ -47,21 +47,21 @@ const readPJinfo = async () => {
 
     try {
         // [2.2] fetch
-        const r = await fetch(`/project/info/indi?pjNo=${pjNo}`)
+        const r = await fetch(`/project/perform/check?pjNo=${pjNo}`)
         const d = await r.json()
         console.log(d)
 
         // [2.3] 화면 표시
-        pjName.value = d.pjName
-        pjStartDate.value = `${d.pjStartDate} ~ ${d.pjEndDate}`
-        roadAddress.value = d.roadAddress
-        detailAddress.value = d.detailAddress
-        clientName.value = d.clientName
-        clientRepresent.value = d.clientRepresent
-        clientPhone.value = d.clientPhone
+        pjName.value = d.pjDto.pjName
+        pjStartDate.value = `${d.pjDto.pjStartDate} ~ ${d.pjDto.pjEndDate}`
+        roadAddress.value = d.pjDto.roadAddress
+        detailAddress.value = d.pjDto.detailAddress
+        clientName.value = d.pjDto.clientName
+        clientRepresent.value = d.pjDto.clientRepresent
+        clientPhone.value = d.pjDto.clientPhone
 
         // [2.4] 카카오맵 마커표시 
-        geocoder.addressSearch(d.roadAddress, function (results, status) {
+        geocoder.addressSearch(d.pjDto.roadAddress, function (results, status) {
             if (status === daum.maps.services.Status.OK) {
                 const result = results[0];
                 const coords = new daum.maps.LatLng(result.y, result.x);
@@ -80,3 +80,108 @@ readPJinfo()
 const downloadExcel = async () => {
     window.location.href = `/excel/download?pjNo=${pjNo}`;
 }
+
+// [04] 프로젝트 근무리스트 전체 조회
+const readAllPJworker = async () => {
+
+    console.log("readAllPJworker() 1 ")
+
+    // 마크 다운
+    const pjWorkerTbody = document.querySelector('#pjWorkerTbody');
+    let html = ``;
+
+    // fetch
+    try {
+        console.log("readAllPJworker() 2 ")
+        const response = await fetch(`/project/perform/check/list?pjNo=${pjNo}`)
+        const data = await response.json();
+
+        console.log(data)
+
+        if (data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+
+                const d = data[i]
+                console.log(d)
+
+                if ( d.pjPerDto.pfStatus == 3){
+                    d.pjPerDto.pfStatus = '완료됨';
+                } else if ( d.pjPerDto.pfStatus == 2 ){
+                    d.pjPerDto.pfStatus = '진행중'; 
+                } else if ( d.pjPerDto.pfStatus == 1 ){
+                    d.pjPerDto.pfStatus = '시작전';
+                } else if ( d.pjPerDto.pfStatus == 4 ){
+                    d.pjPerDto.pfStatus = '취소됨';
+                } else if (d.pjPerDto.pfStatus == 5 ){
+                    d.pjPerDto.pfStatus = '보류중'
+                }
+
+                html += `<tr>
+                            <td>${i + 1}</td>
+                            <td>${d.usersDto.userName}</td>
+                            <td>${d.pjWorkerDto.pjRoleName}</td>
+                            <td>${d.pjCheckDto.pjChklTitle}</td>
+                            <td>${d.pjPerDto.pfStart}</td>
+                            <td>${d.pjPerDto.pfEnd}</td>
+                            <td>${d.pjPerDto.pfStatus}</td>
+                            <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                data-bs-target="#detailPerform" onclick="readPJworker(${d.pjPerDto.pfNo})"">상세보기</button></td>
+                        </tr>
+                    `;
+            } // for end
+
+        } else {
+            html += `<tr>
+                        <td colspan="8"> ※ 표시할 정보가 없습니다.</td>
+                    </tr>`
+        }
+
+        // 화면 표시
+        pjWorkerTbody.innerHTML = html;
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+readAllPJworker(); // 초기화
+
+// [05] 프로젝트 근무리스트 개별 조회(모달)
+const readPJworker = async ( pfNo ) => {
+
+    // 마크다운
+    const userName = document.querySelector('#userName');
+    const pjRoleName = document.querySelector('#pjRoleName');
+    const pjChklTitle = document.querySelector('#pjCheckList');
+    const pfStart = document.querySelector('#pfStart');
+    const pfEnd = document.querySelector('#pfEnd');
+    const pfStatus = document.querySelector('.pjPerformStatus');
+    const note = document.querySelector('#memo');
+
+    // fetch
+    try {
+        const response = await fetch(`/project/perform/check/indi?pjNo=${pjNo}&pfNo=${pfNo}`)
+        const data = await response.json();
+
+        console.log(data)
+
+        // 화면 표시
+        userName.value = data.usersDto.userName;
+        pjRoleName.value = data.pjWorkerDto.pjRoleName;
+        pjChklTitle.value = data.pjCheckDto.pjChklTitle;
+        pfStart.value = data.pjPerDto.pfStart;
+        pfEnd.value = data.pjPerDto.pfEnd;
+        pfStatus.value = data.pjPerDto.pfStatus;
+        note.value = data.pjPerDto.note;
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+// [06] 파일 업로드
+
+// [07] 파일 삭제
+
+// [08] 근무 정보 메모 수정

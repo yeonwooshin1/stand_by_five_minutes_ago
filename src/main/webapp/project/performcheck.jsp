@@ -100,7 +100,7 @@
                             <th>비고</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="pjWorkerTbody">
                         <tr>
                             <td>1</td>
                             <td>홍길동</td>
@@ -110,7 +110,8 @@
                             <td>09:00</td>
                             <td>완료</td>
                             <td><button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                data-bs-target="#detailPerform">상세보기</button></td>
+                                    data-bs-target="#detailPerform">상세보기</button></td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -118,8 +119,7 @@
         </div>
 
         <!-- 근무 정보 상세보기 -->
-        <div class="modal fade" id="detailPerform" tabindex="-1" aria-labelledby="ModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="detailPerform" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -141,21 +141,24 @@
                         </div>
                         <div class="mb-3 align-items-center">
                             <div class="d-flex">
-                                <label for="pjCheckList" class="form-label me-2 mt-2" style="width: 120px;">체크리스트</label>
+                                <label for="pjCheckList" class="form-label me-2 mt-2"
+                                    style="width: 120px;">체크리스트</label>
                                 <input type="text" class="form-control" id="pjCheckList" name="pjCheckList" disabled>
                             </div>
                         </div>
                         <div class="mb-3 align-items-center">
                             <div class="d-flex">
-                                <label for="pjCheckList" class="form-label me-2 mt-2" style="width: 120px;">근무시간</label>
-                                <input type="text" class="form-control" id="pjCheckList" name="pjCheckList" disabled>
+                                <label for="pjCheckList" class="form-label me-2 mt-2" style="width: 60px;">근무시간</label>
+                                <input type="text" class="form-control" id="pfStart" name="pfStart" disabled>
+                                <input type="text" class="form-control" id="pfEnd" name="pjEnd" disabled>
                             </div>
                         </div>
                         <div class="mb-3 align-items-center">
                             <div class="d-flex">
-                                <label for="pjPerformStatus" class="form-label me-2 mt-2" style="width: 120px;">상태</label>
+                                <label for="pjPerformStatus" class="form-label me-2 mt-2"
+                                    style="width: 120px;">상태</label>
                                 <select class="form-select pjPerformStatus">
-                                    <option value="1"selected>시작전</option>
+                                    <option value="1" selected>시작전</option>
                                     <option value="2">진행</option>
                                     <option value="3">완료</option>
                                     <option value="4">취소</option>
@@ -171,8 +174,8 @@
                         </div>
                         <div class="mb-3 align-items-center">
                             <div class="d-flex">
-                                <label for="memo" class="form-label me-2 mt-2" style="width: 120px;">위치</label>
-                                <div id="userMap"></div>
+                                <label for="memo" class="form-label me-2 mt-2" style="width: 120px;">파일</label>
+                                <input type="file" name="fileName" id="fileName" />
                             </div>
                         </div>
                     </div>

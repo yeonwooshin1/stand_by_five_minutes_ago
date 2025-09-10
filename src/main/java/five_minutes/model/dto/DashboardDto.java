@@ -19,17 +19,19 @@ import lombok.NoArgsConstructor;
 @Data
 public class DashboardDto {
     // 멤버변수(없음)
+    // [*] Dto에서 미리 초기화시켜놓으면 Dao에서 바로 불러와 쓸 수 있다.
     // 1-1 사용자
-    private UsersDto usersDto;
+    private UsersDto usersDto = new UsersDto();
     // 3-1 프로젝트 정보
-    private PjDto pjDto;
+    private PjDto pjDto = new PjDto();
     // 3-2 프로젝트 인력
-    private ProjectWorkerDto pjWorkerDto;
+    private ProjectWorkerDto pjWorkerDto = new ProjectWorkerDto();
     // 3-3 프로젝트 체크리스트
-    private PjCheckDto pjCheckDto;
+    private PjCheckDto pjCheckDto = new PjCheckDto();
     // 4-1 프로젝트 실행
-    private ProjectPerformDto pjPerDto;
+    private ProjectPerformDto pjPerDto = new ProjectPerformDto();
     // 4-2 프로젝트 파일
-    private ProjectPerformFileDto pjFileDto;
+    private ProjectPerformFileDto pjFileDto = new ProjectPerformFileDto();
+    
 
 } // class end
