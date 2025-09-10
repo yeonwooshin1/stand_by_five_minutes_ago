@@ -238,7 +238,7 @@ public class PjCheckController {
         return pjCheckService.getPJCheckItem(ctNo);
     }
 
-    // [8] 프로젝트 체크리스트 템플릿 불러오기
+    // [8] 프로젝트 체크리스트 템플릿 불러오기 (수정됨)
     // URL : http://localhost:8080/project/checklist/tem
     // BODY : { "ctiNo" : 5000001 , "pjNo" : 6000001 }
     /*
@@ -250,25 +250,47 @@ public class PjCheckController {
         * CTemDto_CTItemDto 스네이크 형식으로 데이터를 묶어 저장한다.
      */
     @PostMapping("/tem")
-    public int loadAndSaveTemplate(@RequestBody Map<String, Integer> request, HttpSession session) {
+    // 반환 타입을 int에서 Map<String, Object>로 변경하여 JSON 객체를 반환하도록 합니다.
+    public Map<String, Object> loadAndSaveTemplate(@RequestBody Map<String, Integer> request, HttpSession session) {
         int ctiNo = request.get("ctiNo");
         int pjNo = request.get("pjNo");
-        // 1. 세션 확인
+        // 프론트엔드에 전달할 응답 데이터를 담을 Map 객체를 생성합니다.
+        Map<String, Object> response = new HashMap<>();
+
+        // 1. 세션에서 로그인 정보를 확인합니다.
         if (session.getAttribute("loginUserNo") == null) {
-            CTItemDto dto = new CTItemDto();
-            dto.setStatus("NOT_LOGGED_IN");
-            return -1; // 비로그인시 -1 리턴 및 setStatus 전송
+            // 로그인되지 않은 경우, 실패 상태와 메시지를 담아 반환합니다.
+            response.put("success", false);
+            response.put("message", "NOT_LOGGED_IN");
+            response.put("newPjChkItemNo", -1); // JS에서 로그인 실패를 식별할 수 있도록 -1을 담습니다.
+            return response;
         }
-        // 2. pjNo 맞으면 사업자번호 조회
+
+        // 2. 로그인된 사용자가 해당 프로젝트에 접근할 권한이 있는지 확인합니다.
         String bnNo = (String) session.getAttribute("loginBnNo");
         boolean isValidProject = pjCheckService.checkPjNo(pjNo, bnNo);
         if (!isValidProject) {
-            CTItemDto dto = new CTItemDto();
-            dto.setStatus("NOT_FOUND");
-            return 0; // 프로젝트 접근 권한 없음
+            // 권한이 없는 경우, 실패 상태와 메시지를 담아 반환합니다.
+            response.put("success", false);
+            response.put("message", "ACCESS_DENIED");
+            response.put("newPjChkItemNo", 0); // JS에서 권한 없음을 식별할 수 있도록 0을 담습니다.
+            return response;
         }
-        // 3. 리턴
-        return pjCheckService.loadAndSaveTemplate(ctiNo, pjNo);
+
+        // 3. 서비스 로직을 호출하여 템플릿을 불러와 저장하고, 새로 생성된 체크리스트 항목의 ID를 받습니다.
+        int newPjChkItemNo = pjCheckService.loadAndSaveTemplate(ctiNo, pjNo);
+
+        // 4. 서비스 처리 결과에 따라 성공 또는 실패 응답을 구성합니다.
+        if (newPjChkItemNo > 0) {
+            // 성공 시, 성공 상태와 새로 생성된 ID를 담아 반환합니다.
+            response.put("success", true);
+            response.put("newPjChkItemNo", newPjChkItemNo);
+        } else {
+            // 실패 시, 실패 상태를 담아 반환합니다.
+            response.put("success", false);
+            response.put("newPjChkItemNo", 0);
+        }
+        return response;
     }
 
     // [9] 프로젝트 체크리스트 일괄저장

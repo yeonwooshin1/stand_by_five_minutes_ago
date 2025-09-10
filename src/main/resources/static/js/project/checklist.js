@@ -156,34 +156,36 @@ function addClearRow() {
     });
 }
 
-// [05] 체크리스트 템플릿 모달 불러오기
+// [05] 체크리스트 템플릿 모달 불러오기 (수정됨)
 $('#checkTemplateModal').on('show.bs.modal', async function () {
     const modalCheckTemplate = document.querySelector(".modalCheckTemplate");
 
-    // 대분류 데이터가 이미 로드되었는지 확인
+    // 모달을 열 때마다 새로 불러오는 것을 방지하기 위해, 이미 옵션이 2개 이상 있다면(기본 옵션 포함) 함수를 종료합니다.
     if (modalCheckTemplate.options.length > 1) return;
 
     try {
-        // 임의의 ctNo 배열 또는 서버에서 목록을 가져오는 로직 필요
-        // 여기서는 예시로 4000001부터 4000005까지를 가정합니다.
-        const ctNoList = [4000001, 4000002, 4000003, 4000004, 4000005];
+        // CTemController에 있는 GET /checktem 엔드포인트를 호출하여
+        // 현재 로그인한 사업자(business)가 생성한 모든 체크리스트 템플릿 목록을 한 번에 가져옵니다.
+        const response = await fetch(`/checktem`);
+        const data = await response.json();
         let optionsHtml = '';
 
-        for (const ctNo of ctNoList) {
-            try {
-                const response = await fetch(`/project/checklist/tem?ctNo=${ctNo}`);
-                const dto = await response.json();
+        // 서버에서 받은 데이터가 있고, 로그인 되지 않은 상태가 아니라면
+        if (data.length > 0 && data[0].status !== "NOT_LOGGED_IN") {
+            // 각 템플릿(dto)에 대해 반복하면서 <option> 태그를 생성합니다.
+            data.forEach(dto => {
                 if (dto && dto.ctName) {
+                    // 각 옵션에 value로 ctNo(템플릿 번호)를,
+                    // data-* 속성을 이용해 나중에 사용될 이름(ctname)과 설명(ctdescription)을 저장합니다.
                     optionsHtml += `<option value="${dto.ctNo}" data-ctname="${dto.ctName}" data-ctdescription="${dto.ctDescription || ''}">${dto.ctName}</option>`;
                 }
-            } catch (error) {
-                console.warn(`템플릿 ${ctNo} 로딩 실패 :`, error)
-            }
+            });
+            // 생성된 옵션들을 드롭다운 메뉴에 추가합니다.
+            modalCheckTemplate.innerHTML += optionsHtml;
         }
-        modalCheckTemplate.innerHTML += optionsHtml;
-
     } catch (error) {
-        console.error("Error fetching template categories:", error);
+        // 템플릿 목록을 불러오는 중 오류가 발생하면 콘솔에 에러를 출력합니다.
+        console.error("체크리스트 템플릿 대분류를 불러오는 중 오류 발생:", error);
     }
 });
 
@@ -243,36 +245,49 @@ function viewDescription(pjChkItemNo) {
     viewModal.show();
 }
 
-// [03] 템플릿 선택 시 행 추가
+// [03] 템플릿 선택 시 행 추가 (수정됨)
 document.addEventListener("click", async function (e) {
+    // '선택' 버튼(.selectTemplateBtn)이 클릭되었는지 확인합니다.
     if (e.target.classList.contains("selectTemplateBtn")) {
         const ctiNo = e.target.dataset.ctino;
 
-        // 템플릿 데이터 불러오기 및 저장
         try {
+            // 백엔드에 템플릿 추가를 요청합니다. (POST /project/checklist/tem)
             const response = await fetch(`/project/checklist/tem`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ctiNo: parseInt(ctiNo), pjNo: parseInt(pjNo) })
             });
 
-            if(!response.ok){
-                throw new Error(`HTTP error! status : ${response.status}`);
+            // HTTP 응답이 성공적이지 않으면 오류를 발생시킵니다.
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const newPjChkItemNo = await response.json();
+            // 백엔드에서 보낸 JSON 응답을 객체로 변환합니다.
+            // ex) { success: true, newPjChkItemNo: 8000005 }
+            const result = await response.json();
 
-            if (newPjChkItemNo > 0) {
-                alert('템플릿이 추가되었습니다. 저장 버튼을 눌러야 최종 반영됩니다.');
-                await readAllpjcheck(); // 목록 새로고침
+            // 응답 결과에 따라 분기 처리합니다.
+            if (result.success && result.newPjChkItemNo > 0) {
+                // 성공 시, 사용자에게 알리고 목록을 새로고침합니다.
+                // "저장 버튼을 눌러야..." 라는 오해의 소지가 있는 메시지를 수정했습니다.
+                alert('템플릿이 추가되었습니다.');
+                await readAllpjcheck(); // 목록을 다시 불러와 화면을 갱신합니다.
+            } else if (result.newPjChkItemNo === -1) {
+                // 백엔드에서 보낸 '로그인 필요' 상태를 처리합니다.
+                alert('로그인이 필요합니다.');
             } else {
+                // 그 외의 실패 사례를 처리합니다.
                 alert('템플릿 불러오기에 실패했습니다.');
             }
         } catch (error) {
-            console.error('템플릿 추가 오류:' , error);
-            alert('템플릿 추가 중 오류가 발생했습니다.')
+            // fetch 과정이나 JSON 파싱 중 오류가 발생하면 콘솔에 에러를 출력하고 사용자에게 알립니다.
+            console.error('템플릿 추가 오류:', error);
+            alert('템플릿 추가 중 오류가 발생했습니다.');
         }
-        // 모달 닫기
+
+        // 처리가 끝나면 모달창을 닫습니다.
         const modal = bootstrap.Modal.getInstance(document.getElementById('checkTemplateModal'));
         modal.hide();
     }
