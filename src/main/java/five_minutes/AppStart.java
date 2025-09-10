@@ -3,9 +3,11 @@ package five_minutes;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication  // 스프링부트 어노테이션
 @EnableAsync // 비동기 사용 활성화
+@EnableScheduling // 스케쥴 활성화
 public class AppStart { // class start
     public static void main(String[] args) {    // main start
 
