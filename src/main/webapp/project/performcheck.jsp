@@ -148,7 +148,7 @@
                         </div>
                         <div class="mb-3 align-items-center">
                             <div class="d-flex">
-                                <label for="pjCheckList" class="form-label me-2 mt-2" style="width: 60px;">근무시간</label>
+                                <label for="pjCheckList" class="form-label me-2 mt-2" style="width: 120px;">근무시간</label>
                                 <input type="text" class="form-control" id="pfStart" name="pfStart" disabled>
                                 <input type="text" class="form-control" id="pfEnd" name="pjEnd" disabled>
                             </div>
@@ -181,7 +181,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                        <button type="button" class="btn btn-primary" onclick="" data-bs-dismiss="modal">수정</button>
+                        <button type="button" class="btn btn-primary" onclick="updatePJPerform()" data-bs-dismiss="modal">수정</button>
                     </div>
                 </div>
             </div>

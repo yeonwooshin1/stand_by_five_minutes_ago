@@ -86,7 +86,7 @@ const readAllPJworker = async () => {
 
     console.log("readAllPJworker() 1 ")
 
-    // 마크 다운
+    // 마크업
     const pjWorkerTbody = document.querySelector('#pjWorkerTbody');
     let html = ``;
 
@@ -104,15 +104,15 @@ const readAllPJworker = async () => {
                 const d = data[i]
                 console.log(d)
 
-                if ( d.pjPerDto.pfStatus == 3){
+                if (d.pjPerDto.pfStatus == 3) {
                     d.pjPerDto.pfStatus = '완료됨';
-                } else if ( d.pjPerDto.pfStatus == 2 ){
-                    d.pjPerDto.pfStatus = '진행중'; 
-                } else if ( d.pjPerDto.pfStatus == 1 ){
+                } else if (d.pjPerDto.pfStatus == 2) {
+                    d.pjPerDto.pfStatus = '진행중';
+                } else if (d.pjPerDto.pfStatus == 1) {
                     d.pjPerDto.pfStatus = '시작전';
-                } else if ( d.pjPerDto.pfStatus == 4 ){
+                } else if (d.pjPerDto.pfStatus == 4) {
                     d.pjPerDto.pfStatus = '취소됨';
-                } else if (d.pjPerDto.pfStatus == 5 ){
+                } else if (d.pjPerDto.pfStatus == 5) {
                     d.pjPerDto.pfStatus = '보류중'
                 }
 
@@ -147,9 +147,9 @@ const readAllPJworker = async () => {
 readAllPJworker(); // 초기화
 
 // [05] 프로젝트 근무리스트 개별 조회(모달)
-const readPJworker = async ( pfNo ) => {
+const readPJworker = async (pfNo) => {
 
-    // 마크다운
+    // 마크업
     const userName = document.querySelector('#userName');
     const pjRoleName = document.querySelector('#pjRoleName');
     const pjChklTitle = document.querySelector('#pjCheckList');
@@ -185,3 +185,67 @@ const readPJworker = async ( pfNo ) => {
 // [07] 파일 삭제
 
 // [08] 근무 정보 메모 수정
+const updatePJPerform = async () => {
+
+    // 마크업
+    const pfStatus = document.querySelector('.pjPerformStatus');
+    const note = document.querySelector('#memo');
+
+    // 유효성 검사 위한 값
+
+    // (1) 시간 관련
+    const prePfStart = document.querySelector('#pfStart');
+    const prePfEnd = document.querySelector('#pfEnd');
+    const pfStart = new Date(prePfStart.value);
+    const pfEnd = new Date(prePfEnd.value);
+    const now = new Date();
+
+    // (2) 수정 관련
+    const prevPfStatus = window.prevPfStatus;
+    const prevNote = window.prevNote;
+
+    // 유효성 검사
+    if (pfStatus == prevPfStatus && note == prevNote){
+        alert("수정된 근무 정보가 없습니다.")
+        return;
+    }
+    if (pfStatus == "1" && now >= pfStart ){
+        alert("이미 시작 시간이 지났습니다. '시작 전' 상태로 변경할 수 없습니다.");
+        return;
+    }
+    if (pfStatus == "1" && now >= pfEnd){
+        alert("이미 종료 시간이 지났습니다. '시작 전' 상태로 변경할 수 없습니다.");
+        return;
+    }
+
+    // 객체화
+    const obj = {
+        pfStatus,
+        note
+    }
+
+    // fetch
+    try {
+        const option = {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(obj)
+        }
+        const response = await fetch('/project/perform/check', option);
+        const data = await response.json();
+
+
+        if (data > 0) {
+            alert("근무 정보가 수정되었습니다.")
+            readPJworker(pfNo);
+        } 
+
+    } catch (error) {
+        console.log
+    }
+
+}
+
+// [09] PDF 다운로드
+
+

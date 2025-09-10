@@ -315,7 +315,7 @@ document.querySelector("#pjchecklistTbody").addEventListener("click", (e) => {
     const tr = e.target.closest("tr");
     const pjChkItemNo = parseInt(tr.dataset.pjchkitemno);
 
-    if (!confirm("프로젝트 대시보드에서 체크리스트를 확인할 수 없습니다. 삭제하시겠습니까?")) return;
+    if (!confirm("[경고] 프로젝트 대시보드에서 체크리스트를 확인할 수 없습니다. 삭제하시겠습니까?")) return;
 
     const item = TemporarySaveChecklist.find(d => d.pjChkItemNo === pjChkItemNo);
     if (item) {
@@ -333,8 +333,6 @@ document.querySelector("#pjchecklistTbody").addEventListener("click", (e) => {
         row.querySelector("td:first-child").textContent = index + 1;
     });
 });
-
-
 
 // [11] 저장 버튼
 async function savePJchecklist() {
