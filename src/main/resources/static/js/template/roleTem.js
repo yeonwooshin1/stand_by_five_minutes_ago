@@ -43,7 +43,7 @@ const createRT = async () => {
     const rtDescription = document.querySelector("#creatertDescription").value
 
     // [*] 유효성 검사
-    if (rtName.length == 0) {
+    if (rtName.trim().length == 0) {
         alert('역할 템플릿명을 입력해주세요.');
         return;
     }
@@ -162,7 +162,7 @@ const updateRT = async (rtNo) => {
     const rtDescription = document.querySelector("#rtDescriptionUpdate").value
 
     // [*] 유효성 검사
-    if (rtName.length == 0) {
+    if (rtName.trim().length == 0) {
         alert('역할 템플릿명을 입력해주세요.');
         return;
     }

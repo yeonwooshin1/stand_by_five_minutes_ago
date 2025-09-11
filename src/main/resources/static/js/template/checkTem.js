@@ -44,7 +44,7 @@ const createCT = async () => {
     const ctDescription = document.querySelector("#createctDescription").value
 
     // [*] 유효성 검사
-    if (ctName.length == 0) {
+    if (ctName.trim().length == 0) {
         alert('체크리스트 템플릿명을 입력해주세요.');
         return;
     }
@@ -161,7 +161,7 @@ const updateCT = async (ctNo) => {
     const ctDescription = document.querySelector("#ctDescriptionUpdate").value
 
     // [*] 유효성 검사
-    if (ctName.length == 0) {
+    if (ctName.trim().length == 0) {
         alert('체크리스트 템플릿명을 입력해주세요.');
         return;
     }

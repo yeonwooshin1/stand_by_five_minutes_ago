@@ -85,7 +85,7 @@ const createCTI = async () => {
     const ctiHelpText = $('#ctiHelpText').summernote('code');
 
     // [*] 유효성 검사
-    if (ctiTitle.length == 0) {
+    if (ctiTitle.trim().length == 0) {
         alert('상세 체크리스트 템플릿명을 입력해주세요.');
         return;
     }
@@ -213,7 +213,7 @@ const updateCTItem = async (ctiNo) => {
     const ctiHelpText = document.querySelector("#updateCtiHelpText").value
 
     // [*] 유효성 검사
-    if (ctiTitle.length == 0) {
+    if (ctiTitle.trim().length == 0) {
         alert('상세 체크리스트 템플릿명을 입력해주세요.');
         return;
     }
