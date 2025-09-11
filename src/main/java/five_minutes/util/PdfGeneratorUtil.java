@@ -2,6 +2,7 @@ package five_minutes.util;
 
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
+import com.lowagie.text.Image;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -147,13 +148,16 @@ public class PdfGeneratorUtil {
             document.open();
 
             // 이미지 생성
-//            Image logo = Image.getInstance("src/main/resources/static/img/logo.png");
-//            logo.scaleAbsolute(120 , 60);
-//            logo.setAlignment(Element.ALIGN_LEFT); // 왼쪽 정렬
+            Image logo = Image.getInstance("src/main/resources/static/img/logoNonText.png");
+            logo.scaleAbsolute(50 , 50);
+            logo.setAlignment(Element.ALIGN_RIGHT); // 오른쪽 정렬
 
-            document.add(new Paragraph("프로젝트 근무 리스트", titleFont));
+            // 타이틀
+            Paragraph title = new Paragraph("프로젝트 타임라인", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER); // 가운데 정렬
+            document.add(title);
             document.add(new Paragraph(" ")); // 공백 한 줄
-//            document.add(logo);
+            document.add(logo);
 
             // 시간 순으로 출력
             performances.sort(Comparator.comparing(dto -> LocalTime.parse(dto.getPjPerDto().getPfStart())));
