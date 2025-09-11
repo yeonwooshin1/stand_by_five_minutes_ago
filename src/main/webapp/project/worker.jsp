@@ -17,7 +17,8 @@
 
 
         <link rel='stylesheet' href='/CSS/index.css'>
-        <link rel='stylesheet' href='/css/project/worker.css'>
+        <link rel='stylesheet' href='/css/common.css'>
+    <link rel='stylesheet' href='/css/project/worker.css'>
 
         <!-- jquery 최신버전 -->
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>

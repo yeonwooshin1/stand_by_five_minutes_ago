@@ -1,3 +1,5 @@
+@import url('../common.css');
+
 .nav-link {
     background-color: #2f4673;
     color: white;
@@ -8,8 +10,14 @@
 }
 
 .nav-link.active {
-    background-color: #949ba6;
-    color: black;
+    background-color: #2F4673;
+    color: white;
+    font-weight: bold;
+}
+
+.nav-link:not(.active) {
+    background-color: #f8f9fa;
+    color: #6c757d;
 }
 
 #projectNav > a {

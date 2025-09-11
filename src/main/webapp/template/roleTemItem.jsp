@@ -16,8 +16,9 @@
         crossorigin="anonymous"></script>
 
     <!-- roleTem Css -->
-         <link rel='stylesheet' href='/CSS/index.css'>
-    <link rel='stylesheet' href='/CSS/template/roleTemItem.css'>
+    <link rel='stylesheet' href='/CSS/index.css'>
+    <link rel='stylesheet' href='/css/common.css'>
+    <link rel='stylesheet' href='/css/template/roleTemItem.css'>
 
     <!-- jquery 최신버전 -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -104,7 +105,8 @@
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿명</label>
-                            <div class="form-control rtDescription01" type="text" style="background-color: #e9ecef;"></div>
+                            <div class="form-control rtDescription01" type="text" style="background-color: #e9ecef;">
+                            </div>
                         </div>
 
                         <div>
@@ -145,7 +147,8 @@
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿 설명</label>
-                            <div class="form-control rtDescription02" type="text" style="background-color: #e9ecef;"></div>
+                            <div class="form-control rtDescription02" type="text" style="background-color: #e9ecef;">
+                            </div>
                         </div>
 
                         <div>
@@ -184,7 +187,8 @@
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 역할 템플릿 설명</label>
-                            <div class="form-control rtDescription03" type="text" aria-disabled="true" style="background-color: #e9ecef;"></div>
+                            <div class="form-control rtDescription03" type="text" aria-disabled="true"
+                                style="background-color: #e9ecef;"></div>
                         </div>
 
                         <div class="">
@@ -193,7 +197,8 @@
                         </div>
                         <div class="rtiContent">
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">역할 템플릿 설명</label>
-                            <textarea class="updateRtiDescription" id="updateRtiDescription" name="editordata"></textarea>
+                            <textarea class="updateRtiDescription" id="updateRtiDescription"
+                                name="editordata"></textarea>
                         </div>
                     </div>
                 </div>

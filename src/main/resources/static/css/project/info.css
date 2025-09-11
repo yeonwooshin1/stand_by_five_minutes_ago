@@ -1,9 +1,4 @@
-
-/*카드 헤더*/
-.card-header{
-    font-size: 1rem;
-    font-weight: 600;
-}
+@import url('../common.css');
 
 .mapArea{
     min-height: 16.12rem;

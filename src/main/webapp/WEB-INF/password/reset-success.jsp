@@ -25,7 +25,7 @@
     <jsp:include page="/header.jsp"></jsp:include>
 
     <!-- 본문 영역 -->
-    <main class="container my-5" style="max-width: 520px;">
+    <main class="indexContainer my-5" style="max-width: 520px;">
         <!-- 안내 -->
         <div class="alert alert-success border-0 small mb-3" role="alert">
             <strong>비밀번호 변경 성공</strong> · 새 비밀번호로 로그인할 수 있습니다.

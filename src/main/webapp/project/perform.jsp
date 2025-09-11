@@ -23,7 +23,11 @@
             #pfTable {
                 table-layout: fixed;
                 width: 100%;
+                font-size: 0.9rem;
+                /* 전체 폰트 크기 축소 */
             }
+
+            /* 비고 */
 
             /* 모든 셀 중앙정렬 */
             #pfTable th,
@@ -39,6 +43,8 @@
             #pfTable .form-control,
             #pfTable .form-select {
                 text-align: center;
+                font-size: 0.9rem;
+                /* 내부 폰트 크기 미세 조정 */
             }
 
             /* 체크리스트 셀 (select+버튼 한 줄 유지) */
@@ -46,66 +52,67 @@
                 flex-wrap: nowrap;
             }
 
-            #pfTable td:nth-child(3) .pf-chk {
-                width: auto;
-                min-width: 240px;
+            /* No */
+            #pfTable th:nth-child(1) {
+                width: 3%;
             }
 
-            /* 필요 시 260~300px 조절 */
-
-            /* 열 폭 조정 */
-            #pfTable thead th:nth-child(3),
-            #pfTable tbody td:nth-child(3) {
-                width: 380px;
+            /* 역할 */
+            #pfTable th:nth-child(2) {
+                width: 5%;
             }
 
-            /* 체크리스트 넓게 */
-
-            #pfTable thead th:nth-child(4),
-            #pfTable tbody td:nth-child(4) {
-                width: 180px;
+            /* 체크리스트 */
+            #pfTable th:nth-child(2) {
+                width: 5%;
             }
 
-            /* 시작시간 */
-
-            #pfTable thead th:nth-child(5),
-            #pfTable tbody td:nth-child(5) {
-                width: 180px;
+            /* 체크리스트 */
+            #pfTable th:nth-child(3) {
+                width: 7%;
             }
 
-            /* 종료시간 */
-
-            #pfTable thead th:nth-child(6),
-            #pfTable tbody td:nth-child(6) {
-                width: 110px;
+            /* 시작/종료 */
+            #pfTable th:nth-child(4),
+            #pfTable th:nth-child(5) {
+                width: 7%;
             }
 
-            /* 알림발송 조건 좁게 */
-
-            #pfTable thead th:nth-child(7),
-            #pfTable tbody td:nth-child(7) {
-                width: 120px;
+            /* 알림조건 */
+            #pfTable th:nth-child(6) {
+                width: 3%;
             }
 
-            /* 알림발송 시간 좁게 */
-
-            #pfTable thead th:nth-child(8),
-            #pfTable tbody td:nth-child(8) {
-                width: 90px;
+            /* 시간(분) */
+            #pfTable th:nth-child(7) {
+                width: 3%;
             }
 
-            /* 진행상태 아주 좁게 */
+            /* 진행상태 */
+            #pfTable th:nth-child(8) {
+                width: 3%;
+            }
+
+            /* 비고 */
+            #pfTable th:nth-child(9) {
+                width: 3%;
+            }
 
             /* input/select 폭 꽉 채우기 */
             .pf-start,
             .pf-end,
             .pf-notify-mins {
-                width: 100%;
+                width: 10px;
             }
 
-            /* 반응형 최소 폭 */
             .table-responsive {
-                min-width: 1200px;
+                overflow-x: auto;
+                /* 테이블만 가로 스크롤 가능 */
+            }
+
+            td .d-flex>.form-control {
+                flex: 0 0 80px;
+                /* 최소/최대/기본값 */
             }
         </style>
 
@@ -138,13 +145,13 @@
                         <thead>
                             <tr>
                                 <th style="width:40px;" class="text-center">No</th>
-                                <th style="min-width:200px;">역할</th>
+                                <th style="width:200px;">역할</th>
                                 <th style="width:320px;">체크리스트</th>
                                 <th style="width:230px;">시작시간</th>
                                 <th style="width:230px;">종료시간</th>
                                 <th style="width:130px;">알림조건</th>
                                 <th style="width:100px;">시간(분)</th>
-                                <th style="min-width:60px;">진행상태</th>
+                                <th style="width:60px;">진행상태</th>
                                 <th style="width:60px;"> 비고</th>
                             </tr>
                         </thead>
@@ -175,7 +182,6 @@
                 </div>
             </div>
         </div>
-        <!-- ================================================================ -->
 
         <jsp:include page="/footer.jsp"></jsp:include>
 
@@ -185,6 +191,7 @@
 
         <!-- ★ 본 JS 연결 -->
         <script src="/JS/project/perform.js"></script>
+
     </body>
 
     </html>

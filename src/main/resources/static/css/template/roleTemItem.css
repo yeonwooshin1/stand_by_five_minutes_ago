@@ -1,71 +1,21 @@
-/* 글꼴 noto sans import */
-.noto-sans-kr {
-    font-family: "Noto Sans KR", sans-serif;
-    font-optical-sizing: auto;
-    font-style: normal;
-}
+@import url('../common.css');
 
-* {
-    box-sizing: border-box;
-    margin: 0px;
-    padding: 0px;
-    /* 전체 글꼴 Noto Sans로 지정  */
-    font-family: "Noto Sans KR", sans-serif;
-}
-
-li {
-    list-style-type: none;
-}
-
-a {
-    text-decoration: none;
-    color: black;
-}
-
-.indexContainer {
-    margin: 0.5rem auto;
-    max-width: 1280px;
-}
-
-.mainContent {
-    padding: 0.5rem;
-}
-
-/* Content 구역 얇은 회색 선 */
-.ContentBox {
-    border: 0.12rem solid #efefef;
-    border-radius: 1.25rem;
-    padding: 1rem;
-}
-
-/* 상단 제목 */
-.titleBox {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 0.7rem;
-    margin-left: 0.75rem;
-}
-
-/* 상단 제목과 버튼을 양쪽 끝으로 배치 */
 .contentHeader {
     display: flex;
     justify-content: space-between;
 }
 
-/* 테이블 내 요소 중앙정렬 */
 .RTIThead th,
 .RTITbody td {
     text-align: center;
     vertical-align: middle;
 }
 
-/* 모달 내 소제목 */
 .modalMiddleTitle {
     font-size: 1.12rem;
     font-weight: 600;
 }
 
-/* 상단 제목 몇 템플릿 대분류 명칭 */
 .title1 span {
     font-size: 1.3rem;
     font-weight: bold;

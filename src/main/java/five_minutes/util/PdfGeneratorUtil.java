@@ -120,7 +120,7 @@ public class PdfGeneratorUtil {
             cell.setBorderColor(SUB_COLOR_2);
 
             // 헤더 텍스트를 흰색으로
-            Paragraph headerText = new Paragraph(header, new Font(headFont.getBaseFont(), 13, Font.BOLD, Color.WHITE));
+            Paragraph headerText = new Paragraph(header, new Font(headFont.getBaseFont(), 11, Font.BOLD, Color.WHITE));
             cell = new PdfPCell(headerText);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setVerticalAlignment(Element.ALIGN_MIDDLE);

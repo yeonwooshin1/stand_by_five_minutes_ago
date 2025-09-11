@@ -12,7 +12,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
-    <link rel='stylesheet' href='/CSS/project/list.css'>
+    <link rel='stylesheet' href='/css/common.css'>
+    <link rel='stylesheet' href='/css/index.css'>
+    <link rel='stylesheet' href='/css/project/list.css'>
 
     <!-- 글꼴 Noto Sans -->
     <style>
@@ -30,7 +32,8 @@
     <div class="indexContainer">
         <div class="titleArea">
             <div class="title1">프로젝트 목록</div>
-            <button type="button" class="btn btn-primary createBtn" onclick="location.href='/project/create.jsp'">생성</button>
+            <button type="button" class="btn btn-primary createBtn"
+                onclick="location.href='/project/create.jsp'">생성</button>
         </div>
         <div class="ContentBox">
             <table class="table table-striped table-hover pjList">

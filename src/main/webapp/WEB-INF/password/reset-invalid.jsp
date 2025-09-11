@@ -25,7 +25,7 @@
     <jsp:include page="/header.jsp"></jsp:include>
 
     <!-- 본문 영역 -->
-    <main class="container my-5" style="max-width: 520px;">
+    <main class="indexContainer my-5" style="max-width: 520px;">
         <!-- 안내 -->
         <div class="alert alert-danger border-0 small mb-3" role="alert">
             <strong>비밀번호 재설정 오류</strong> · 링크가 유효하지 않거나 만료되었습니다.

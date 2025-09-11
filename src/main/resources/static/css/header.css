@@ -1,14 +1,10 @@
-* {
-    margin: 0px 0px;
-    padding: 0px 0px;
-    text-decoration: none;
-}
+@import url('common.css');
 
 .headerContainer {
     background-color: #ffffff;
     border-bottom: 4px solid #eeeeee;
     display: flex;
-    justify-content: center
+    justify-content: center;
 }
 
 .header-inner {
