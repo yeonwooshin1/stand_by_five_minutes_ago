@@ -9,7 +9,8 @@ let userNameHeader;
 
 // [1] 메인 메뉴 
 
-const mainMenu = async () => {
+const mainMenu = () => {
+    return new Promise(async (resolve, reject) => {
     // 1. 로그인 여부 판단
     try {
         // 1. fetch 실행
@@ -54,10 +55,11 @@ const mainMenu = async () => {
         document.getElementById("logoImgBox").href = "/project/list.jsp"
     }
     mainMenu.innerHTML = html;
-}
+    resolve();
+    });
+};
 
 const subMenu = async () => {
-
 
     const subMenu = document.querySelector(".sub-menu")
     let html = ''
@@ -184,6 +186,8 @@ function bindChatIconClick() {
     const chatIcon = document.querySelector('.chatIcon');
     if (chatIcon) {
         chatIcon.addEventListener('click', function () {
+            console.log("bindChatIconClick");
+            console.log(userNo);
             openPopupWithPost(userNo, managerNameHeader, userNameHeader);
         });
     }
