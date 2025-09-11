@@ -197,7 +197,7 @@ public class PasswordResetService { // class start
             // String 으로 저장된 userNo를 parseInt 해서 int로 변환후 저장.
             int userNo = Integer.parseInt(c.getSubject());
 
-            // (4) jti (고유 id <= UUID) 를 즉시 소모 => 인메모리에서 삭제(재사용 차단)
+            // jti (고유 id <= UUID) 를 즉시 소모 => 인메모리에서 삭제(재사용 차단)
             // invalidate() => 인메모리에 있는 key의 값을 삭제한다.
             issuedTokens.invalidate(c.getId());
 
