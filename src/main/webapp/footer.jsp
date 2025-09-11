@@ -18,7 +18,7 @@
     </div>
 
     <!-- 푸터 -->
-    <footer class="footerBackgroud">
+    <footer class="footerBackground">
       <div class="footer-area">
         <ul class="footerNotice">
           <li><a href="#">서비스 이용약관</a></li><span>|</span>

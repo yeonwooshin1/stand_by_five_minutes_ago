@@ -7,7 +7,7 @@
 }
 
 /* 푸터 */
-.footerBackgroud, .footerBackground {
+.footerBackground {
   background-color: #2F4673;
   width: 100%;
   display: flex;
@@ -45,3 +45,13 @@
   font-weight: 700;
   text-align: center;
 }
+
+m;
+}
+.copyRight {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+}
+

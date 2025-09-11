@@ -46,23 +46,49 @@
             }
 
             /* No */
-            #pfTable th:nth-child(1) { width: 4%; }
+            #pfTable th:nth-child(1) {
+                width: 4%;
+            }
+
             /* 역할 */
-            #pfTable th:nth-child(2) { width: 15%; }
+            #pfTable th:nth-child(2) {
+                width: 15%;
+            }
+
             /* 체크리스트 */
-            #pfTable th:nth-child(3) { width: 25%; }
+            #pfTable th:nth-child(3) {
+                width: 25%;
+            }
+
             /* 시작시간 */
-            #pfTable th:nth-child(4) { width: 14%; }
+            #pfTable th:nth-child(4) {
+                width: 14%;
+            }
+
             /* 종료시간 */
-            #pfTable th:nth-child(5) { width: 14%; }
+            #pfTable th:nth-child(5) {
+                width: 14%;
+            }
+
             /* 알림조건 */
-            #pfTable th:nth-child(6) { width: 10%; }
+            #pfTable th:nth-child(6) {
+                width: 10%;
+            }
+
             /* 시간(분) */
-            #pfTable th:nth-child(7) { width: 7%; }
+            #pfTable th:nth-child(7) {
+                width: 7%;
+            }
+
             /* 진행상태 */
-            #pfTable th:nth-child(8) { width: 5%; }
+            #pfTable th:nth-child(8) {
+                width: 5%;
+            }
+
             /* 비고 */
-            #pfTable th:nth-child(9) { width: 6%; }
+            #pfTable th:nth-child(9) {
+                width: 6%;
+            }
 
             /* input/select 폭 꽉 채우기 */
             .pf-start,
@@ -98,7 +124,7 @@
                 </div>
             </div>
 
-            <div class="ContentBox">
+            <div class="ContentBox border rounded">
 
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <div class="d-flex gap-2">
@@ -106,24 +132,24 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table id="pfTable" class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th style="width:40px;" class="text-center">No</th>
-                                <th style="width:200px;">역할</th>
-                                <th style="width:320px;">체크리스트</th>
-                                <th style="width:230px;">시작시간</th>
-                                <th style="width:230px;">종료시간</th>
-                                <th style="width:130px;">알림조건</th>
-                                <th style="width:100px;">시간(분)</th>
-                                <th style="width:60px;">진행상태</th>
-                                <th style="width:60px;"> 비고</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pfBody"><!-- rows go here --></tbody>
-                    </table>
-                </div>
+
+                <table id="pfTable" class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th>역할</th>
+                            <th>체크리스트</th>
+                            <th>시작시간</th>
+                            <th>종료시간</th>
+                            <th>알림조건</th>
+                            <th>시간(분)</th>
+                            <th> 상태</th>
+                            <th> 비고</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pfBody"><!-- rows go here --></tbody>
+                </table>
+
 
                 <div id="pfError" class="text-danger small"></div>
 
@@ -152,15 +178,6 @@
         <jsp:include page="/footer.jsp"></jsp:include>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-            crossorigin="anonymous"></script>
-
-        <!-- ★ 본 JS 연결 -->
-        <script src="/JS/project/perform.js"></script>
-
-    </body>
-
-    </html>ap.bundle.min.js"
             integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
             crossorigin="anonymous"></script>
 

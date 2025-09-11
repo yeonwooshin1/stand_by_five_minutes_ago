@@ -52,7 +52,7 @@
                     <button type="button" class="btn btn-primary" onclick="nextStage()">다음</button>
                 </div>
             </div>
-            <div class="ContentBox">
+            <div class="ContentBox border rounded">
                 <div class="rowBox mb-2">
                     <button id="templateSearchBtn" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#checkTemplateModal" onclick="checkTemplateModalShow()">체크리스트 검색</button>
