@@ -205,19 +205,23 @@ public class DashboardController {
     // [10] 프로젝트 대시보드 - 체크리스트 PDF 다운로드
     // 전체 근무리스트
     @GetMapping("/pdf/all")
-    public void downloadAllPerformancesPdf(@RequestParam int pjNo, HttpSession session, HttpServletResponse response) throws IOException {
+    public void downloadAllPerformancesPdf(@RequestParam int pjNo, HttpSession session,
+                                           HttpServletResponse response) throws IOException {
         Integer userNo = (Integer) session.getAttribute("loginUserNo");
         String bnNo = (String) session.getAttribute("loginBnNo");
-        if (userNo == null && bnNo == null) { response.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
-
+        if (userNo == null && bnNo == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
         List<DashboardDto> list = dashboardService.getListPJDash(pjNo, userNo, bnNo);
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment; filename=\"performances_" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".pdf\"");
-
+        response.setHeader("Content-Disposition", "attachment; filename=\"performances_"
+                + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".pdf\"");
         try {
             pdfGeneratorUtil.generateAllPerPdf(list, response.getOutputStream());
         } catch (DocumentException e) { throw new IOException(e.getMessage()); }
     }
+
     // 개인 체크리스트
 //    @GetMapping("/pdf/single")
 //    public void downloadSinglePerformancePdf(@RequestParam int pjNo, @RequestParam int pfNo, HttpSession session, HttpServletResponse response) throws IOException {

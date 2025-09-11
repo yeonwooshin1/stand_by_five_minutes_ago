@@ -14,7 +14,9 @@ import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -40,7 +42,8 @@ public class PdfGeneratorUtil {
     public PdfGeneratorUtil() {
         try {
             // [*] 폰트 스타일 지정. noto sans kr가 한글 영문을 모두 지원하므로, 하나로 통일합니다.
-            BaseFont baseFont = BaseFont.createFont("/font/NotoSansKR-VariableFont_wght.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            BaseFont baseFont = BaseFont.createFont("/font/NotoSansKR-VariableFont_wght.ttf",
+                    BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             this.titleFont = new Font(baseFont , 18, Font.BOLD);
             this.headFont = new Font(baseFont, 12, Font.BOLD);
             this.bodyFont = new Font(baseFont , 11);
@@ -137,52 +140,54 @@ public class PdfGeneratorUtil {
 //    }
 //
     // [2] 전체 근무 리스트 PDF 생성
-    public void generateAllPerPdf(List<DashboardDto> performances , OutputStream outputStream) throws DocumentException {
+    public void generateAllPerPdf(List<DashboardDto> performances , OutputStream outputStream)
+            throws DocumentException {
         try {
             // PDF 문서 속성
-            
             Document document = new Document(PageSize.A4);
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
             document.open();
-
             // 이미지 생성
             Image logo = Image.getInstance("src/main/resources/static/img/logoNonText.png");
             logo.scaleAbsolute(50 , 50);
             logo.setAlignment(Element.ALIGN_RIGHT); // 오른쪽 정렬
-
             // 타이틀
             Paragraph title = new Paragraph("프로젝트 타임라인", titleFont);
             title.setAlignment(Element.ALIGN_CENTER); // 가운데 정렬
             document.add(title);
             document.add(new Paragraph(" ")); // 공백 한 줄
             document.add(logo);
-
             // 시간 순으로 출력
-            performances.sort(Comparator.comparing(dto -> LocalTime.parse(dto.getPjPerDto().getPfStart())));
+            // 연월일 추가되었음
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            performances.sort(Comparator.comparing(dto ->
+                    LocalTime.parse(dto.getPjPerDto().getPfStart() , formatter)));
             PdfPTable table = new PdfPTable(7);
             table.setWidthPercentage(100);
             table.setWidths(new float[]{1, 2, 2, 5, 3, 3, 2}); // td가 차지하는 길이
             table.setSpacingBefore(10f); // 장평
-
             // 테이블 헤더
             addTableHeader(table, "No", "근무자", "역할명", "체크리스트명", "시작시간", "종료시간", "체크");
-
             // 테이블 바디
             int index = 1;
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
             for (DashboardDto dto : performances) {
                 table.addCell(createBodyCell(String.valueOf(index++)));
                 table.addCell(createBodyCell(dto.getUsersDto().getUserName()));
                 table.addCell(createBodyCell(dto.getPjWorkerDto().getPjRoleName()));
                 table.addCell(createBodyCell(dto.getPjCheckDto().getPjChklTitle()));
-                table.addCell(createBodyCell(dto.getPjPerDto().getPfStart()));
-                table.addCell(createBodyCell(dto.getPjPerDto().getPfEnd()));
+                String startTime = dto.getPjPerDto().getPfStart() != null ?
+                        timeFormat.format(dto.getPjPerDto().getPfStart()) : "";
+                String endTime = dto.getPjPerDto().getPfEnd() != null ?
+                        timeFormat.format(dto.getPjPerDto().getPfEnd()) : "";
 
+                table.addCell(createBodyCell(startTime));
+                table.addCell(createBodyCell(endTime));
                 // 체크박스 생성
                 PdfPCell checkBoxCell = new PdfPCell();
                 checkBoxCell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 checkBoxCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 checkBoxCell.setFixedHeight(20);
-
                 // 체크박스 폼필드 추가
                 RadioCheckField checkBox = new RadioCheckField(
                         writer,
@@ -194,10 +199,8 @@ public class PdfGeneratorUtil {
                 checkBox.setBorderWidth(BaseField.BORDER_WIDTH_THIN);
                 checkBox.setBorderColor(Color.BLACK);
                 checkBox.setBackgroundColor(Color.WHITE);
-
                 PdfFormField field = checkBox.getCheckField();
                 writer.addAnnotation(field);
-
                 // 셀에 그냥 " " 넣어야 레이아웃이 유지됨
                 checkBoxCell.addElement(new Phrase(" "));
                 table.addCell(checkBoxCell);
