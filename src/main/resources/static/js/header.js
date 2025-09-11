@@ -137,22 +137,27 @@ initHeader().then(() => {
 // 다만 URL에 userNo가 노출될 경우, 다른 user에 채팅에 접근이 가능함.
 // 이를 방지하기 위해 임시form을 만들어 userNo를 팝업창에 전송
 function openPopupWithPost(userNo, managerNameHeader, userNameHeader) {
-    // 1. 폼 생성
+    
+    // 1. 팝업창 열기 및 변수에 저장
+    const popup = window.open("", "popupWindow", "width=800,height=800,left=100,top=100");
+
+    
+    // 2. 폼 생성
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "/chat/chat.jsp";
     form.target = "popupWindow";
 
-    // 2. 숨겨진 input 생성
-    const input1 = document.createElement("input1");
+    // 3. 숨겨진 input 생성
+    const input1 = document.createElement("input");
     input1.type = "hidden";
     input1.name = "userNo";
     input1.value = userNo;
-        const input2 = document.createElement("input2");
+    const input2 = document.createElement("input");
     input2.type = "hidden";
     input2.name = "managerNameHeader";
     input2.value = managerNameHeader;
-        const input3 = document.createElement("input3");
+    const input3 = document.createElement("input");
     input3.type = "hidden";
     input3.name = "userNameHeader";
     input3.value = userNameHeader;
@@ -160,24 +165,26 @@ function openPopupWithPost(userNo, managerNameHeader, userNameHeader) {
     form.appendChild(input2);
     form.appendChild(input3);
 
-    // 3. 폼을 body에 추가
+    // 4. 폼을 body에 추가
     document.body.appendChild(form);
 
-    // 4. 팝업창 열기
-    window.open("", "popupWindow", "width=800,height=800,left=100,top=100");
-
-    // 5. 폼 제출
-    form.submit();
+    // 5. 팝업에 포커스 후 폼 제출
+    if (popup) {
+        popup.focus();
+        form.submit();
+    } else {
+        alert("팝업이 차단되었거나 열리지 않았습니다.");
+    }
 
     // 6. 폼 제거
     document.body.removeChild(form);
 }
 
 function bindChatIconClick() {
-  const chatIcon = document.querySelector('.chatIcon');
-  if (chatIcon) {
-    chatIcon.addEventListener('click', function () {
-      openPopupWithPost(userNo, managerNameHeader, userNameHeader);
-    });
-  }
+    const chatIcon = document.querySelector('.chatIcon');
+    if (chatIcon) {
+        chatIcon.addEventListener('click', function () {
+            openPopupWithPost(userNo, managerNameHeader, userNameHeader);
+        });
+    }
 }

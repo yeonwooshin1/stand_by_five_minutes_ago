@@ -3,7 +3,7 @@
 02. 과거 메시지 렌더링 함수
 03. 웹 소켓 연결
 04. 채팅방 목록 불러오기 함수
-05. 채팅방 이름 표시 함수
+05. 채팅방 목록 버튼생성-class 부여
 06. 채팅방 열기 함수 (선택된 채팅방의 메시지 불러오기 등)
 07. 페이지 로드 시 실행 (jsp 실행 = 이벤트)
 08. 날짜 포맷 변경 함수
@@ -12,6 +12,10 @@
 */
 
 console.log("chat js exe")
+console.log(userNo)
+console.log(managerNameHeader)
+console.log(userNameHeader)
+
 
 // ※ 주의 userNo / managerNameHeader / userNameHeader는 이미 전역변수로 선언되어 있음
 
@@ -22,11 +26,11 @@ let socket = null;
 const renderMessage = (data) => {
     const chatMessages = document.querySelector("#chatMessages");
     console.log("renderMessage func exe")
-    console.log(data.sendUserNo)
-    console.log(userNo)
-    const isMine = data.sendUserNo == userNo ? true : false; // 현재 로그인 유저와 비교 true/false
-    console.log(isMine)
-    console.log(data.sentDate)
+    // console.log(data.sendUserNo)
+    // console.log(userNo)
+    const isMine = data.sendUserNo == userNo; // 현재 로그인 유저와 비교 true/false
+    // console.log(isMine)
+    // console.log(data.sentDate)
 
     // 렌더링을 위한 구역 생성
     if (isMine) { // 내가 보낸 메세지
@@ -43,10 +47,10 @@ const renderMessage = (data) => {
         row.className = "row"
         chatMessages.appendChild(row);
         row.innerHTML = `<div class="mb-3 col-6">
-                                <div class="bg-light p-2 rounded d-inline-block">
-                                ${data.message}</div>
-                                <small class="text-muted d-block">${formatDate(data.sentDate)}</small>
-                            </div>`
+                            <div class ="fw-semibold mb-1">${data.userName}</div>
+                            <div class="bg-light p-2 rounded d-inline-block">${data.message}</div>
+                            <small class="text-muted d-block">${formatDate(data.sentDate)}</small>
+                        </div>`
     }
     chatMessages.scrollTop = chatMessages.scrollHeight;
 } // func end
@@ -77,8 +81,8 @@ const renderPreMessage = async (messages) => {
             // 받은 메시지
             messageRow.innerHTML = `
                 <div class="mb-3 col-6">
-                    <div class="bg-light p-2 rounded d-inline-block">                                
-                    ${msg.message}</div>
+                    <div class ="fw-semibold mb-1">${msg.userName}</div>
+                    <div class="bg-light p-2 rounded d-inline-block">${msg.message}</div>
                     <small class="text-muted d-block">${formatDate(msg.sentDate)}</small>
                 </div>
             `;
@@ -143,7 +147,7 @@ const loadChatRooms = async (userNo) => {
     }
 } // func end
 
-// [05] 채팅방 이름 표시 함수
+// [05] 채팅방 목록 버튼생성-class 부여
 const renderChatList = (chatRooms) => {
     const chatRoomList = document.querySelector(".chatRoomList");
     chatRoomList.innerHTML = ""; // 기존 목록 초기화
@@ -236,7 +240,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const input = document.querySelector(".chat-input input");
     const sendBtn = document.querySelector(".chat-input button");
-    const chatMessages = document.getElementById("chatMessages");
 
     // [09] 메시지 전송 
     function sendMessage() {
@@ -248,9 +251,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const payload = {
             messageNo: 0, // 임의 메세지 no
             roomNo: currentRoomNo,
+            userName : userNameHeader,
             sendUserNo: parseInt(userNo),
             message: message,
-            userName : userNameHeader,
             sentDate: new Date().toISOString()
         };
         console.log(payload)
@@ -271,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // =========================================================
 
-// [10] 일반 회원 목록 조회
+// [10] 일반 회원 목록 조회 - 대화 선택 선택
 const fetchUserList = async () => {
     try {
         // 사업자 제외 일반 회원 조회
@@ -291,7 +294,7 @@ const fetchUserList = async () => {
     }
 }
 
-
+// [11] 채팅방 생성
 const createChatRoom = async () => {
     const activeButtons = document.querySelectorAll("#userListContainer button.active");
     const selectedUserNos = Array.from(activeButtons).map(btn => parseInt(btn.dataset.userno));
@@ -340,7 +343,7 @@ const createChatRoom = async () => {
             }
         } catch (error) {
             alert("채팅방 생성 중 오류 발생");
-            console.error(err);
+            console.log(error);
         }
     }
 

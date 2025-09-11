@@ -152,7 +152,7 @@ const getIndiRT = async (rtNo) => {
 // [RT-04] 역할템플릿 수정	updateRT()
 const updateRT = async (rtNo) => {
     // [4.1] 수정할 정보 가져오기
-    const rtName = document.querySelector("#rtNampeUpdate").value
+    const rtName = document.querySelector("#rtNameUpdate").value
     const rtDescription = document.querySelector("#rtDescriptionUpdate").value
 
     // [4.2] fetch

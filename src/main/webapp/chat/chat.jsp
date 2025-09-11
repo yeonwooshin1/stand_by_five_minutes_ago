@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html ; charset=utf-8" pageEncoding="UTF-8" %>
-    <% String userNo=request.getParameter("userNo"); %>
+    <% String userNo=request.getParameter("userNo"); String managerNameHeader=request.getParameter("managerNameHeader");
+        String userNameHeader=request.getParameter("userNameHeader"); %>
+
 
         <!DOCTYPE html>
         <html>
@@ -18,7 +20,8 @@
             <script>
                 // JSP에서 받은 userNo를 JS 변수로 전달
                 const userNo = "<%= userNo %>";
-                console.log("userNo from JSP:", userNo);
+                const managerNameHeader = "<%= managerNameHeader %>";
+                const userNameHeader = "<%= userNameHeader %>";
             </script>
             <link rel='stylesheet' href='/css/chat/chat.css' />
 
@@ -36,25 +39,28 @@
 
                         <div class="btn-group-vertical chatRoomList" role="group" aria-label="Vertical button group"
                             style="width: 100%;">
-                            <button class="btn btn-outline-secondary" type="button">홍길동</button>
-                            <button class="btn btn-outline-secondary" type="button">가나다</button>
+                            <button class="btn btn-outline-secondary" type="button"></button>
                         </div>
                     </div>
 
                     <!-- 우측: 채팅방 -->
-                    <div class="chat-room col-9 border rounded">
-                        <div class="chat-header mx-auto p-2 text-center" id="chatTilte" style="width: 20rem;"><span
-                                class="fs-3"></span></div>
-                        <div class="chat-messages" id="chatMessages">
+                    <div class="chat-room col-9">
+                        <div class="chat-header mx-auto p-2 text-center fs-3" id="chatTilte" style="width: 20rem;">
+                        </div>
+                        <div class="chat-messages rounded-top" id="chatMessages" style="background-color: #eeeeee;">
+                            <div style="height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <div class="text-center">※ 좌측 채팅방을 클릭하면 대화 내역을 확인할 수 있습니다.</div>
+                            </div>
                             <!-- 받은 메세지 -->
-                            <div class="row">
+                            <div class="row" style="display: none;">
                                 <div class="mb-3 col-6">
+                                    <div class="fw-semibold"></div>
                                     <div class="bg-light p-2 rounded d-inline-block"></div>
                                     <small class="text-muted d-block"></small>
                                 </div>
                             </div>
                             <!-- 보낸 메세지 -->
-                            <div class="row">
+                            <div class="row" style="display: none;">
                                 <div class="col-6"></div>
                                 <div class="mb-3 text-end col-6">
                                     <div class="bg-primary text-white p-2 rounded d-inline-block"></div>

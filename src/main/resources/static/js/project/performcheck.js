@@ -2,6 +2,7 @@ console.log('info js exe')
 
 window.onHeaderReady = () => {
     loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+    userDisplay();
 };
 
 // [0] 로그인 체크
@@ -10,7 +11,22 @@ const loginCheck = async () => {
     if (userNo == null || userNo === 0) {
         alert("[경고] 로그인 후 이용가능합니다.")
         location.href = "/index.jsp"
-    } 
+    }
+}
+
+// [0] 일반회원일 경우, 네비게이션바 비활성화
+const userDisplay = async () => {
+    const naviBar = document.querySelector('#projectNav');
+    const excelBtn = document.querySelector('#excelBtn')
+    if ((!userNo&&!businessNo) ||(userNo && !businessNo)) {
+        // 조건 만족 시 숨김 처리
+        naviBar.style.display = 'none';
+        excelBtn.style.display = 'none';
+    } else {
+        // 조건 불만족 시 다시 보이게
+        naviBar.style.display = '';
+        excelBtn.style.display = '';
+    }
 }
 
 // [1] 카카오 우편번호 검색 / 도로명 주소 검색 
@@ -83,7 +99,7 @@ const readAllPJworker = async () => {
 
     console.log("readAllPJworker() 1 ")
 
-    // 마크업
+    // 마크 다운
     const pjWorkerTbody = document.querySelector('#pjWorkerTbody');
     let html = ``;
 
@@ -311,9 +327,9 @@ const updatePJPerform = async () => {
 
 // [09] PDF 다운로드
 const downloadChecklistPdf = () => {
-    if(!pjNo) { 
-        alert("프로젝트 정보가 없습니다."); 
-        return; 
+    if(!pjNo) {
+        alert("프로젝트 정보가 없습니다.");
+        return;
     }
     window.location.href = `/project/perform/check/pdf/all?pjNo=${pjNo}`;
 }

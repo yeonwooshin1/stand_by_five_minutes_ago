@@ -3,6 +3,7 @@ console.log("list js exe")
 
 window.onHeaderReady = async () => {
     await loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
+    await createBtnDisplay()
     await readAllPj();
 };
 
@@ -14,6 +15,18 @@ const loginCheck = async () => {
     if (userNo == null || userNo === 0) {
         alert("[경고] 로그인 후 이용가능합니다.")
         location.href = "/index.jsp"
+    }
+}
+
+// [0] 일반회원일 경우, 생성버튼 비활성화
+const createBtnDisplay = async () => {
+    const createBtn = document.querySelector('.createBtn');
+    if (userNo && !businessNo) {
+        // 조건 만족 시 숨김 처리
+        createBtn.style.display = 'none';
+    } else {
+        // 조건 불만족 시 다시 보이게
+        createBtn.style.display = '';
     }
 }
 
@@ -75,7 +88,7 @@ const readAllPj = async () => {
                 d.forEach(pjDto => {
                     html += `<tr>
                         <td>${i}</td>
-                        <td><a href="/project/performCheck.jsp?pjNo=${pjDto.pjNo}">${pjDto.pjName}</td>
+                        <td><a href="/project/performcheck.jsp?pjNo=${pjDto.pjNo}">${pjDto.pjName}</td>
                         <td>${pjDto.clientName}</td>
                         <td>${pjDto.clientRepresent}</td>
                         <td>${pjDto.clientPhone}</td>

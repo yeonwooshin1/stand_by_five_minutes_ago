@@ -36,12 +36,18 @@ public class ChatMessageDao extends Dao {
     public List<ChatMessageDto> selectMessagesByRoomNo(int roomNo) {
         List<ChatMessageDto> list = new ArrayList<>();
         try {
-            String sql = "SELECT * FROM ChatMessage WHERE roomNo = ?";
+            String sql = "SELECT cm.* , u.userName FROM ChatMessage cm inner join users u on cm.senduserNo = u.userNo WHERE roomNo = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, roomNo);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                ChatMessageDto dto = ChatMessageDto.builder().messageNo(rs.getInt("messageNo")).roomNo(rs.getInt("roomNo")).sendUserNo(rs.getInt("sendUserNo")).message(rs.getString("message")).sentDate(rs.getString("sentDate")).build();
+                ChatMessageDto dto = ChatMessageDto.builder()
+                        .messageNo(rs.getInt("messageNo"))
+                        .roomNo(rs.getInt("roomNo"))
+                        .sendUserNo(rs.getInt("sendUserNo"))
+                        .message(rs.getString("message"))
+                        .sentDate(rs.getString("sentDate"))
+                        .userName(rs.getString("userName")).build();
                 list.add(dto);
             }
         } catch (Exception e) {
