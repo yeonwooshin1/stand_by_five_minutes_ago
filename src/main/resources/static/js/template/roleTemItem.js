@@ -86,7 +86,7 @@ const createRTI = async () => {
     const rtiDescription = document.querySelector("#rtiDescription").value;
 
     // [*] 유효성 검사
-    if (rtiName.length == 0) {
+    if (rtiName.trim().length == 0) {
         alert('상세 역할 템플릿명을 입력해주세요.');
         return;
     }
@@ -207,7 +207,7 @@ const updateRTItem = async (rtiNo) => {
     const rtiDescription = document.querySelector("#updateRtiDescription").value
 
     // [*] 유효성 검사
-    if (rtiName.length == 0) {
+    if (rtiName.trim().length == 0) {
         alert('상세 역할 템플릿명을 입력해주세요.');
         return;
     }

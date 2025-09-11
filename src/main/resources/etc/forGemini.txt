@@ -1,20 +1,64 @@
-{ 
+{
+  "_comment1": "사용자가 원하는 기능",
   "I_want" : "outside_task_manage_program",
-  "need" : "common.css",
+
+  "_comment2": "필요한 작업 목록",
+  "need" : [ "update_css", "update_jsp_by_necessity" ],
+
+  "_comment3": "프로젝트 관련 경로들",
+  "find_path" : [ "/webapp" , "/webapp/chat" , "/webapp/project" , "/webapp/template" , "/webapp/user" , "/webapp/WEB-INF" , "/webapp/WEB-INF/password" ],
+  "update_path" : [ "/static/css" , "/static/css/chat" , "/static/css/project" , "/static/css/template" ],
+
+  "_comment4": "디자인 관련 옵션",
   "design1" : "consistency",
-  "design2 : "readability",
-  "for" : "project_portfolio",
+  "design2" : "readability",
+
+  "_comment5": "프로젝트 용도",
+  "for" : "cording_project_portfolio",
+
+  "_comment6": "색상 설정",
   "main_color" : "#2F4673",
+  "sub_color" : [ "#64758c", "#949ba6", "#d9d9d9", "#f2f2f2", "#eeeeee" ],
+
+  "_comment7": "히어로 섹션 최대 이미지 너비",
+  "hero-section-img-max-width" : "1920px",
+  "frame-max-width" : "1280px",
+
+  "_comment8": "헤더 스타일",
+  "header-max-height" : "120px",
+  "header-text-size" : "2rem",
+  "header-right-text-size" : "1rem",
+  "header-border-bottom-line-size" : "0.2rem",
+
+  "_comment9": "푸터 스타일",
+  "footer-max-height" : "120px",
+  "footer-text-size" : "1rem",
+  "footer-copyright-text-size" : "1.25rem",
+
+  "_comment10": "메인 영역 최소 높이",
+  "main-min-height" : "800px",
+
+  "_comment11": "비즈니스 모델",
   "businessModel" : "B2B",
-  "Responsive1" : "PC" ,
-  "Responsive2" : "Ipad" ,
-  "Responsive3" : "mobile" ,
-  "font-family" : "Noto Sans KR", 
-  "create" : "markdown_file",
+
+  "_comment12": "반응형 설정",
+  "Responsive1" : "PC",
+  "Responsive2" : "Ipad",
+  "Responsive3" : "mobile",
+
+  "_comment13": "폰트",
+  "font-family" : "Noto_Sans_KR",
+
+  "_comment14": "생성 관련 옵션",
+  "create" : "markdown_file_for_guideline",
+
+  "_comment15": "HTML 요소 추가 옵션",
   "add_div" : "OK",
   "add_class" : "OK",
   "add_id" : "OK",
   "another_edit" : "none",
+
+  "_comment16": "사용 가능한 라이브러리",
   "have_library1" : "bootstrap",
   "have_library2" : "jquery",
   "have_library3" : "summernote"

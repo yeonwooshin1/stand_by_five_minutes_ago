@@ -120,6 +120,41 @@ function Postcode() {
 const updatePJInfo = async () => {
     console.log("updatePJInfo func exe")
 
+    // [*] 유효성 검사를 위해 조회된 마크업 가져오기
+    const pjName = document.querySelector("#pjName").value;
+    const roadAddress = document.querySelector("#roadAddress").value;
+    const detailAddress = document.querySelector("#detailAddress").value;
+    const clientName = document.querySelector("#clientName").value;
+    const clientRepresent = document.querySelector("#clientRepresent").value;
+    const clientPhone = document.querySelector("#clientPhone").value;
+
+    // [*] 유효성 검사
+    if (pjName.trim().length == 0) {
+        alert('프로젝트명을 입력해주세요.');
+        return;
+    }
+    if (roadAddress.trim().length == 0) {
+        alert('도로명 주소를 입력해주세요.');
+        return;
+    }
+    if (detailAddress.trim().length == 0) {
+        alert('상세 주소를 입력해주세요.');
+        return;
+    }
+    if (clientName.trim().length == 0) {
+        alert('클라이언트명을 입력해주세요.');
+        return;
+    }
+    if (clientRepresent.trim().length == 0) {
+        alert('클라이언트 담당자를 입력해주세요.');
+        return;
+    }
+    if (clientPhone.trim().length == 0) {
+        alert('클라이언트 연락처를 입력해주세요.');
+        return;
+    }
+
+
     // [4.1] PJ 정보를 가진 form 가져오기
     const PJinfoForm = document.querySelector('#pjForm')
     const createDate = document.querySelector("#createDate").innerHTML
@@ -156,7 +191,7 @@ const deletePJInfo = async () => {
 
     try {
         // [5.2] fetch
-        const r = await fetch(`/project/info?pjNo=${pjNo}`,{ method: "DELETE" })
+        const r = await fetch(`/project/info?pjNo=${pjNo}`, { method: "DELETE" })
         const d = await r.json()
         console.log(d)
         if (d > 0) {
