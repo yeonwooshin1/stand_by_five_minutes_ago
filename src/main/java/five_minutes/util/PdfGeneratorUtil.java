@@ -3,10 +3,8 @@ package five_minutes.util;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.*;
 import five_minutes.model.dto.DashboardDto;
 import five_minutes.model.dto.PjDto;
 import org.apache.jasper.tagplugins.jstl.core.Out;
@@ -144,7 +142,7 @@ public class PdfGeneratorUtil {
             // PDF 문서 속성
             
             Document document = new Document(PageSize.A4);
-            PdfWriter.getInstance(document, outputStream);
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
             document.open();
 
             // 이미지 생성
@@ -168,7 +166,7 @@ public class PdfGeneratorUtil {
             table.setSpacingBefore(10f); // 장평
 
             // 테이블 헤더
-            addTableHeader(table, "No", "근무자", "역할명", "체크리스트명", "시작시간", "종료시간", "상태");
+            addTableHeader(table, "No", "근무자", "역할명", "체크리스트명", "시작시간", "종료시간", "체크");
 
             // 테이블 바디
             int index = 1;
@@ -179,8 +177,36 @@ public class PdfGeneratorUtil {
                 table.addCell(createBodyCell(dto.getPjCheckDto().getPjChklTitle()));
                 table.addCell(createBodyCell(dto.getPjPerDto().getPfStart()));
                 table.addCell(createBodyCell(dto.getPjPerDto().getPfEnd()));
-                table.addCell(createBodyCell(getStatusString(dto.getPjPerDto().getPfStatus())));
+
+                // 체크박스 추가
+
+                // 체크박스 생성
+                PdfPCell checkBoxCell = new PdfPCell();
+                checkBoxCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                checkBoxCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+                checkBoxCell.setFixedHeight(20);
+
+                // 체크박스 폼필드 추가
+                RadioCheckField checkBox = new RadioCheckField(
+                        writer,
+                        new Rectangle(0, 0, 15, 15), // 체크박스 크기
+                        "chk_" + index,              // 필드명
+                        "Yes"                        // 체크값
+                );
+                checkBox.setCheckType(RadioCheckField.TYPE_CHECK);
+                checkBox.setBorderWidth(BaseField.BORDER_WIDTH_THIN);
+                checkBox.setBorderColor(Color.BLACK);
+                checkBox.setBackgroundColor(Color.WHITE);
+
+                PdfFormField field = checkBox.getCheckField();
+                writer.addAnnotation(field);
+
+                // 셀에 그냥 " " 넣어야 레이아웃이 유지됨
+                checkBoxCell.addElement(new Phrase(" "));
+                table.addCell(checkBoxCell);
             }
+
+
             document.add(table);
             document.close();
         } catch (Exception e){
