@@ -159,7 +159,6 @@ public class PdfGeneratorUtil {
 
             // 시간 순으로 출력
             performances.sort(Comparator.comparing(dto -> LocalTime.parse(dto.getPjPerDto().getPfStart())));
-
             PdfPTable table = new PdfPTable(7);
             table.setWidthPercentage(100);
             table.setWidths(new float[]{1, 2, 2, 5, 3, 3, 2}); // td가 차지하는 길이
@@ -177,8 +176,6 @@ public class PdfGeneratorUtil {
                 table.addCell(createBodyCell(dto.getPjCheckDto().getPjChklTitle()));
                 table.addCell(createBodyCell(dto.getPjPerDto().getPfStart()));
                 table.addCell(createBodyCell(dto.getPjPerDto().getPfEnd()));
-
-                // 체크박스 추가
 
                 // 체크박스 생성
                 PdfPCell checkBoxCell = new PdfPCell();
@@ -204,9 +201,8 @@ public class PdfGeneratorUtil {
                 // 셀에 그냥 " " 넣어야 레이아웃이 유지됨
                 checkBoxCell.addElement(new Phrase(" "));
                 table.addCell(checkBoxCell);
+                index++;
             }
-
-
             document.add(table);
             document.close();
         } catch (Exception e){
