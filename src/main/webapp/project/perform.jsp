@@ -128,7 +128,6 @@
             <div class="ContentBox">
 
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div class="fw-semibold">프로젝트 업무 배정/관리</div>
                     <div class="d-flex gap-2">
                         <button id="btnAdd" type="button" class="btn btn-primary btn-sm">행 추가</button>
                     </div>
