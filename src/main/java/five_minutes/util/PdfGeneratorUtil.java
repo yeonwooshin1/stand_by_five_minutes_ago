@@ -201,7 +201,6 @@ public class PdfGeneratorUtil {
                 // 셀에 그냥 " " 넣어야 레이아웃이 유지됨
                 checkBoxCell.addElement(new Phrase(" "));
                 table.addCell(checkBoxCell);
-                index++;
             }
             document.add(table);
             document.close();
