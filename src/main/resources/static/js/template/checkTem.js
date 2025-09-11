@@ -43,6 +43,12 @@ const createCT = async () => {
     const ctName = document.querySelector("#ctNameInput").value;
     const ctDescription = document.querySelector("#createctDescription").value
 
+    // [*] 유효성 검사
+    if(ctName.length == 0){
+        alert('체크리스트 템플릿명을 입력해주세요.');
+        return;
+    }
+
     // [1.2] Fetch
     try {
         const obj = { ctName, ctDescription }

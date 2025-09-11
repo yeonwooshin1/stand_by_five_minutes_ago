@@ -458,7 +458,7 @@ const onClickNext = async () => {
     let result = confirm(`[경고] 저장을 하지 않고 다음 페이지로 이동하시면, 변경된 내용은 삭제되며 복구할 수 없습니다. \n계속 진행하시겠습니까?`)
     if (result == false) { return }
 
-    location.href = `/project/performCheck.jsp?pjNo=${pjNo}`;
+    location.href = `/project/performcheck.jsp?pjNo=${pjNo}`;
 } // func end
 
 /** 저장 페이로드 만들기
