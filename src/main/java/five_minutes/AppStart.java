@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling // 스케쥴 활성화
 public class AppStart { // class start
     public static void main(String[] args) {    // main start
-
         SpringApplication.run(AppStart.class);
     }   // main end
 }   // class end
