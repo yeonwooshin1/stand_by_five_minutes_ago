@@ -85,6 +85,12 @@ const createRTI = async () => {
     const rtiName = document.querySelector("#rtiNameInput").value;
     const rtiDescription = document.querySelector("#rtiDescription").value;
 
+    // [*] 유효성 검사
+    if (rtiName.length == 0) {
+        alert('상세 역할 템플릿명을 입력해주세요.');
+        return;
+    }
+
     try {
         // [1.2] Fetch
         const obj = { rtNo, rtiName, rtiDescription }
@@ -141,7 +147,7 @@ const getRTItem = async () => {
                         <td>${value.updateDate}</td>
                         <td><button type="button" class="btn btn-danger" onclick="deleteRTItem(${value.rtiNo})">삭제</button></td>
                     </tr>`
-                    i++
+                i++
             });
         } else {
             html += `<tr>
@@ -199,6 +205,13 @@ const updateRTItem = async (rtiNo) => {
     // [4.1] 정보를 표시할 구역
     const rtiName = document.querySelector("#updateRtiName").value
     const rtiDescription = document.querySelector("#updateRtiDescription").value
+
+    // [*] 유효성 검사
+    if (rtiName.length == 0) {
+        alert('상세 역할 템플릿명을 입력해주세요.');
+        return;
+    }
+
 
     try {
         // [4.2] Fetch

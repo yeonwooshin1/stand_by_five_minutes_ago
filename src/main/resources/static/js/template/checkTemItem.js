@@ -84,6 +84,12 @@ const createCTI = async () => {
     // const ctiHelpText = document.querySelector("#ctiHelpText").value;
     const ctiHelpText = $('#ctiHelpText').summernote('code');
 
+    // [*] 유효성 검사
+    if (ctiTitle.length == 0) {
+        alert('상세 체크리스트 템플릿명을 입력해주세요.');
+        return;
+    }
+
     try {
         // [1.2] Fetch
         const obj = { ctNo, ctiTitle, ctiHelpText }
@@ -205,6 +211,12 @@ const updateCTItem = async (ctiNo) => {
     // [4.1] 정보를 표시할 구역
     const ctiTitle = document.querySelector("#updateCtiTitle").value
     const ctiHelpText = document.querySelector("#updateCtiHelpText").value
+
+    // [*] 유효성 검사
+    if (ctiTitle.length == 0) {
+        alert('상세 체크리스트 템플릿명을 입력해주세요.');
+        return;
+    }
 
     try {
         // [4.2] Fetch

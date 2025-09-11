@@ -42,6 +42,12 @@ const createRT = async () => {
     const rtName = document.querySelector("#rtNameInput").value;
     const rtDescription = document.querySelector("#creatertDescription").value
 
+    // [*] 유효성 검사
+    if (rtName.length == 0) {
+        alert('역할 템플릿명을 입력해주세요.');
+        return;
+    }
+
     // [1.2] Fetch
     try {
         const obj = { rtName, rtDescription }
@@ -154,6 +160,12 @@ const updateRT = async (rtNo) => {
     // [4.1] 수정할 정보 가져오기
     const rtName = document.querySelector("#rtNameUpdate").value
     const rtDescription = document.querySelector("#rtDescriptionUpdate").value
+
+    // [*] 유효성 검사
+    if (rtName.length == 0) {
+        alert('역할 템플릿명을 입력해주세요.');
+        return;
+    }
 
     // [4.2] fetch
     try {
