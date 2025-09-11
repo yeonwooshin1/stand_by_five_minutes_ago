@@ -28,11 +28,11 @@ CREATE TABLE Users (
  * 사업자 등록 번호를 입력한 [기업 담당자]의 USER TABLE 외 추가 정보 테이블
  * ========================================================= */
 CREATE TABLE BusinessUser (	
-  bnNo  	 VARCHAR(30)  NOT NULL,  			-- 사업자등록번호 예: '123-45-67890' UNIQUE , primary key 
+  bnNo  	 VARCHAR(30)  NOT NULL,  			-- 사업자등록번호 예: '''123-45-67890''' UNIQUE , primary key 
   bnName    	 VARCHAR(100) NOT NULL,				-- 기업명 
   managerName    VARCHAR(50)  NOT NULL,				-- 담당자명
   managerPhone   VARCHAR(20)  NOT NULL UNIQUE,		-- 담당자번호 
-  bnDocuImg  	 varchar(250) NOT NULL,  			-- 사업자이미지 예: '/img/docs/alpha.png'
+  bnDocuImg  	 varchar(250) NOT NULL,  			-- 사업자이미지 예: '''/img/docs/alpha.png'''
   bnType   		 VARCHAR(50)  NOT NULL,  			-- 업태
   bnStatus		 int NOT NULL DEFAULT 1,                 				-- 활성/비활성 삭제시에는 delete 사용. 0 은 비활성 1 은 활성
   bnItem   		 VARCHAR(50)  NOT NULL,  			-- 종목
@@ -109,7 +109,7 @@ CREATE TABLE CheckTemplateItem (
   ctINo 		INT UNSIGNED PRIMARY KEY AUTO_INCREMENT, 		 		-- [PK] 체크리스트 템플릿 아이템 번호 
   ctNo 			INT UNSIGNED NOT NULL,                        	 		-- [FK] 체크리스트헤더 템플릿 번호
   ctiTitle 		VARCHAR(200) NOT NULL,                           		-- 체크리스트 제목
-  ctiHelpText  		longtext  NULL,                               		-- 도움말 (선택으로 넣기)
+  ctiHelpText  		longtext  NULL,                               		-- 체크리스트 항목 수행에 도움이 되는 상세 설명 및 가이드라인
   ctIStatus TINYINT(1) NOT NULL DEFAULT 1,					
   createDate		DATETIME NOT NULL DEFAULT NOW(),					-- 생성시간 
   updateDate 		DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),	-- 변경 날짜 (이거 최신템플릿 동기화할 시 필요한 항목) (선택으로 넣기)
@@ -138,7 +138,7 @@ CREATE TABLE ProjectInfo (
   clientRepresent	varchar(30)  not null,							-- 클라이언트 담당자 // 20250902_2030_옹태경 추가
   clientPhone		VARCHAR(15)  NOT NULL, 							-- 클라이언트연락처
   clientMemo		longtext NULL,                            	-- 클라이언트 업무요청사항
-  pjStatus			TINYINT NOT NULL DEFAULT 1,						-- 상태 초기값 '1' => 1: 작성중() , 2: 작성완료 3: 진행중 4: 수행완료
+  pjStatus			TINYINT NOT NULL DEFAULT 1,						-- 상태 초기값 '''1''' => 1: 작성중() , 2: 작성완료 3: 진행중 4: 수행완료
   createDate  		DATETIME NOT NULL DEFAULT NOW(),				-- 생성시간 
   updateDate 		DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),		 -- 변경 날짜
   CONSTRAINT
@@ -197,7 +197,7 @@ CREATE TABLE PjChecklistItem (
   pjChkItemNo    	 	INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,     	 		-- 체크리스트 아이템 번호 PK
   pjNo	 				INT UNSIGNED NOT NULL,                					-- 프로젝트명
   pjChklTitle 			VARCHAR(200) NOT NULL,                           		-- 체크리스트 제목
-  pjHelpText			longtext,												-- 체크리스트 설명
+  pjHelpText			longtext,												-- 프로젝트 체크리스트 항목에 대한 구체적인 설명 및 지침
   pjChkIStatus			TINYINT NOT NULL DEFAULT 1,								-- 상태 		
   createDate  			DATETIME NOT NULL DEFAULT NOW(),						-- 생성 날짜
   updateDate 			DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),		-- 변경 날짜 -> 변경시점이랑 템플릿에서 변경된 거랑 업데이트 하려고
@@ -230,7 +230,7 @@ CREATE TABLE  pjPerform (
   
   -- 진행 상태/결과
   pfStatus 				TINYINT NOT NULL DEFAULT 1,								-- 1: 시작전 2: 진행중 3: 완료됨 4: 취소됨 5: 보류
-  note       			VARCHAR(600) NULL,                               				-- 지시/비고
+  note       			VARCHAR(600) NULL,                               				-- 업무 수행 관련 특별 지시사항 또는 참고 메모
   createDate  			DATETIME NOT NULL DEFAULT NOW(),					-- 생성 날짜
   updateDate 			DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),	-- 변경 날짜 -> 변경시점이랑 템플릿에서 변경된 거랑 업데이트 하려고
   
