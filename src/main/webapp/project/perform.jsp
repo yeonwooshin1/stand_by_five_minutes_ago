@@ -34,9 +34,7 @@
             #pfTable td {
                 text-align: center;
                 vertical-align: middle;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                word-break: break-all;
             }
 
             /* 폼 컨트롤 중앙정렬 */
@@ -47,56 +45,24 @@
                 /* 내부 폰트 크기 미세 조정 */
             }
 
-            /* 체크리스트 셀 (select+버튼 한 줄 유지) */
-            #pfTable td:nth-child(3) .d-flex {
-                flex-wrap: nowrap;
-            }
-
             /* No */
-            #pfTable th:nth-child(1) {
-                width: 3%;
-            }
-
+            #pfTable th:nth-child(1) { width: 4%; }
             /* 역할 */
-            #pfTable th:nth-child(2) {
-                width: 5%;
-            }
-
+            #pfTable th:nth-child(2) { width: 15%; }
             /* 체크리스트 */
-            #pfTable th:nth-child(2) {
-                width: 5%;
-            }
-
-            /* 체크리스트 */
-            #pfTable th:nth-child(3) {
-                width: 7%;
-            }
-
-            /* 시작/종료 */
-            #pfTable th:nth-child(4),
-            #pfTable th:nth-child(5) {
-                width: 7%;
-            }
-
+            #pfTable th:nth-child(3) { width: 25%; }
+            /* 시작시간 */
+            #pfTable th:nth-child(4) { width: 14%; }
+            /* 종료시간 */
+            #pfTable th:nth-child(5) { width: 14%; }
             /* 알림조건 */
-            #pfTable th:nth-child(6) {
-                width: 3%;
-            }
-
+            #pfTable th:nth-child(6) { width: 10%; }
             /* 시간(분) */
-            #pfTable th:nth-child(7) {
-                width: 3%;
-            }
-
+            #pfTable th:nth-child(7) { width: 7%; }
             /* 진행상태 */
-            #pfTable th:nth-child(8) {
-                width: 3%;
-            }
-
+            #pfTable th:nth-child(8) { width: 5%; }
             /* 비고 */
-            #pfTable th:nth-child(9) {
-                width: 3%;
-            }
+            #pfTable th:nth-child(9) { width: 6%; }
 
             /* input/select 폭 꽉 채우기 */
             .pf-start,
@@ -186,6 +152,15 @@
         <jsp:include page="/footer.jsp"></jsp:include>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
+
+        <!-- ★ 본 JS 연결 -->
+        <script src="/JS/project/perform.js"></script>
+
+    </body>
+
+    </html>ap.bundle.min.js"
             integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
             crossorigin="anonymous"></script>
 

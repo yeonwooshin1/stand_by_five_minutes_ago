@@ -242,7 +242,7 @@ function render() {
         </td>
 
         <td>
-          <div class="d-flex align-items-center gap-2 flex-nowrap">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
             <select class="form-select pf-chk w-auto">
               ${itemOptions(row.pjChkItemNo)}
             </select>
