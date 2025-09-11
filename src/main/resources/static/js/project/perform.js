@@ -82,6 +82,64 @@ const toNum0 = (x) => (Number.isFinite(Number(x)) ? Number(x) : 0);
 /** 기존행 여부 (pfNo > 0 이면 기존행) */
 const isExisting = (pfNo) => Number(pfNo) > 0;
 
+// ===== DATETIME 유틸 (datetime-local 대응) =====
+
+// 서버 "YYYY-MM-DD HH:mm:ss" → input "YYYY-MM-DDTHH:mm"
+function toDTLocal(v) {
+  if (!v) return "";
+  return String(v).replace(" ", "T").slice(0, 16);
+}
+
+// "YYYY-MM-DDTHH:mm"만 허용, 아니면 빈값
+function sanitizeDTLocal(v) {
+  if (!v) return "";
+  const s = String(v).replace(" ", "T").slice(0, 16);
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(s) ? s : "";
+}
+
+// "YYYY-MM-DDTHH:mm" → epoch seconds
+function dtLocalToEpochSeconds(v) {
+  if (!v) return null;
+  const s = v.length === 16 ? v + ":00" : v; // 초 보정
+  const d = new Date(s);
+  if (isNaN(d)) return null;
+  return Math.floor(d.getTime() / 1000);
+}
+
+// now → epoch seconds
+function nowEpochSeconds() {
+  return Math.floor(Date.now() / 1000);
+}
+
+// row 기반 발송 타겟 epoch 계산
+function calcTargetEpoch(row) {
+  const offset = (Number(row.notifySetMins) || 0) * 60;
+  const start = dtLocalToEpochSeconds(row.pfStart);
+  const end   = dtLocalToEpochSeconds(row.pfEnd);
+  switch (Number(row.notifyType)) {
+    case 1: return start != null ? start - offset : null; // 시작 전
+    case 2: return start != null ? start + offset : null; // 시작 후
+    case 3: return end   != null ? end   - offset : null; // 종료 전
+    case 4: return end   != null ? end   + offset : null; // 종료 후
+    case 0: default: return null; // 미발송 또는 -1 등
+  }
+}
+
+// 발송 가능 검증: target >= now (타겟이 과거면 막음)
+function isSchedulableNow(row) {
+  const t = calcTargetEpoch(row);
+  if (t == null) return true; // 계산 불가/미발송 등은 통과
+  return t >= nowEpochSeconds();
+}
+
+// a(종료) - b(시작), 음수면 종료 < 시작(잘못된 값)
+function cmpDTLocal(a, b) {
+  const ea = dtLocalToEpochSeconds(a);
+  const eb = dtLocalToEpochSeconds(b);
+  if (ea == null || eb == null) return 0;
+  return ea - eb;
+}
+
 // ===== 데이터 로딩 =====
 
 // 룩업(역할/체크리스트) 배열에 채워주기
@@ -111,8 +169,8 @@ async function loadList() {
       pfNo:            Number(dto.pfNo) || 0,
       pjRoleNo:        Number(dto.pjRoleNo) || 0,
       pjChkItemNo:     Number(dto.pjChkItemNo) || 0,
-      pfStart:         toHHMM(dto.pfStart || ""),
-      pfEnd:           toHHMM(dto.pfEnd || ""),
+      pfStart:         sanitizeDTLocal(toDTLocal(dto.pfStart || "")),
+      pfEnd:           sanitizeDTLocal(toDTLocal(dto.pfEnd || "")),
       notifyType:      Number(dto.notifyType ?? 0),
       notifySetMins:   Number(dto.notifySetMins ?? 0),
       pfStatus:        Number(dto.pfStatus ?? 1),
@@ -193,8 +251,8 @@ function render() {
         </td>
 
         <!-- 시간: 발송완료여도 편집 가능(요구사항) -->
-        <td><input type="time" class="form-control pf-start" value="${row.pfStart}"></td>
-        <td><input type="time" class="form-control pf-end"   value="${row.pfEnd}"></td>
+        <td><input type="datetime-local" class="form-control pf-start" value="${sanitizeDTLocal(row.pfStart)}"></td>
+        <td><input type="datetime-local" class="form-control pf-end"   value="${sanitizeDTLocal(row.pfEnd)}"></td>
 
         <!-- 알림 타입: 발송완료면 배지로 고정 -->
         <td>${notifyCell}</td>
@@ -213,43 +271,9 @@ function render() {
   }).join("");
 
   $tbody.innerHTML = html;
+
+  // [ADD] 새로 렌더링될 때마다 설명 버튼을 다시 주입
   addHelpButtons();
-}
-
-
-// 현재 시각(초)
-function nowSeconds() {
-  const d = new Date();
-  return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
-}
-// "HH:mm" → 초
-function hhmmToSeconds(v) {
-  if (!v) return null;
-  const [h, m] = String(v).split(":").map(n => parseInt(n, 10));
-  if (!Number.isFinite(h) || !Number.isFinite(m)) return null;
-  return h * 3600 + m * 60;
-}
-// row 기준 타겟 초 계산 (null: 계산 불가)
-function calcTargetSecond(row) {
-  const mins = Number(row.notifySetMins) || 0;
-  const offset = mins * 60;
-  const startSec = hhmmToSeconds(row.pfStart);
-  const endSec   = hhmmToSeconds(row.pfEnd);
-
-  switch (Number(row.notifyType)) {
-    case 1: return (startSec != null) ? (startSec - offset) : null; // 시작 전
-    case 2: return (startSec != null) ? (startSec + offset) : null; // 시작 후
-    case 3: return (endSec   != null) ? (endSec   - offset) : null; // 종료 전
-    case 4: return (endSec   != null) ? (endSec   + offset) : null; // 종료 후
-    case 0: return null; // 미발송은 검증 대상 아님
-    default: return null; // -1 등
-  }
-}
-// 발송 가능 검증: target >= now
-function isSchedulableNow(row) {
-  const t = calcTargetSecond(row);
-  if (t == null) return true; // 계산 불가/미발송 등은 통과
-  return t >= nowSeconds();
 }
 
 /** 번호 다시 채우기(삭제 후) */
@@ -292,8 +316,9 @@ function bindAddButton() {
 
 
 
-// 테이블 값 변경/삭제 (이벤트 위임)
+/** 테이블 값 변경/삭제 (이벤트 위임) */
 function bindTableEvents() {
+  // 값 변경
   $tbody.addEventListener("change", (e) => {
     const tr = e.target.closest("tr");
     if (!tr) return;
@@ -313,8 +338,10 @@ function bindTableEvents() {
       row.pjChkItemNo = toNum0(e.target.value);
 
     } else if (e.target.classList.contains("pf-start")) {
-      row.pfStart = toHHMM(e.target.value);
-      if (row.pfStart && row.pfEnd && cmpHHMM(row.pfEnd, row.pfStart) < 0) {
+      row.pfStart = sanitizeDTLocal(e.target.value);
+      if (!row.pfStart) e.target.value = "";
+      // 시작/종료 시간 유효성 검사: 종료시간 ≥ 시작시간
+      if (row.pfStart && row.pfEnd && cmpDTLocal(row.pfEnd, row.pfStart) < 0) {
         alert("종료시간은 시작시간보다 빠를 수 없습니다.");
         Object.assign(row, prev);
         render();
@@ -322,8 +349,10 @@ function bindTableEvents() {
       }
 
     } else if (e.target.classList.contains("pf-end")) {
-      row.pfEnd = toHHMM(e.target.value);
-      if (row.pfStart && row.pfEnd && cmpHHMM(row.pfEnd, row.pfStart) < 0) {
+      row.pfEnd = sanitizeDTLocal(e.target.value);
+      if (!row.pfEnd) e.target.value = "";
+      // 시작/종료 시간 유효성 검사: 종료시간 ≥ 시작시간
+      if (row.pfStart && row.pfEnd && cmpDTLocal(row.pfEnd, row.pfStart) < 0) {
         alert("종료시간은 시작시간보다 빠를 수 없습니다.");
         Object.assign(row, prev);
         render();
@@ -352,23 +381,9 @@ function bindTableEvents() {
       return;
     }
 
-    if (isExisting(pfNo)) row.changeStatus = 3; // 기존행 수정 플래그
+    // [CHG] 유효하지 않아 return된 경우를 제외하고 변경 플래그 처리
+    if (isExisting(pfNo)) row.changeStatus = 3; // 기존행이면 3(수정), 신규행은 1 유지
   });
-}
-
-
-/* HH:mm 비교 유틸: a(종료) - b(시작)
-   반환값 <0  => a < b (잘못된 종료시간)
-            0 => a == b
-           >0 => a > b
-*/
-function cmpHHMM(a, b) {
-  // a,b는 "HH:mm" 가정 (toHHMM으로 정리됨)
-  const [ah, am] = String(a).split(":").map(n => parseInt(n, 10));
-  const [bh, bm] = String(b).split(":").map(n => parseInt(n, 10));
-  const aMin = (Number.isFinite(ah) ? ah : 0) * 60 + (Number.isFinite(am) ? am : 0);
-  const bMin = (Number.isFinite(bh) ? bh : 0) * 60 + (Number.isFinite(bm) ? bm : 0);
-  return aMin - bMin;
 }
 
 
@@ -438,8 +453,8 @@ async function onClickSave() {
       pfNo:            Number(dto.pfNo) || 0,
       pjRoleNo:        Number(dto.pjRoleNo) || 0,
       pjChkItemNo:     Number(dto.pjChkItemNo) || 0,
-      pfStart:         toHHMM(dto.pfStart || ""),
-      pfEnd:           toHHMM(dto.pfEnd || ""),
+      pfStart:         sanitizeDTLocal(toDTLocal(dto.pfStart || "")),
+      pfEnd:           sanitizeDTLocal(toDTLocal(dto.pfEnd || "")),
       notifyType:      Number(dto.notifyType ?? 0),
       notifySetMins:   Number(dto.notifySetMins ?? 0),
       pfStatus:        Number(dto.pfStatus ?? 1),
@@ -477,8 +492,8 @@ function buildSavePayload() {
       creates.push({
         pjRoleNo:       r.pjRoleNo,
         pjChkItemNo:    r.pjChkItemNo,
-        pfStart:        r.pfStart,       // "HH:mm"
-        pfEnd:          r.pfEnd,         // "HH:mm"
+        pfStart:        r.pfStart,       // "YYYY-MM-DDTHH:mm"
+        pfEnd:          r.pfEnd,         // "YYYY-MM-DDTHH:mm"
         notifyType:     r.notifyType,
         notifySetMins:  r.notifySetMins
       });
@@ -588,5 +603,3 @@ function openDescModal(itemId) {
 
   descModal.show();
 }
-
-// ======================================================================

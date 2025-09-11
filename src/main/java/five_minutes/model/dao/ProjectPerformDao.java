@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -267,8 +268,8 @@ public class ProjectPerformDao extends Dao {    // class start
 
                 dto.setNotifyType(rs.getInt("notifyType"));
                 dto.setNotifySetMins(rs.getInt("notifySetMins"));
-                dto.setPfStart(rs.getTime("pfStart").toLocalTime());
-                dto.setPfEnd(rs.getTime("pfEnd").toLocalTime());
+                dto.setPfStart(rs.getTimestamp("pfStart").toLocalDateTime());
+                dto.setPfEnd(rs.getTimestamp("pfEnd").toLocalDateTime());
                 dto.setPfStatus(rs.getInt("pfStatus"));
                 dto.setPfNo(rs.getInt("pfNo"));
 

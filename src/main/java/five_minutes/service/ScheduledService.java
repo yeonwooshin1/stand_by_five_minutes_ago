@@ -26,18 +26,18 @@ public class ScheduledService { // class start
     public void alertToDoList () {
         System.out.println("스케쥴 메소드 실행됨");
         // 현재 시간 초로 바꿔주는 메소드 호출
-        final int nowSec = ScheduledCatchUtil.nowSecond();
+        final long nowSec = ScheduledCatchUtil.nowSecond();
 
         // 가져온다.
         List<ScheduledDto> itemList = projectPerformDao.getScheduledItem();
         // 없으면 그냥 return
-        if (itemList.isEmpty()) return;
+        if (itemList == null || itemList.isEmpty()) return;
 
         // 가져온 리스트 반복문으로 하나씩 조회
         for (ScheduledDto dto : itemList) {
             try {
                 // 여기서 null 값 뜨면 Integer 객체에 null 이 뜬건데 일단 놔둠
-                Integer targetSec = ScheduledCatchUtil.targetSecond(dto);
+                Long targetSec = ScheduledCatchUtil.targetSecond(dto);
 
                 if (!ScheduledCatchUtil.isDueOrPast(targetSec, nowSec)) {
                     // 아직 시간이 안 지나거나 null 값 즉 값 자체가 없음. 근데 웬만하면 null이 뜰 수가 없는게

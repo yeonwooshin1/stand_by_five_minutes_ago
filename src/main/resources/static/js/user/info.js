@@ -633,20 +633,36 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// 모달 show 시: 파일명만 인코딩 + 캐시 무효화
-document.getElementById('bizImageModal')?.addEventListener('show.bs.modal', () => {
-  // url 없으면 return
-  if (!_bnDocuImgUrl) return;
-  // dom 화 만약 dom이 없으면 return
-  const img = $('#bnDocuImgModal');
-  if (!img) return;
+document.getElementById('bizImageModal')?.addEventListener('show.bs.modal', async () => {
+  try {
+    // 1) 최신 사업자 정보로 _bnDocuImgUrl 갱신
+    await getBusinessInfo();
 
-  // 마지막 세그먼트(파일명)만 안전하게 인코딩
-  const encoded = _bnDocuImgUrl.replace(/[^/]+$/, (m) => {
-    try { return encodeURIComponent(decodeURIComponent(m)); } // 이미 인코딩된 경우 방지
-    catch { return encodeURIComponent(m); }
-  }); // -> 파일 한글명 인코딩
+    // 2) URL 없으면 중단
+    if (!_bnDocuImgUrl) return;
 
-  // 항상 최신 파일만 보여준다. 쿼리스트링에 날짜 붙여서
-  img.src = `${encoded}${encoded.includes('?') ? '&' : '?'}t=${Date.now()}`;
+    // 3) <img> DOM
+    const img = document.getElementById('bnDocuImgModal');
+    if (!img) return;
+
+    // 4) 파일명만 안전 인코딩
+    const encoded = _bnDocuImgUrl.replace(/[^/]+$/, (m) => {
+      try { return encodeURIComponent(decodeURIComponent(m)); }
+      catch { return encodeURIComponent(m); }
+    });
+
+    // 5) 캐시 무효화 파라미터
+    const nextSrc = `${encoded}${encoded.includes('?') ? '&' : '?'}t=${Date.now()}`;
+
+    // 6) 강제 리로드(캐시 우회 보강)
+    img.removeAttribute('srcset');
+    img.removeAttribute('sizes');
+    img.src = '';            // 이전 이미지 폐기
+    img.loading = 'eager';
+    img.decoding = 'sync';
+    img.src = nextSrc;       // 새 요청
+
+  } catch (e) {
+    console.warn('이미지 로드 중 오류:', e);
+  }
 });

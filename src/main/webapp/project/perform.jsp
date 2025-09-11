@@ -138,15 +138,15 @@
                     <table id="pfTable" class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th style="width:56px;" class="text-center">No</th>
+                                <th style="width:40px;" class="text-center">No</th>
                                 <th style="min-width:200px;">역할</th>
                                 <th style="width:320px;">체크리스트</th>
-                                <th style="width:150px;">시작시간</th>
-                                <th style="width:150px;">종료시간</th>
-                                <th style="width:150px;">알림발송 조건</th>
-                                <th style="width:140px;">알림발송 시간(분)</th>
-                                <th style="min-width:80px;">진행상태</th>
-                                <th style="width:84px;"> 비고</th>
+                                <th style="width:230px;">시작시간</th>
+                                <th style="width:230px;">종료시간</th>
+                                <th style="width:130px;">알림조건</th>
+                                <th style="width:100px;">시간(분)</th>
+                                <th style="min-width:60px;">진행상태</th>
+                                <th style="width:60px;"> 비고</th>
                             </tr>
                         </thead>
                         <tbody id="pfBody"><!-- rows go here --></tbody>

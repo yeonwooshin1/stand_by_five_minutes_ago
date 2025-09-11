@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+
 
 @Data @AllArgsConstructor @NoArgsConstructor
 public class ScheduledDto { // class start
@@ -55,9 +56,9 @@ public class ScheduledDto { // class start
     /** 알림 설정 분 (pjPerform.notifySetMins) */
     private int notifySetMins;
     /** 시작 시각 TIME (pjPerform.pfStart) */
-    private LocalTime pfStart;
+    private LocalDateTime pfStart;
     /** 종료 시각 TIME (pjPerform.pfEnd) */
-    private LocalTime pfEnd;
+    private LocalDateTime pfEnd;
     /** 진행 상태 1~5 (pjPerform.pfStatus) */
     private int pfStatus;
 

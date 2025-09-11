@@ -192,8 +192,8 @@ public final class EmailSendFormat {
         String todoTitle  = esc(d.getTodoTitle());
         String todoHelp   = esc(nz(d.getTodoHelpText()));
 
-        String startTime  = esc(fmtTime(d.getPfStart()));
-        String endTime    = esc(fmtTime(d.getPfEnd()));
+        String startTime  = esc(fmtDateTime(d.getPfStart()));
+        String endTime    = esc(fmtDateTime(d.getPfEnd()));
 
         String bnName     = esc(d.getBnName());
         String manager    = esc(d.getManagerName());
@@ -300,10 +300,15 @@ public final class EmailSendFormat {
                """.formatted(esc(key), esc(val));
     }
 
-    private static String fmtTime(LocalTime t) {
-        if (t == null) return "-";
-        int h = t.getHour(), m = t.getMinute();
-        return (h < 10 ? "0" + h : String.valueOf(h)) + ":" + (m < 10 ? "0" + m : String.valueOf(m));
+    private static String fmtDateTime(LocalDateTime dt) {
+        if (dt == null) return "-";
+        int y = dt.getYear();
+        int M = dt.getMonthValue();
+        int d = dt.getDayOfMonth();
+        int h = dt.getHour();
+        int m = dt.getMinute();
+
+        return String.format("%04d-%02d-%02d %02d:%02d", y, M, d, h, m);
     }
     private static String nz(String s) { return s == null ? "" : s; }
     private static String esc(String s) { return HtmlUtils.htmlEscape(nz(s)); }
