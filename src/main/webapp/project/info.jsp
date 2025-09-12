@@ -12,7 +12,8 @@
             integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
         <link rel='stylesheet' href='/CSS/index.css'>
-        <link rel='stylesheet' href='/CSS/project/info.css'>
+        <link rel='stylesheet' href='/css/common.css'>
+    <link rel='stylesheet' href='/css/project/info.css'>
 
         <!-- 글꼴 Noto Sans -->
         <style>
@@ -107,10 +108,9 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="mb-3">
+                                    <div class="mb-3 d-flex flex-column h-100">
                                         <label for="clientRequest" class="form-label">요청사항</label>
-                                        <textarea class="form-control" id="clientMemo" name="clientMemo"
-                                            rows="5"></textarea>
+                                        <textarea class="form-control flex-grow-1" id="clientMemo" name="clientMemo"></textarea>
                                     </div>
                                 </div>
                             </div>

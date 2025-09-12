@@ -26,9 +26,8 @@
     <jsp:include page="/header.jsp"></jsp:include>
     <!-- 본문 영역 -->
     <div class="indexContainer">
-        <div class="row">
-            <!-- 본문 작업 영역 -->
-            <div class="mainContent col-10">
+        <div class="row justify-content-center"> <!-- 추가 -->
+            <div class="mainContent col-10 col-md-8"> 
                 <div class="container py-5">
                     <div class="row justify-content-center">
                         <div class="col-12 col-sm-10 col-md-8 col-lg-5">

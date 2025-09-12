@@ -23,89 +23,88 @@
             #pfTable {
                 table-layout: fixed;
                 width: 100%;
+                font-size: 0.9rem;
+                /* 전체 폰트 크기 축소 */
             }
+
+            /* 비고 */
 
             /* 모든 셀 중앙정렬 */
             #pfTable th,
             #pfTable td {
                 text-align: center;
                 vertical-align: middle;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                word-break: break-all;
             }
 
             /* 폼 컨트롤 중앙정렬 */
             #pfTable .form-control,
             #pfTable .form-select {
                 text-align: center;
+                font-size: 0.9rem;
+                /* 내부 폰트 크기 미세 조정 */
             }
 
-            /* 체크리스트 셀 (select+버튼 한 줄 유지) */
-            #pfTable td:nth-child(3) .d-flex {
-                flex-wrap: nowrap;
+            /* No */
+            #pfTable th:nth-child(1) {
+                width: 4%;
             }
 
-            #pfTable td:nth-child(3) .pf-chk {
-                width: auto;
-                min-width: 240px;
+            /* 역할 */
+            #pfTable th:nth-child(2) {
+                width: 15%;
             }
 
-            /* 필요 시 260~300px 조절 */
-
-            /* 열 폭 조정 */
-            #pfTable thead th:nth-child(3),
-            #pfTable tbody td:nth-child(3) {
-                width: 380px;
-            }
-
-            /* 체크리스트 넓게 */
-
-            #pfTable thead th:nth-child(4),
-            #pfTable tbody td:nth-child(4) {
-                width: 180px;
+            /* 체크리스트 */
+            #pfTable th:nth-child(3) {
+                width: 25%;
             }
 
             /* 시작시간 */
-
-            #pfTable thead th:nth-child(5),
-            #pfTable tbody td:nth-child(5) {
-                width: 180px;
+            #pfTable th:nth-child(4) {
+                width: 14%;
             }
 
             /* 종료시간 */
-
-            #pfTable thead th:nth-child(6),
-            #pfTable tbody td:nth-child(6) {
-                width: 110px;
+            #pfTable th:nth-child(5) {
+                width: 14%;
             }
 
-            /* 알림발송 조건 좁게 */
-
-            #pfTable thead th:nth-child(7),
-            #pfTable tbody td:nth-child(7) {
-                width: 120px;
+            /* 알림조건 */
+            #pfTable th:nth-child(6) {
+                width: 10%;
             }
 
-            /* 알림발송 시간 좁게 */
-
-            #pfTable thead th:nth-child(8),
-            #pfTable tbody td:nth-child(8) {
-                width: 90px;
+            /* 시간(분) */
+            #pfTable th:nth-child(7) {
+                width: 7%;
             }
 
-            /* 진행상태 아주 좁게 */
+            /* 진행상태 */
+            #pfTable th:nth-child(8) {
+                width: 5%;
+            }
+
+            /* 비고 */
+            #pfTable th:nth-child(9) {
+                width: 6%;
+            }
 
             /* input/select 폭 꽉 채우기 */
             .pf-start,
             .pf-end,
             .pf-notify-mins {
-                width: 100%;
+                width: 10px;
             }
 
-            /* 반응형 최소 폭 */
             .table-responsive {
-                min-width: 1200px;
+                overflow-x: auto;
+                /* 테이블만 가로 스크롤 가능 */
+            }
+
+            td .d-flex>.form-control {
+                flex: 0 0 80px;
+                /* 최소/최대/기본값 */
             }
         </style>
 
@@ -125,7 +124,7 @@
                 </div>
             </div>
 
-            <div class="ContentBox">
+            <div class="ContentBox border rounded">
 
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <div class="d-flex gap-2">
@@ -133,24 +132,24 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table id="pfTable" class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th style="width:40px;" class="text-center">No</th>
-                                <th style="min-width:200px;">역할</th>
-                                <th style="width:320px;">체크리스트</th>
-                                <th style="width:230px;">시작시간</th>
-                                <th style="width:230px;">종료시간</th>
-                                <th style="width:130px;">알림조건</th>
-                                <th style="width:100px;">시간(분)</th>
-                                <th style="min-width:60px;">진행상태</th>
-                                <th style="width:60px;"> 비고</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pfBody"><!-- rows go here --></tbody>
-                    </table>
-                </div>
+
+                <table id="pfTable" class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th>역할</th>
+                            <th>체크리스트</th>
+                            <th>시작시간</th>
+                            <th>종료시간</th>
+                            <th>알림조건</th>
+                            <th>시간(분)</th>
+                            <th> 상태</th>
+                            <th> 비고</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pfBody"><!-- rows go here --></tbody>
+                </table>
+
 
                 <div id="pfError" class="text-danger small"></div>
 
@@ -175,7 +174,6 @@
                 </div>
             </div>
         </div>
-        <!-- ================================================================ -->
 
         <jsp:include page="/footer.jsp"></jsp:include>
 
@@ -185,6 +183,7 @@
 
         <!-- ★ 본 JS 연결 -->
         <script src="/JS/project/perform.js"></script>
+
     </body>
 
     </html>

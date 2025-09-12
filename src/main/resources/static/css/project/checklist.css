@@ -1,6 +1,4 @@
-body {
-    font-family: 'Noto Sans KR', sans-serif;
-}
+@import url('../common.css');
 
 .titleArea {
     display: flex;

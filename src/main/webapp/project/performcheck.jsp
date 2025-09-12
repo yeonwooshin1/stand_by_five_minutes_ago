@@ -27,7 +27,7 @@
         <jsp:include page="/project/navigation.jsp"></jsp:include>
 
         <!-- 본문 영역 -->
-        <div class="container mt-4">
+        <div class="indexContainer mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class='title1'>프로젝트 업무 관리</div>
                 <div>

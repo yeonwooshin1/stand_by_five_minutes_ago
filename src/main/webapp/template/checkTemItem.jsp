@@ -16,7 +16,9 @@
         crossorigin="anonymous"></script>
 
     <!-- checkTemItem Css -->
-    <link rel='stylesheet' href='/CSS/template/checkTemItem.css'>
+    <link rel='stylesheet' href='/css/common.css'>
+    <link rel='stylesheet' href='/css/index.css'>
+    <link rel='stylesheet' href='/css/template/checkTemItem.css'>
 
     <!-- jquery 최신버전 -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -107,12 +109,14 @@
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 체크리스트 템플릿명
                                 <span
-                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※ 대분류 템플릿 수정은 [ 체크리스트 템플릿 ] 메뉴에서 가능합니다.</span></label>
+                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※
+                                    대분류 템플릿 수정은 [ 체크리스트 템플릿 ] 메뉴에서 가능합니다.</span></label>
                             <input class="form-control ctName01" type="text" disabled /> <!-- class="ctName01" -->
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 체크리스트 템플릿명</label>
-                            <div class="form-control ctDescription01" type="text"></div> <!-- class="ctDescription01" -->
+                            <div class="form-control ctDescription01" type="text"></div>
+                            <!-- class="ctDescription01" -->
                         </div>
 
                         <div>
@@ -121,13 +125,14 @@
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿 설명</label>
-                            <textarea class="ctiHelpText" id="ctiHelpText" name="editordata"></textarea> <!-- class="ctiHelpText" id="ctiHelpText" -->
+                            <textarea class="ctiHelpText" id="ctiHelpText" name="editordata"></textarea>
+                            <!-- class="ctiHelpText" id="ctiHelpText" -->
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" onclick="createCTI()" 
+                    <button type="button" class="btn btn-primary" onclick="createCTI()"
                         data-bs-dismiss="modal">저장</button> <!-- onclick="createCTI()"  -->
                 </div>
             </div>
@@ -147,17 +152,20 @@
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 체크리스트 템플릿명
                                 <span
-                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※ 대분류 템플릿 수정은 [ 체크리스트 템플릿 ] 메뉴에서 가능합니다.</span></label>
+                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※
+                                    대분류 템플릿 수정은 [ 체크리스트 템플릿 ] 메뉴에서 가능합니다.</span></label>
                             <input class="form-control ctName02" type="text" disabled /> <!-- class="ctName02" -->
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 체크리스트 템플릿 설명</label>
-                            <div class="form-control ctDescription02" type="text"></div> <!-- class="ctDescription02" -->
+                            <div class="form-control ctDescription02" type="text"></div>
+                            <!-- class="ctDescription02" -->
                         </div>
 
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿명 </label>
-                            <input class="form-control" id="previewCtiTitle" type="text" disabled /> <!-- id="previewCtiTitle" -->
+                            <input class="form-control" id="previewCtiTitle" type="text" disabled />
+                            <!-- id="previewCtiTitle" -->
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿 설명 </label>
@@ -185,12 +193,14 @@
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle"> 대분류 체크리스트 템플릿명
                                 <span
-                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※ 대분류 템플릿 수정은 [ 체크리스트 템플릿 ] 메뉴에서 가능합니다.</span></label>
+                                    style="font-size: 0.8rem; color: #A6A6A6; font-weight: 600; margin-left: 0.25rem;">※
+                                    대분류 템플릿 수정은 [ 체크리스트 템플릿 ] 메뉴에서 가능합니다.</span></label>
                             <input class="form-control ctName03" type="text" disabled /> <!-- class="ctName03" -->
                         </div>
                         <div>
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">대분류 체크리스트 템플릿 설명</label>
-                            <div class="form-control ctDescription03" type="text" disabled></div> <!-- class="ctDescription03" -->
+                            <div class="form-control ctDescription03" type="text" disabled></div>
+                            <!-- class="ctDescription03" -->
                         </div>
 
                         <div class="">
@@ -199,8 +209,8 @@
                         </div>
                         <div class="ctiContent"> <!-- class="ctiContent" -->
                             <label for="recipient-name" class="col-form-label modalMiddleTitle">상세 체크리스트 템플릿 설명 </label>
-                            <textarea class="updateCtiHelpText" id="updateCtiHelpText"
-                                name="editordata"></textarea> <!-- class="updateCtiHelpText" id="updateCtiHelpText" -->
+                            <textarea class="updateCtiHelpText" id="updateCtiHelpText" name="editordata"></textarea>
+                            <!-- class="updateCtiHelpText" id="updateCtiHelpText" -->
                         </div>
                     </div>
                 </div>

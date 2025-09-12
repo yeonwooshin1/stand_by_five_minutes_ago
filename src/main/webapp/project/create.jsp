@@ -12,7 +12,8 @@
 
         <link rel='stylesheet' href='/CSS/index.css'>
         <link rel='stylesheet' href='/CSS/project/info.css'>
-        <link rel='stylesheet' href='/CSS/project/create.css'>
+        <link rel='stylesheet' href='/css/common.css'>
+    <link rel='stylesheet' href='/css/project/create.css'>
 
         <!-- 글꼴 Noto Sans -->
         <style>

@@ -16,7 +16,9 @@
         crossorigin="anonymous"></script>
 
     <!-- roleTem Css -->
-    <link rel='stylesheet' href='/CSS/template/roleTem.css'>
+    <link rel='stylesheet' href='/css/common.css'>
+    <link rel='stylesheet' href='/css/index.css'>
+    <link rel='stylesheet' href='/css/template/roleTem.css'>
 
     <!-- jquery 최신버전 -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>

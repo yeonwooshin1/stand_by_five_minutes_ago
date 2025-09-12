@@ -1,0 +1,149 @@
+/* Noto Sans KR 폰트 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+/* 기본 스타일 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #333;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 50vh;
+}
+
+.container {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.indexContainer {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0.5rem auto;
+    padding: 0 15px;
+}
+
+.hero-section {
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    position: relative;
+    margin-bottom: 0;
+}
+
+/* 버튼 */
+.btn-primary {
+    background-color: #2F4673;
+    border-color: #2F4673;
+}
+
+.btn-primary:hover {
+    background-color: #233554;
+    border-color: #233554;
+}
+
+/* 테이블 */
+.table {
+    border-color: #d9d9d9;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* 카드 */
+.card {
+    border-color: #d9d9d9;
+}
+
+.card-header {
+    background-color: #2F4673;
+    color: white;
+    font-weight: bold;
+}
+
+/* 내비게이션 */
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    background-color: #2F4673;
+}
+
+.nav-link {
+    color: #2F4673;
+}
+
+/* 푸터 */
+.footerBackgroud {
+    background-color: #2F4673;
+    color: white;
+}
+
+/* 프로젝트 페이지 공통 스타일 */
+.project-container {
+    margin-top: 2rem;
+}
+
+.project-title {
+    font-size: 2rem;
+    /* 제목 폰트 크기 통일 */
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.content-box {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+
+    .header-inner, .footer-area, .indexContainer, .mainContent {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .main-menu, .sub-menu ul {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        padding: 0;
+    }
+    
+    .sub-menu {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .titleArea {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .main-title {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+    }
+
+    .feature-cards {
+        flex-direction: column;
+    }
+}

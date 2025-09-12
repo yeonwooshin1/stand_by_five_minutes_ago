@@ -23,7 +23,7 @@
     <jsp:include page="/header.jsp"></jsp:include>
 
     <!-- 본문 영역 -->
-    <main class="container my-5" style="max-width: 520px;">
+    <main class="indexContainer my-5" style="max-width: 520px;">
         <!-- 안내 -->
         <div class="alert alert-dark border-0 small mb-3" role="alert">
             <strong>새 비밀번호 설정</strong> · 새로운 비밀번호를 입력하세요.

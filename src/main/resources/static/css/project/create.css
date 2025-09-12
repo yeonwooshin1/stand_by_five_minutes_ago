@@ -1,3 +1,5 @@
+@import url('../common.css');
+
 .mapArea{
     min-height: 14rem;
     border-radius: 0.5rem;
