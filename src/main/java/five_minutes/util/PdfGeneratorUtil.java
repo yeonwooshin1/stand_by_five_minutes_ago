@@ -69,7 +69,7 @@ public class PdfGeneratorUtil {
         headerTable.setSpacingAfter(20f);
 
         // 타이틀 셀
-        Paragraph title = new Paragraph("프로젝트 타임라인", titleFont);
+        Paragraph title = new Paragraph("프로젝트 타임라인 체크리스트", titleFont);
         title.setSpacingBefore(10f);
         PdfPCell titleCell = new PdfPCell(title);
         titleCell.setBorder(Rectangle.NO_BORDER);
