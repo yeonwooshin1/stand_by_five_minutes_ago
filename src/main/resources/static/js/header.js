@@ -81,7 +81,7 @@ const subMenu = async () => {
                         <li class="headerbar"> | </li>
                         <li><a href="/user/info.jsp" class="myPage">마이페이지</a></li>
                         <li class="headerbar"> | </li>
-                        <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li>
+                        <li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li>
                     </ul>`
 
     } else if (userNo > 0) { // 일반회원
@@ -97,7 +97,7 @@ const subMenu = async () => {
                         <li class="headerbar"> | </li>
                         <li><a href="/user/info.jsp" class="myPage">마이페이지</a></li>
                         <li class="headerbar"> | </li>
-                        <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
+                        <li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
     }
     subMenu.innerHTML = html
     bindChatIconClick()
@@ -141,7 +141,7 @@ initHeader().then(() => {
 function openPopupWithPost(userNo, managerNameHeader, userNameHeader) {
     
     // 1. 팝업창 열기 및 변수에 저장
-    const popup = window.open("", "popupWindow", "width=800,height=800,left=100,top=100");
+    const popup = window.open("", "popupWindow", "width=1000,height=800,left=100,top=100");
 
     
     // 2. 폼 생성

@@ -484,3 +484,6 @@ a {
         max-width: 300px;
     }
 }
+.indexContainer{
+    min-height: 1000px;
+}
