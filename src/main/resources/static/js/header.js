@@ -81,7 +81,7 @@ const subMenu = async () => {
                         <li class="headerbar"> | </li>
                         <li><a href="/user/info.jsp" class="myPage">마이페이지</a></li>
                         <li class="headerbar"> | </li>
-                        <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li>
+                        <li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li>
                     </ul>`
 
     } else if (userNo > 0) { // 일반회원
@@ -97,7 +97,7 @@ const subMenu = async () => {
                         <li class="headerbar"> | </li>
                         <li><a href="/user/info.jsp" class="myPage">마이페이지</a></li>
                         <li class="headerbar"> | </li>
-                        <li><li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
+                        <li><a href="#" class="myPageNlogout" onclick="logout()">로그아웃</a></li></ul>`
     }
     subMenu.innerHTML = html
     bindChatIconClick()
@@ -127,13 +127,6 @@ const initHeader = async () => {
 };
 
 initHeader();
-
-initHeader().then(() => {
-    // header 초기화 후 실행할 함수 등록
-    if (typeof onHeaderReady === "function") {
-        onHeaderReady();
-    }
-});
 
 // chat을 위해서는 userNo가 필요
 // 다만 URL에 userNo가 노출될 경우, 다른 user에 채팅에 접근이 가능함.
