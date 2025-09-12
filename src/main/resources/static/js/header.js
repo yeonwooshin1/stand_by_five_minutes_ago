@@ -141,7 +141,7 @@ initHeader().then(() => {
 function openPopupWithPost(userNo, managerNameHeader, userNameHeader) {
     
     // 1. 팝업창 열기 및 변수에 저장
-    const popup = window.open("", "popupWindow", "width=800,height=800,left=100,top=100");
+    const popup = window.open("", "popupWindow", "width=1000,height=800,left=100,top=100");
 
     
     // 2. 폼 생성

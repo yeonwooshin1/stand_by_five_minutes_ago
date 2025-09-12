@@ -24,6 +24,13 @@ let descModal;                                    // Bootstrap Modal 인스턴�
 const $descTitle = () => document.querySelector("#descTitle"); // 모달 제목 영역
 const $descBody  = () => document.querySelector("#descBody");  // 모달 본문 영역
 
+/* [PATCH] 내부 원복/렌더 중 재귀 이벤트 차단 플래그 */
+let IS_REVERTING = false;
+function withRevertGuard(fn) {
+  IS_REVERTING = true;
+  try { fn(); } finally { setTimeout(() => { IS_REVERTING = false; }, 0); }
+}
+
 // ===== 시작 지점 =====
 // 로딩 렌더링 지정
 window.onHeaderReady = async () => {
@@ -56,13 +63,13 @@ const loginCheck = async () => {
     }
 }
 
-// "HH:mm:ss" 또는 "HH:mm" → "HH:mm"으로 정리 
+// "HH:mm:ss" 또는 "HH:mm" → "HH:mm"으로 정리
 function toHHMM(v) {
   if (!v) return "";
   return v.length >= 5 ? v.slice(0, 5) : v;
 }
 
-// 상태 배지 HTML (읽기 전용) 
+// 상태 배지 HTML (읽기 전용)
 function statusBadge(st) {
   // 1: 시작전  2: 진행중  3: 완료됨  4: 취소됨  5: 보류
   const MAP = {
@@ -184,7 +191,7 @@ async function loadList() {
 
 // ===== 렌더링 =====
 
-// 역할 옵션 
+// 역할 옵션
 function roleOptions(selected) {
   let html = `<option value="0">-- 역할 선택 --</option>`;
   // 역할 리스트 돌면서 없으면 "" 있으면 채워주기
@@ -195,7 +202,7 @@ function roleOptions(selected) {
   return html;
 }
 
-// 체크리스트 옵션 
+// 체크리스트 옵션
 function itemOptions(selected) {
   let html = `<option value="0">-- 체크리스트 선택 --</option>`;
   // 체크 리스트 돌면서 없으면 "" 있으면 채워주기
@@ -250,9 +257,29 @@ function render() {
           </div>
         </td>
 
-        <!-- 시간: 발송완료여도 편집 가능(요구사항) -->
-        <td><input type="datetime-local" class="form-control pf-start" value="${sanitizeDTLocal(row.pfStart)}"></td>
-        <td><input type="datetime-local" class="form-control pf-end"   value="${sanitizeDTLocal(row.pfEnd)}"></td>
+        <td>
+          <div class="d-flex align-items-center gap-2">
+            <span class="pf-start-view text-nowrap" title="${sanitizeDTLocal(row.pfStart)}">
+              ${fmtKShort(row.pfStart) || "-"}
+            </span>
+            <input type="datetime-local"
+                   class="form-control form-control-sm pf-start d-none"
+                   value="${sanitizeDTLocal(row.pfStart)}" style="max-width:170px">
+            <button type="button" class="btn btn-sm btn-outline-secondary pf-start-edit">편집</button>
+          </div>
+        </td>
+
+        <td>
+          <div class="d-flex align-items-center gap-2">
+            <span class="pf-end-view text-nowrap" title="${sanitizeDTLocal(row.pfEnd)}">
+              ${fmtKShort(row.pfEnd) || "-"}
+            </span>
+            <input type="datetime-local"
+                   class="form-control form-control-sm pf-end d-none"
+                   value="${sanitizeDTLocal(row.pfEnd)}" style="max-width:170px">
+            <button type="button" class="btn btn-sm btn-outline-secondary pf-end-edit">편집</button>
+          </div>
+        </td>
 
         <!-- 알림 타입: 발송완료면 배지로 고정 -->
         <td>${notifyCell}</td>
@@ -314,12 +341,52 @@ function bindAddButton() {
   });
 }
 
+/* [PATCH] === 보기/편집 토글 유틸: 진입 시 이전값(data-prev) 저장 === */
+function enterEdit(tr, key /* 'start' | 'end' */) {
+  const inp  = tr.querySelector(`.pf-${key}`);
+  const view = tr.querySelector(`.pf-${key}-view`);
+  const btn  = tr.querySelector(`.pf-${key}-edit`);
+  if (!inp) return;
 
+  // 편집 시작 전에 해당 row의 현재 값을 data-prev로 저장
+  const pfNo = Number(tr.dataset.pfno);
+  const row  = ROWS.find(r => Number(r.pfNo) === pfNo);
+  if (row) {
+    const prevVal = key === "start" ? sanitizeDTLocal(row.pfStart) : sanitizeDTLocal(row.pfEnd);
+    inp.dataset.prev = prevVal || "";
+  }
+
+  view?.classList.add("d-none");
+  btn?.classList.add("d-none");
+  inp.classList.remove("d-none");
+
+  setTimeout(() => {
+    try { inp.showPicker?.(); } catch {}
+    inp.focus();
+    const val = String(inp.value || "");
+    if (inp.setSelectionRange) {
+      const n = val.length;
+      inp.setSelectionRange(n, n);
+    }
+  }, 0);
+}
+
+function exitEdit(tr, key /* 'start' | 'end' */) {
+  const inp  = tr.querySelector(`.pf-${key}`);
+  const view = tr.querySelector(`.pf-${key}-view`);
+  const btn  = tr.querySelector(`.pf-${key}-edit`);
+  if (!inp) return;
+  inp.classList.add("d-none");
+  view?.classList.remove("d-none");
+  btn?.classList.remove("d-none");
+}
 
 /** 테이블 값 변경/삭제 (이벤트 위임) */
 function bindTableEvents() {
   // 값 변경
   $tbody.addEventListener("change", (e) => {
+    if (IS_REVERTING) return; /* [PATCH] 내부 원복 중이면 무시 */
+
     const tr = e.target.closest("tr");
     if (!tr) return;
 
@@ -340,22 +407,34 @@ function bindTableEvents() {
     } else if (e.target.classList.contains("pf-start")) {
       row.pfStart = sanitizeDTLocal(e.target.value);
       if (!row.pfStart) e.target.value = "";
-      // 시작/종료 시간 유효성 검사: 종료시간 ≥ 시작시간
+
       if (row.pfStart && row.pfEnd && cmpDTLocal(row.pfEnd, row.pfStart) < 0) {
         alert("종료시간은 시작시간보다 빠를 수 없습니다.");
-        Object.assign(row, prev);
-        render();
+        // [PATCH] render() 대신 조용히 원복
+        withRevertGuard(() => {
+          row.pfStart = prev.pfStart;
+          e.target.value = sanitizeDTLocal(prev.pfStart) || "";
+          const view = tr.querySelector(".pf-start-view");
+          if (view) view.textContent = fmtKShort(prev.pfStart) || "-";
+          exitEdit(tr, "start");
+        });
         return;
       }
 
     } else if (e.target.classList.contains("pf-end")) {
       row.pfEnd = sanitizeDTLocal(e.target.value);
       if (!row.pfEnd) e.target.value = "";
-      // 시작/종료 시간 유효성 검사: 종료시간 ≥ 시작시간
+
       if (row.pfStart && row.pfEnd && cmpDTLocal(row.pfEnd, row.pfStart) < 0) {
         alert("종료시간은 시작시간보다 빠를 수 없습니다.");
-        Object.assign(row, prev);
-        render();
+        // [PATCH] render() 대신 조용히 원복
+        withRevertGuard(() => {
+          row.pfEnd = prev.pfEnd;
+          e.target.value = sanitizeDTLocal(prev.pfEnd) || "";
+          const view = tr.querySelector(".pf-end-view");
+          if (view) view.textContent = fmtKShort(prev.pfEnd) || "-";
+          exitEdit(tr, "end");
+        });
         return;
       }
 
@@ -376,8 +455,21 @@ function bindTableEvents() {
     // === 공통: 현재 시각 기준 발송 불가면 되돌림 ===
     if (!isSchedulableNow(row)) {
       alert("현재 시각 기준으로 알림 발송 시간이 이미 지났습니다. 알림 설정/시간을 다시 선택하세요.");
-      Object.assign(row, prev);
-      render();
+      withRevertGuard(() => {
+        Object.assign(row, prev);
+        // 바뀐 필드만 원복
+        if (e.target.classList.contains("pf-start")) {
+          e.target.value = sanitizeDTLocal(prev.pfStart) || "";
+          const view = tr.querySelector(".pf-start-view");
+          if (view) view.textContent = fmtKShort(prev.pfStart) || "-";
+          exitEdit(tr, "start");
+        } else if (e.target.classList.contains("pf-end")) {
+          e.target.value = sanitizeDTLocal(prev.pfEnd) || "";
+          const view = tr.querySelector(".pf-end-view");
+          if (view) view.textContent = fmtKShort(prev.pfEnd) || "-";
+          exitEdit(tr, "end");
+        }
+      });
       return;
     }
 
@@ -386,6 +478,141 @@ function bindTableEvents() {
   });
 }
 
+// [PATCH] 보기→편집 토글: 버튼/라벨 클릭으로 input만 보이도록, data-prev 저장 포함
+$tbody.addEventListener("click", (e) => {
+  const tr = e.target.closest("tr");
+  if (!tr) return;
+
+  if (e.target.classList.contains("pf-start-edit") || e.target.classList.contains("pf-start-view")) {
+    enterEdit(tr, "start");
+  }
+
+  if (e.target.classList.contains("pf-end-edit") || e.target.classList.contains("pf-end-view")) {
+    enterEdit(tr, "end");
+  }
+});
+
+// [B] 편집 완료(blur/Enter/Escape) 시 라벨 업데이트 + input 숨김
+$tbody.addEventListener("keydown", (e) => {
+  if (!(e.target.classList.contains("pf-start") || e.target.classList.contains("pf-end"))) return;
+
+  if (e.key === "Enter") {
+    e.target.blur(); // 기존 로직 유지
+    return;
+  }
+
+  // [PATCH] ESC → 편집 취소(원복: data-prev 사용)
+  if (e.key === "Escape") {
+    const tr  = e.target.closest("tr");
+    const pfNo = Number(tr.dataset.pfno);
+    const row  = ROWS.find(r => Number(r.pfNo) === pfNo);
+    const isStart = e.target.classList.contains("pf-start");
+    const key = isStart ? "start" : "end";
+    const prevVal = sanitizeDTLocal(e.target.dataset.prev || (isStart ? row?.pfStart : row?.pfEnd) || "");
+    withRevertGuard(() => {
+      if (row) {
+        if (isStart) row.pfStart = prevVal; else row.pfEnd = prevVal;
+      }
+      e.target.value = prevVal;
+      const view = tr.querySelector(isStart ? ".pf-start-view" : ".pf-end-view");
+      if (view) view.textContent = fmtKShort(prevVal) || "-";
+      exitEdit(tr, key);
+    });
+  }
+});
+
+$tbody.addEventListener("blur", (e) => {
+  if (IS_REVERTING) return; /* [PATCH] 내부 원복 중이면 무시 */
+
+  const tr = e.target.closest("tr");
+  if (!tr) return;
+
+  // 시작값 확정
+  if (e.target.classList.contains("pf-start")) {
+    const pfNo = Number(tr.dataset.pfno);
+    const row = ROWS.find(r => Number(r.pfNo) === pfNo);
+    if (!row) return;
+
+    const v = sanitizeDTLocal(e.target.value);
+    const prevVal = sanitizeDTLocal(e.target.dataset.prev || row.pfStart || "");
+    if (!v) { e.target.value = ""; } else { row.pfStart = v; }
+
+    // 유효성(종료 ≥ 시작) 재검증
+    if (row.pfStart && row.pfEnd && cmpDTLocal(row.pfEnd, row.pfStart) < 0) {
+      alert("종료시간은 시작시간보다 빠를 수 없습니다.");
+      withRevertGuard(() => {
+        row.pfStart = prevVal;
+        e.target.value = prevVal;
+        const view = tr.querySelector(".pf-start-view");
+        if (view) view.textContent = fmtKShort(prevVal) || "-";
+        exitEdit(tr, "start");
+      });
+      return;
+    }
+
+    // 현재 기준 발송가능 체크
+    if (!isSchedulableNow(row)) {
+      alert("현재 시각 기준으로 알림 발송 시간이 이미 지났습니다. 시간을 다시 선택하세요.");
+      withRevertGuard(() => {
+        row.pfStart = prevVal;
+        e.target.value = prevVal;
+        const view = tr.querySelector(".pf-start-view");
+        if (view) view.textContent = fmtKShort(prevVal) || "-";
+        exitEdit(tr, "start");
+      });
+      return;
+    }
+
+    // 라벨 갱신 + input 숨김
+    const view = tr.querySelector(".pf-start-view");
+    if (view) view.textContent = fmtKShort(row.pfStart) || "-";
+    exitEdit(tr, "start");
+
+    // 기존행이면 수정 플래그
+    if (isExisting(pfNo)) row.changeStatus = 3;
+  }
+
+  // 종료값 확정
+  if (e.target.classList.contains("pf-end")) {
+    const pfNo = Number(tr.dataset.pfno);
+    const row = ROWS.find(r => Number(r.pfNo) === pfNo);
+    if (!row) return;
+
+    const v = sanitizeDTLocal(e.target.value);
+    const prevVal = sanitizeDTLocal(e.target.dataset.prev || row.pfEnd || "");
+    if (!v) { e.target.value = ""; } else { row.pfEnd = v; }
+
+    if (row.pfStart && row.pfEnd && cmpDTLocal(row.pfEnd, row.pfStart) < 0) {
+      alert("종료시간은 시작시간보다 빠를 수 없습니다.");
+      withRevertGuard(() => {
+        row.pfEnd = prevVal;
+        e.target.value = prevVal;
+        const view = tr.querySelector(".pf-end-view");
+        if (view) view.textContent = fmtKShort(prevVal) || "-";
+        exitEdit(tr, "end");
+      });
+      return;
+    }
+
+    if (!isSchedulableNow(row)) {
+      alert("현재 시각 기준으로 알림 발송 시간이 이미 지났습니다. 시간을 다시 선택하세요.");
+      withRevertGuard(() => {
+        row.pfEnd = prevVal;
+        e.target.value = prevVal;
+        const view = tr.querySelector(".pf-end-view");
+        if (view) view.textContent = fmtKShort(prevVal) || "-";
+        exitEdit(tr, "end");
+      });
+      return;
+    }
+
+    const view = tr.querySelector(".pf-end-view");
+    if (view) view.textContent = fmtKShort(row.pfEnd) || "-";
+    exitEdit(tr, "end");
+
+    if (isExisting(pfNo)) row.changeStatus = 3;
+  }
+}, true); // ← blur는 캡처링으로 받아야 안정적
 
 // 삭제
 $tbody.addEventListener("click", (e) => {
@@ -402,7 +629,6 @@ $tbody.addEventListener("click", (e) => {
   tr.remove();
   renumber();
 });
-
 
 // ===== 저장/이동 =====
 
@@ -468,7 +694,7 @@ async function onClickSave() {
     alert("저장 중 오류가 발생했습니다.");
   }
 }
-// 다음 페이지 이동 
+// 다음 페이지 이동
 const onClickNext = async () => {
     let result = confirm(`[경고] 저장을 하지 않고 다음 페이지로 이동하시면, 변경된 내용은 삭제되며 복구할 수 없습니다. \n계속 진행하시겠습니까?`)
     if (result == false) { return }
@@ -523,7 +749,7 @@ function buildSavePayload() {
   return { creates, updates, deletes };
 }
 
-/** 
+/**
 
 0 : 깨끗한 상태(서버와 동기화 완료)
 
@@ -533,7 +759,7 @@ function buildSavePayload() {
 
 3 : 기존행 수정됨(서버에 update 필요)
 
-4 : 기존행 삭제됨(서버에 delete 필요) 
+4 : 기존행 삭제됨(서버에 delete 필요)
 
 */
 
@@ -602,4 +828,15 @@ function openDescModal(itemId) {
   if ($descBody())  $descBody().textContent  = help;
 
   descModal.show();
+}
+
+// "YYYY-MM-DDTHH:mm" → "M월 D일 HH:mm" (24시간, 연도/오전/오후 미표시)
+function fmtKShort(dtLocal) {
+  const s = sanitizeDTLocal(dtLocal || "");
+  if (!s) return "";
+  const [datePart, timePart] = s.split("T");
+  const [y, m, d] = datePart.split("-").map(Number);
+  const [hh, mm]  = timePart.split(":").map(Number);
+  // [PATCH] 분도 항상 두 자리로 패딩
+  return `${m}월 ${d}일 ${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
 }
