@@ -12,9 +12,8 @@ let tempCheckNoCounter = -1; // 임시 ID 카운터 (음수로 시작)
 // 페이지 로드 시 실행
 window.onHeaderReady = async () => {
     await loginCheck();
-    await readAllpjcheck();
 };
-
+readAllpjcheck();
 // [00] 로그인 체크 - 수정된 버전
 async function loginCheck() {
     console.log("loginCheck 실행됨"); // 디버깅용

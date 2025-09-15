@@ -1,10 +1,7 @@
 console.log("list js exe")
 
-
 window.onHeaderReady = async () => {
-    await loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
-    await createBtnDisplay()
-    await readAllPj();
+    loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
 };
 
 // [0] 로그인 체크
@@ -110,3 +107,5 @@ const readAllPj = async () => {
     }
 } // func end
 
+createBtnDisplay();
+readAllPj();

@@ -22,7 +22,6 @@ console.log("Pjworker func exe")
 
 window.onHeaderReady = async () => {
     await loginCheck(); // header.js의 userNo, businessNo가 설정된 후 실행됨
-    await readAllpjworker();
 };
 
 // [0] 로그인 체크
@@ -554,3 +553,5 @@ const nextStage = async () => {
 
     location.href = `/project/checklist.jsp?pjNo=${pjNo}`;
 } // func end
+
+readAllpjworker();

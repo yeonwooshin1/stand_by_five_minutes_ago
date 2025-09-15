@@ -2,12 +2,12 @@ console.log("perform.js loaded");
 
 // ===== 전역 fetch /DOM  =====
 const API_LOOKUP = (pjNo) => `/project/lookup?pjNo=${pjNo}`;
-const API_LIST   = (pjNo) => `/project/perform?pjNo=${pjNo}`;
-const API_SAVE   = (pjNo) => `/project/perform?pjNo=${pjNo}`;
+const API_LIST = (pjNo) => `/project/perform?pjNo=${pjNo}`;
+const API_SAVE = (pjNo) => `/project/perform?pjNo=${pjNo}`;
 
-const $tbody  = document.querySelector("#pfBody");   // 테이블 바디
+const $tbody = document.querySelector("#pfBody");   // 테이블 바디
 const $btnAdd = document.querySelector("#btnAdd");   // 행 추가 버튼
-const $err    = document.querySelector("#pfError");  // 에러 영역
+const $err = document.querySelector("#pfError");  // 에러 영역
 
 // 룩업 데이터 FK값
 let ROLE_LIST = [];    // [{pjRoleNo, pjUserName, pjRoleName}]
@@ -22,7 +22,7 @@ let tempId = -1;
 // [ADD] ===== 설명 모달 핸들 =====
 let descModal;                                    // Bootstrap Modal 인스턴스 저장용
 const $descTitle = () => document.querySelector("#descTitle"); // 모달 제목 영역
-const $descBody  = () => document.querySelector("#descBody");  // 모달 본문 영역
+const $descBody = () => document.querySelector("#descBody");  // 모달 본문 영역
 
 /* [PATCH] 내부 원복/렌더 중 재귀 이벤트 차단 플래그 */
 let IS_REVERTING = false;
@@ -34,9 +34,13 @@ function withRevertGuard(fn) {
 // ===== 시작 지점 =====
 // 로딩 렌더링 지정
 window.onHeaderReady = async () => {
-  await loginCheck();       // 로그인/권한 체크
-  await loadLookups();      // 역할/체크리스트 조회
-  await loadList();         // 업무 목록 조회
+  // await loginCheck();       // 로그인/권한 체크
+  await readySetting();
+};
+
+const readySetting = async () => {
+  loadLookups();      // 역할/체크리스트 조회
+  loadList();         // 업무 목록 조회
   render();                 // 테이블 그리기
 
   bindAddButton();          // 행 추가
@@ -47,20 +51,22 @@ window.onHeaderReady = async () => {
   addHelpButtons();         // 렌더된 각 행의 체크리스트 select 옆에 '설명' 버튼을 동적으로 추가
   bindHelpEvents();         // 설명 버튼 클릭 이벤트(위임)
   initDescModal();          // 모달 인스턴스 준비
-};
+}
+
+
 
 // ===== 유틸리티 =====
 
 // [0] 로그인 체크
 const loginCheck = async () => {
-    // console.log("loginCheck func exe")
-    if (userNo == null || userNo === 0) {
-        alert("[경고] 로그인 후 이용가능합니다.")
-        location.href = "/index.jsp"
-    } else if (businessNo == null || businessNo === 0) {
-        alert("[경고] 일반회원은 사용불가능한 메뉴입니다.")
-        location.href = "/index.jsp"
-    }
+  // console.log("loginCheck func exe")
+  if (userNo == null || userNo === 0) {
+    alert("[경고] 로그인 후 이용가능합니다.")
+    location.href = "/index.jsp"
+  } else if (businessNo == null || businessNo === 0) {
+    alert("[경고] 일반회원은 사용불가능한 메뉴입니다.")
+    location.href = "/index.jsp"
+  }
 }
 
 // "HH:mm:ss" 또는 "HH:mm" → "HH:mm"으로 정리
@@ -73,11 +79,11 @@ function toHHMM(v) {
 function statusBadge(st) {
   // 1: 시작전  2: 진행중  3: 완료됨  4: 취소됨  5: 보류
   const MAP = {
-    1: { t: "시작전",  cls: "secondary" },
-    2: { t: "진행중",  cls: "info" },
-    3: { t: "완료됨",  cls: "success" },
-    4: { t: "취소됨",  cls: "danger" },
-    5: { t: "보류",    cls: "warning" }
+    1: { t: "시작전", cls: "secondary" },
+    2: { t: "진행중", cls: "info" },
+    3: { t: "완료됨", cls: "success" },
+    4: { t: "취소됨", cls: "danger" },
+    5: { t: "보류", cls: "warning" }
   };
   const v = MAP[Number(st)] || { t: "-", cls: "dark" };
   return `<span class="badge text-bg-${v.cls}">${v.t}</span>`;
@@ -122,12 +128,12 @@ function nowEpochSeconds() {
 function calcTargetEpoch(row) {
   const offset = (Number(row.notifySetMins) || 0) * 60;
   const start = dtLocalToEpochSeconds(row.pfStart);
-  const end   = dtLocalToEpochSeconds(row.pfEnd);
+  const end = dtLocalToEpochSeconds(row.pfEnd);
   switch (Number(row.notifyType)) {
     case 1: return start != null ? start - offset : null; // 시작 전
     case 2: return start != null ? start + offset : null; // 시작 후
-    case 3: return end   != null ? end   - offset : null; // 종료 전
-    case 4: return end   != null ? end   + offset : null; // 종료 후
+    case 3: return end != null ? end - offset : null; // 종료 전
+    case 4: return end != null ? end + offset : null; // 종료 후
     case 0: default: return null; // 미발송 또는 -1 등
   }
 }
@@ -173,15 +179,15 @@ async function loadList() {
     const list = await response.json();
     // 있으면 채우기 map 써서
     ROWS = (Array.isArray(list) ? list : []).map((dto) => ({
-      pfNo:            Number(dto.pfNo) || 0,
-      pjRoleNo:        Number(dto.pjRoleNo) || 0,
-      pjChkItemNo:     Number(dto.pjChkItemNo) || 0,
-      pfStart:         sanitizeDTLocal(toDTLocal(dto.pfStart || "")),
-      pfEnd:           sanitizeDTLocal(toDTLocal(dto.pfEnd || "")),
-      notifyType:      Number(dto.notifyType ?? 0),
-      notifySetMins:   Number(dto.notifySetMins ?? 0),
-      pfStatus:        Number(dto.pfStatus ?? 1),
-      changeStatus:    0
+      pfNo: Number(dto.pfNo) || 0,
+      pjRoleNo: Number(dto.pjRoleNo) || 0,
+      pjChkItemNo: Number(dto.pjChkItemNo) || 0,
+      pfStart: sanitizeDTLocal(toDTLocal(dto.pfStart || "")),
+      pfEnd: sanitizeDTLocal(toDTLocal(dto.pfEnd || "")),
+      notifyType: Number(dto.notifyType ?? 0),
+      notifySetMins: Number(dto.notifySetMins ?? 0),
+      pfStatus: Number(dto.pfStatus ?? 1),
+      changeStatus: 0
     }));
   } catch (e) {
     console.error(e);
@@ -222,7 +228,7 @@ function notifyTypeOptions(selected) {
     { v: 3, t: "종료 전" },
     { v: 4, t: "종료 후" }
   ];
-  return L.map(o => `<option value="${o.v}" ${Number(selected)===o.v ? "selected":""}>${o.t}</option>`).join("");
+  return L.map(o => `<option value="${o.v}" ${Number(selected) === o.v ? "selected" : ""}>${o.t}</option>`).join("");
 }
 
 /** 테이블 렌더링 */
@@ -343,14 +349,14 @@ function bindAddButton() {
 
 /* [PATCH] === 보기/편집 토글 유틸: 진입 시 이전값(data-prev) 저장 === */
 function enterEdit(tr, key /* 'start' | 'end' */) {
-  const inp  = tr.querySelector(`.pf-${key}`);
+  const inp = tr.querySelector(`.pf-${key}`);
   const view = tr.querySelector(`.pf-${key}-view`);
-  const btn  = tr.querySelector(`.pf-${key}-edit`);
+  const btn = tr.querySelector(`.pf-${key}-edit`);
   if (!inp) return;
 
   // 편집 시작 전에 해당 row의 현재 값을 data-prev로 저장
   const pfNo = Number(tr.dataset.pfno);
-  const row  = ROWS.find(r => Number(r.pfNo) === pfNo);
+  const row = ROWS.find(r => Number(r.pfNo) === pfNo);
   if (row) {
     const prevVal = key === "start" ? sanitizeDTLocal(row.pfStart) : sanitizeDTLocal(row.pfEnd);
     inp.dataset.prev = prevVal || "";
@@ -361,7 +367,7 @@ function enterEdit(tr, key /* 'start' | 'end' */) {
   inp.classList.remove("d-none");
 
   setTimeout(() => {
-    try { inp.showPicker?.(); } catch {}
+    try { inp.showPicker?.(); } catch { }
     inp.focus();
     const val = String(inp.value || "");
     if (inp.setSelectionRange) {
@@ -372,9 +378,9 @@ function enterEdit(tr, key /* 'start' | 'end' */) {
 }
 
 function exitEdit(tr, key /* 'start' | 'end' */) {
-  const inp  = tr.querySelector(`.pf-${key}`);
+  const inp = tr.querySelector(`.pf-${key}`);
   const view = tr.querySelector(`.pf-${key}-view`);
-  const btn  = tr.querySelector(`.pf-${key}-edit`);
+  const btn = tr.querySelector(`.pf-${key}-edit`);
   if (!inp) return;
   inp.classList.add("d-none");
   view?.classList.remove("d-none");
@@ -503,9 +509,9 @@ $tbody.addEventListener("keydown", (e) => {
 
   // [PATCH] ESC → 편집 취소(원복: data-prev 사용)
   if (e.key === "Escape") {
-    const tr  = e.target.closest("tr");
+    const tr = e.target.closest("tr");
     const pfNo = Number(tr.dataset.pfno);
-    const row  = ROWS.find(r => Number(r.pfNo) === pfNo);
+    const row = ROWS.find(r => Number(r.pfNo) === pfNo);
     const isStart = e.target.classList.contains("pf-start");
     const key = isStart ? "start" : "end";
     const prevVal = sanitizeDTLocal(e.target.dataset.prev || (isStart ? row?.pfStart : row?.pfEnd) || "");
@@ -640,17 +646,17 @@ async function onClickSave() {
     // 가벼운 검증: 신규/수정에 필수값 존재하는지
     const problems = [];
     payload.creates.forEach((c, i) => {
-      if (!c.pjRoleNo)    problems.push(`신규[${i+1}] 역할 미선택`);
-      if (!c.pjChkItemNo) problems.push(`신규[${i+1}] 체크리스트 미선택`);
-      if (!c.pfStart)     problems.push(`신규[${i+1}] 시작시간 미입력`);
-      if (!c.pfEnd)       problems.push(`신규[${i+1}] 종료시간 미입력`);
+      if (!c.pjRoleNo) problems.push(`신규[${i + 1}] 역할 미선택`);
+      if (!c.pjChkItemNo) problems.push(`신규[${i + 1}] 체크리스트 미선택`);
+      if (!c.pfStart) problems.push(`신규[${i + 1}] 시작시간 미입력`);
+      if (!c.pfEnd) problems.push(`신규[${i + 1}] 종료시간 미입력`);
     });
     payload.updates.forEach((u, i) => {
-      if (!u.pfNo)        problems.push(`수정[${i+1}] pfNo 없음`);
-      if (!u.pjRoleNo)    problems.push(`수정[${i+1}] 역할 미선택`);
-      if (!u.pjChkItemNo) problems.push(`수정[${i+1}] 체크리스트 미선택`);
-      if (!u.pfStart)     problems.push(`수정[${i+1}] 시작시간 미입력`);
-      if (!u.pfEnd)       problems.push(`수정[${i+1}] 종료시간 미입력`);
+      if (!u.pfNo) problems.push(`수정[${i + 1}] pfNo 없음`);
+      if (!u.pjRoleNo) problems.push(`수정[${i + 1}] 역할 미선택`);
+      if (!u.pjChkItemNo) problems.push(`수정[${i + 1}] 체크리스트 미선택`);
+      if (!u.pfStart) problems.push(`수정[${i + 1}] 시작시간 미입력`);
+      if (!u.pfEnd) problems.push(`수정[${i + 1}] 종료시간 미입력`);
     });
     // 문제행이 있으면?
     if (problems.length) {
@@ -676,15 +682,15 @@ async function onClickSave() {
 
     // 화면 버퍼 교체와 초기화
     ROWS = (Array.isArray(fresh) ? fresh : []).map((dto) => ({
-      pfNo:            Number(dto.pfNo) || 0,
-      pjRoleNo:        Number(dto.pjRoleNo) || 0,
-      pjChkItemNo:     Number(dto.pjChkItemNo) || 0,
-      pfStart:         sanitizeDTLocal(toDTLocal(dto.pfStart || "")),
-      pfEnd:           sanitizeDTLocal(toDTLocal(dto.pfEnd || "")),
-      notifyType:      Number(dto.notifyType ?? 0),
-      notifySetMins:   Number(dto.notifySetMins ?? 0),
-      pfStatus:        Number(dto.pfStatus ?? 1),
-      changeStatus:    0
+      pfNo: Number(dto.pfNo) || 0,
+      pjRoleNo: Number(dto.pjRoleNo) || 0,
+      pjChkItemNo: Number(dto.pjChkItemNo) || 0,
+      pfStart: sanitizeDTLocal(toDTLocal(dto.pfStart || "")),
+      pfEnd: sanitizeDTLocal(toDTLocal(dto.pfEnd || "")),
+      notifyType: Number(dto.notifyType ?? 0),
+      notifySetMins: Number(dto.notifySetMins ?? 0),
+      pfStatus: Number(dto.pfStatus ?? 1),
+      changeStatus: 0
     }));
 
     render();
@@ -696,10 +702,10 @@ async function onClickSave() {
 }
 // 다음 페이지 이동
 const onClickNext = async () => {
-    let result = confirm(`[경고] 저장을 하지 않고 다음 페이지로 이동하시면, 변경된 내용은 삭제되며 복구할 수 없습니다. \n계속 진행하시겠습니까?`)
-    if (result == false) { return }
+  let result = confirm(`[경고] 저장을 하지 않고 다음 페이지로 이동하시면, 변경된 내용은 삭제되며 복구할 수 없습니다. \n계속 진행하시겠습니까?`)
+  if (result == false) { return }
 
-    location.href = `/project/performcheck.jsp?pjNo=${pjNo}`;
+  location.href = `/project/performcheck.jsp?pjNo=${pjNo}`;
 } // func end
 
 /** 저장 페이로드 만들기
@@ -716,12 +722,12 @@ function buildSavePayload() {
     // 신규
     if (r.changeStatus === 1 && r.pfNo < 0) {
       creates.push({
-        pjRoleNo:       r.pjRoleNo,
-        pjChkItemNo:    r.pjChkItemNo,
-        pfStart:        r.pfStart,       // "YYYY-MM-DDTHH:mm"
-        pfEnd:          r.pfEnd,         // "YYYY-MM-DDTHH:mm"
-        notifyType:     r.notifyType,
-        notifySetMins:  r.notifySetMins
+        pjRoleNo: r.pjRoleNo,
+        pjChkItemNo: r.pjChkItemNo,
+        pfStart: r.pfStart,       // "YYYY-MM-DDTHH:mm"
+        pfEnd: r.pfEnd,         // "YYYY-MM-DDTHH:mm"
+        notifyType: r.notifyType,
+        notifySetMins: r.notifySetMins
       });
       continue;
     }
@@ -729,13 +735,13 @@ function buildSavePayload() {
     // 수정
     if (r.changeStatus === 3 && r.pfNo > 0) {
       updates.push({
-        pfNo:           r.pfNo,
-        pjRoleNo:       r.pjRoleNo,
-        pjChkItemNo:    r.pjChkItemNo,
-        pfStart:        r.pfStart,
-        pfEnd:          r.pfEnd,
-        notifyType:     r.notifyType,
-        notifySetMins:  r.notifySetMins
+        pfNo: r.pfNo,
+        pjRoleNo: r.pjRoleNo,
+        pjChkItemNo: r.pjChkItemNo,
+        pfStart: r.pfStart,
+        pfEnd: r.pfEnd,
+        notifyType: r.notifyType,
+        notifySetMins: r.notifySetMins
       });
       continue;
     }
@@ -820,12 +826,12 @@ function openDescModal(itemId) {
   // ITEM_LIST에서 해당 항목 찾기 (백엔드가 pjHelpText를 내려줘야 함)
   const item = ITEM_LIST.find(x => String(x.pjChkItemNo) === String(itemId));
   const title = item?.pjChklTitle || "(제목 없음)";
-  const help  = (item?.pjHelpText && String(item.pjHelpText).trim())
+  const help = (item?.pjHelpText && String(item.pjHelpText).trim())
     ? item.pjHelpText
     : "설명(도움말)이 등록되어 있지 않습니다.";
 
   if ($descTitle()) $descTitle().textContent = title;
-  if ($descBody())  $descBody().textContent  = help;
+  if ($descBody()) $descBody().textContent = help;
 
   descModal.show();
 }
@@ -836,7 +842,9 @@ function fmtKShort(dtLocal) {
   if (!s) return "";
   const [datePart, timePart] = s.split("T");
   const [y, m, d] = datePart.split("-").map(Number);
-  const [hh, mm]  = timePart.split(":").map(Number);
+  const [hh, mm] = timePart.split(":").map(Number);
   // [PATCH] 분도 항상 두 자리로 패딩
   return `${m}월 ${d}일 ${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
 }
+
+window.onHeaderReady();
