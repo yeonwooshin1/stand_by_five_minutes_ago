@@ -25,6 +25,7 @@ a {
 .indexContainer {
     margin: 0.5rem auto;
     max-width: 1280px;
+    min-height: 900px;
 }
 
 .mainContent {
